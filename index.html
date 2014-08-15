@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
+    <link rel="stylesheet" href="libs/codemirror/codemirror.css">
+    <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
+    <link rel="stylesheet" href="style.css" type="text/css" media="all">
+    
+    <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="libs/lodash.min.js"></script>
+    <script type="text/javascript" src="libs/async.js"></script>
+    <script src="libs/codemirror/codemirror.js"></script>
+    <script src="libs/codemirror/mode/javascript/javascript.js"></script>
+
+    <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="user.js"></script>
+    <script type="text/javascript" src="elevator.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Elevator Crush Saga</h1>
+        <h3>The elevator programming game</h3>
+
+        <div class="world">
+            <div class="innerworld">
+                <div style="display: none" class="elevator movable elevatorprototype">
+                    <span class="floorindicator"></span>
+                    <span class="buttonindicator">
+                        <span style="display: none" class="buttonpress buttonpressprototype"></span>
+                    </span>
+                </div>
+                <div style="display: none" class="floor floorprototype">
+                    <span class="floornumber">0</span>
+                    <span class="buttonindicator">
+                        <i class="fa fa-arrow-circle-up"></i>
+                        <i class="fa fa-arrow-circle-down on"></i>
+                    </span>
+                </div>
+                <i style="display: none" class="fa fa-user user movable userprototype"></i>
+            </div>
+        </div>
+
+        <div class="code">
+            <textarea name="Code" id="code"></textarea>
+        </div>
+        <button id="button_reset" style="float: left">Reset</button>
+        <button id="button_resetundo" style="float: left">Undo reset</button>
+        <button id="button_apply" style="float: right">Apply</button>
+        <button id="button_save" style="float: right">Save</button>
+        <span id="save_message" style="float: right"></span>
+    </div>
+</body>
+</html>
