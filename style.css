@@ -23,7 +23,7 @@ h2, h3, h4, h5 {
 .container {
     width: 1100px;
     margin: 0 auto;
-    padding: 20px 40px 70px 40px;
+    padding: 20px 40px 40px 40px;
     background-color: #84B4BA;
 }
 
@@ -139,6 +139,13 @@ button {
     padding-left: 10px;
 }
 
+
+.footer {
+    margin-top: 20px;
+}
+.footer h4 {
+    font-size: 13px;
+}
 
 .color1 {
     background-color: #4F8686;

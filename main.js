@@ -82,7 +82,6 @@ var createEditor = function() {
         cm.setValue("var foo = function()\n{alert('hey');\n}\nfoo();");
     };
     var saveCode = function() {
-        console.log("SAVING");
         localStorage.setItem("develevateCode", cm.getValue());
         $("#save_message").text("Code saved " + new Date().toTimeString());
     };
