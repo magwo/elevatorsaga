@@ -79,7 +79,7 @@ var createEditor = function() {
     console.log("code mirror is", cm);
 
     var reset = function() {
-        cm.setValue("var foo = function()\n{alert('hey');\n}\nfoo();");
+        cm.setValue("{\n    init: function(floorCount, elevators) {\n        _.each(elevators, function(elevator, index) {\n            async.forever(function(cbOuter) {\n                async.series([\n                    function(cb) { elevator.wait(500+4000*Math.random(), cb) },\n                    function(cb) { elevator.goToFloor(Math.round((floorCount-1)*Math.random()), cb) },\n                ], function() { cbOuter() });\n            });\n        });\n    },\n    update: function(elevators, floors) {\n    }\n}");
     };
     var saveCode = function() {
         localStorage.setItem("develevateCode", cm.getValue());
