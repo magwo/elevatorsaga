@@ -59,15 +59,14 @@ button {
 
 .world {
     width: 1100px;
-    height: 300px;
     background-color: #333;
     padding: 0;
 }
 
 .innerworld {
     position: relative;
+    height: 100%;
     width: 1100px;
-    height: 300px;
 }
 
 .movable {
@@ -79,6 +78,12 @@ button {
 
 .user {
     color: white;
+    text-shadow: 0 1px 3px black;
+    z-index: 2;
+}
+
+.user.done {
+    z-index: 0;
 }
 
 .elevator {
@@ -86,10 +91,12 @@ button {
     border: 2px solid white;
     width: 40px;
     height: 46px;
+    z-index: 1;
 }
 
 .elevator .floorindicator {
     display: inline-block;
+    position: absolute;
     width: 100%;
     font-size: 15px;
     text-align: center;
@@ -98,8 +105,9 @@ button {
 
 .elevator .buttonindicator {
     display: inline-block;
+    position: absolute;
+    top: 15px;
     width: 100%;
-    font-size: 15px;
     text-align: center;
     font-size: 8px;
     color: rgba(255, 255, 255, 0.3);

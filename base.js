@@ -1,6 +1,6 @@
 
 
-var TIMESTEP = 1000/30; // ms
+var TIMESTEP = 1000/50; // ms
 var EPSILON = 0.00001;
 
 var linearInterpolate = function(value0, value1, x) {
@@ -21,9 +21,15 @@ var asEmittingEvent = function(obj, eventName) {
         if(typeof handler !== "undefined") {
             handlers.push(handler);
         } else {
-            _.each(handlers, function(h) { h(obj, arg); });
+            _.remove(handlers, function(h) { return h._remove });
+            _.each(handlers, function(h) {
+                h(obj, h);
+            });
         }
     };
+    obj["remove_" + eventName] = function(handler) {
+        handler._remove = true;
+    }
     return obj;
 }
 
@@ -57,7 +63,7 @@ var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc
                 clearIntervalFunc(intervalId);
                 obj.x = newX;
                 obj.y = newY;
-                if(cb) { cb(obj); }
+                if(cb) { cb(); }
             } else {
                 var factor = timeSpent / timeToSpend;
                 obj.x = interpolator(origX, newX, factor);
@@ -93,19 +99,28 @@ var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc
         return [resultX, resultY];
     };
 
+    obj.parentStateListener = function() {
+        obj.onNewState();
+    };
+
     obj.setParent = function(movableParent) {
+        if(obj.parent !== null) {
+            // Clean up listener
+            obj.parent.remove_onNewState(obj.parentStateListener);
+        }
         if(movableParent === null) {
             if(obj.parent !== null) {
-                // Parent was set from something to null - detach
-                obj.setPosition(obj.getWorldPosition());
+                var objWorld = obj.getWorldPosition();
                 obj.parent = null;
+                obj.setPosition(objWorld);
             }
         } else {
+            // Parent is being set a non-null movable
             var objWorld = obj.getWorldPosition();
-            if(obj.parent !== null) {
-                var parentWorld = parent.getWorldPosition();
-                // TODO: FINISH WRITING THIS CODE
-            }
+            var parentWorld = movableParent.getWorldPosition();
+            obj.parent = movableParent;
+            obj.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
+            movableParent.onNewState(obj.parentStateListener);
         }
     };
 
@@ -114,3 +129,16 @@ var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc
     obj.onNewState();
     return obj;
 }
+
+// var asFloorPositionable = function(movable, floorHeight, floorCount, objectHeight, desiredOffset) {
+
+//     movable.currentFloor = 0;
+
+//     movable.setFloorPosition = function(floor) {
+//         movable.moveTo(null, (floorCount - 1) - floor * floorHeight - objectHeight * 0.5 - desiredOffset);
+//         onPositionedAtFloor();
+//         movable.onNewState();
+//     }
+//     asEmittingEvent("onPositionedAtFloor");
+//     return movable;
+// }

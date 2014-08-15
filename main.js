@@ -13,7 +13,8 @@ var timingSetInterval = function(f, dt) {
 
 var bindMovableToElement = function(obj, elem) {
     obj.onNewState(function(obj) {
-        elem.css({top: obj.y, left: obj.x });
+        pos = obj.getWorldPosition();
+        elem.css({left: pos[0], top: pos[1] });
     });
 }
 
@@ -23,7 +24,30 @@ var bindElevatorFloorToElement = function(obj, elem) {
     });
 }
 
+var getRandomInt = function(min, max) {
+    return min + Math.round(Math.random() * (max - min));
+}
+
+var userSpawner = null;
+var stopper = null;
+var counter = 0;
+var startTime = 0;
 var resetWorld = function() {
+    if(stopper != null) {
+        stopper.shouldStop = true;
+    }
+    stopper = {
+        shouldStop: false,
+        shouldContinue: function() { return !this.shouldStop; }
+    };
+
+    counter = 0;
+    startTime = new Date().getTime();
+
+    if(userSpawner != null) {
+        console.log("Clearing", userSpawner);
+        clearInterval(userSpawner);
+    }
     $(".floor:not(.floorprototype)").remove();
     $(".elevator:not(.elevatorprototype)").remove();
     $(".user:not(.userprototype)").remove();
@@ -32,9 +56,11 @@ var resetWorld = function() {
 
 var createWorld = function(codeObj, floorCount, elevatorCount) {
     console.log("Creating world with", codeObj);
-    codeObj.init(2, 3);
+    console.log("Elevators are")
 
     var floorHeight = $(".floorprototype").outerHeight() + 10;
+    $(".world").css("height", floorCount * floorHeight);
+    
     var floors = _.map(_.range(floorCount), function(e, i){
         var floorElem = $(".floorprototype").clone().appendTo(".innerworld");
         floorElem.removeClass("floorprototype");
@@ -42,14 +68,39 @@ var createWorld = function(codeObj, floorCount, elevatorCount) {
         floorElem.show();
         floorElem.find(".floornumber").text(floorCount - 1 - i);
         floorElem.find(".buttonindicator i").removeClass("on");
+        return floorElem;
     });
 
-    var users = _.map(_.range(0), function(e, i) {
+    var users = [];
+
+    var createUser = function() {
         var userElem = $(".userprototype").clone().appendTo(".innerworld");
         userElem.removeClass("userprototype");
-        userElem.css({top: floorHeight-27, left: 10+20*i});
         userElem.show();
-    });
+        var user = asMovable({}, timingSetInterval, clearInterval, setTimeout);
+        bindMovableToElement(user, userElem);
+        user = asUser(user, floorCount, floorHeight);
+        user.moveTo(100+Math.random()*40, 0);
+        var currentFloor = Math.round() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
+        user.setFloorPosition(currentFloor);
+        user.destinationFloor = currentFloor === 0 ? getRandomInt(1, floorCount - 1) : 0;
+
+        user.onExitedElevator(function() {
+            counter++;
+            setTimeout(function() {
+                userElem.addClass("done");
+            }, 500);
+            
+            
+        });
+        user.onRemovable(function() {
+            userElem.remove();
+            _.pull(users, user);
+        })
+        return user;
+    }
+
+    userSpawner = setInterval(function() { users.push(createUser()) }, 500);
 
     var elevators = _.map(_.range(elevatorCount), function(e, i){
         var elevatorElem = $(".elevatorprototype").clone().appendTo(".innerworld");
@@ -63,23 +114,33 @@ var createWorld = function(codeObj, floorCount, elevatorCount) {
         });
         var elevator = asMovable({}, timingSetInterval, clearInterval, setTimeout);
         bindMovableToElement(elevator, elevatorElem);
-        elevator.moveTo(100+60*i, null);
+        elevator.moveTo(200+60*i, null);
         elevator = asElevator(elevator, 2.0, floorCount, floorHeight);
         bindElevatorFloorToElement(elevator, elevatorElem.find(".floorindicator"));
-        elevator.setFloorPosition(4);
+        elevator.setFloorPosition(1);
+
+        elevator.onEntranceAvailable(function() {
+            _.forEach(users, function(user) {
+                if(user.currentFloor === elevator.currentFloor) {
+                    user.elevatorAvailable(elevator);
+                }
+            });
+        });
+
         return elevator;
     });
+
     console.log("elevators are", elevators);
-    codeObj.init(floorCount, elevators);
+    console.log("stopper is", stopper);
+    codeObj.init(floorCount, elevators, stopper);
 }
 
 
 var createEditor = function() {
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized", mode: "javascript" });
-    console.log("code mirror is", cm);
 
     var reset = function() {
-        cm.setValue("{\n    init: function(floorCount, elevators) {\n        _.each(elevators, function(elevator, index) {\n            async.forever(function(cbOuter) {\n                async.series([\n                    function(cb) { elevator.wait(500+4000*Math.random(), cb) },\n                    function(cb) { elevator.goToFloor(Math.round((floorCount-1)*Math.random()), cb) },\n                ], function() { cbOuter() });\n            });\n        });\n    },\n    update: function(elevators, floors) {\n    }\n}");
+        cm.setValue("{\n    init: function(floorCount, elevators, stopper) {\n        _.each(elevators, function(elevator, index) {\n            async.whilst(stopper.shouldContinue, function(cbOuter) {\n                async.series([\n                    function(cb) { elevator.wait(1000, cb) },\n                    function(cb) { elevator.goToFloor(1 + Math.round((floorCount-2)*Math.random()), cb) },\n                    function(cb) { elevator.wait(1000, cb) },\n                    function(cb) { elevator.goToFloor(0, cb) },\n                ], function() { cbOuter() });\n            });\n        });\n    },\n    update: function(elevators, floors) {\n    }\n}");
     };
     var saveCode = function() {
         localStorage.setItem("develevateCode", cm.getValue());
@@ -89,7 +150,6 @@ var createEditor = function() {
     var applyCode = function () {
         resetWorld();
         var code = cm.getValue();
-        console.log("code is", code);
     
         obj = eval("(" + code + ")");
         if(typeof obj.init !== "function") {
@@ -98,7 +158,7 @@ var createEditor = function() {
         if(typeof obj.update !== "function") {
             throw "Code object must contain an update function";
         }
-        createWorld(obj, 5, 14);
+        createWorld(obj, 9, 7);
     };
 
     var existingCode = localStorage.getItem("develevateCode");
@@ -141,11 +201,17 @@ var createEditor = function() {
         cm.focus();
     });
 
+    setInterval(function() {
+        var transportedPerSecond = counter / (0.001 * (new Date().getTime() - startTime));
+        $(".stats").text("Transported: " + counter + " (" + transportedPerSecond.toPrecision(4) + " per sec)");
+    }, 1000);
+
     var autoSaver = _.debounce(saveCode, 1000);
     cm.on("change", function() {
         autoSaver();
     });
 
+    // Autorun
     applyCode();
 }
 
