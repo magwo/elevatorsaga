@@ -76,12 +76,17 @@ var createWorld = function(codeObj, floorCount, elevatorCount) {
     var createUser = function() {
         var userElem = $(".userprototype").clone().appendTo(".innerworld");
         userElem.removeClass("userprototype");
+        if(Math.random() < 0.02) {
+            userElem.removeClass("fa-male").addClass("fa-child");
+        } else if(Math.random() < 0.5) {
+            userElem.removeClass("fa-male").addClass("fa-female");
+        }
         userElem.show();
         var user = asMovable({}, timingSetInterval, clearInterval, setTimeout);
         bindMovableToElement(user, userElem);
         user = asUser(user, floorCount, floorHeight);
         user.moveTo(100+Math.random()*40, 0);
-        var currentFloor = Math.round() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
+        var currentFloor = Math.random() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
         user.setFloorPosition(currentFloor);
         user.destinationFloor = currentFloor === 0 ? getRandomInt(1, floorCount - 1) : 0;
 
