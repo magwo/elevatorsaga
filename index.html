@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="elevatorApp">
 <head>
+    <title>Elevator Crush Saga - the elevator programming game</title>
     <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
     <link rel="stylesheet" href="libs/codemirror/codemirror.css">
     <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
@@ -8,38 +9,45 @@
     
     <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="libs/lodash.min.js"></script>
+    <script type="text/javascript" src="libs/angular.min.js"></script>
     <script type="text/javascript" src="libs/async.js"></script>
     <script src="libs/codemirror/codemirror.js"></script>
     <script src="libs/codemirror/mode/javascript/javascript.js"></script>
 
     <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="floor.js"></script>
     <script type="text/javascript" src="user.js"></script>
     <script type="text/javascript" src="elevator.js"></script>
     <script type="text/javascript" src="main.js"></script>
 </head>
-<body>
+<body ng-controller="WorldController" ng-init="init()">
     <div class="container">
         <h1>Elevator Crush Saga</h1>
         <h3>The elevator programming game</h3>
 
-        <h4><span class="stats">Waiting...</span></h4>
+        <h4><span class="stats">Transported: {{ world.transportedCounter}} ({{ world.transportedPerSec | number:2}} per second)</span></h4>
 
-        <div class="world">
-            <div class="innerworld">
-                <div style="display: none" class="elevator movable elevatorprototype">
-                    <span class="floorindicator"></span>
+<!--         <form>
+            <input type="radio" ng-model="execMode" value="manual" ng-change="newExecutionMode()"> Manual
+            <input type="radio" ng-model="execMode" value="code" ng-change="newExecutionMode()"> Code
+        </form> -->
+
+        <div class="world ng-cloak" ng-cloak ng-style="{ height: world.floors.length * world.floorHeight }">
+            <div class="innerworld" ng-style="{height: world.floors.length * world.floorHeight }">
+                <div ng-repeat="floor in world.floors" class="floor" ng-style="{top: floor.yPosition}">
+                    <span class="floornumber">{{ floor.level }}</span>
                     <span class="buttonindicator">
-                        <span style="display: none" class="buttonpress buttonpressprototype"></span>
+                        <i class="fa fa-arrow-circle-up" ng-class="{activated: floor.buttonStates.up}" ng-click="floor.pressUpButton()"></i>
+                        <i class="fa fa-arrow-circle-down" ng-class="{activated: floor.buttonStates.down}" ng-click="floor.pressDownButton()"></i>
                     </span>
                 </div>
-                <div style="display: none" class="floor floorprototype">
-                    <span class="floornumber">0</span>
+                <div ng-repeat="e in world.elevators" class="elevator movable" ng-style="{left: e.worldX, top: e.worldY}">
+                    <span class="floorindicator">{{ e.currentFloor }}</span>
                     <span class="buttonindicator">
-                        <i class="fa fa-arrow-circle-up"></i>
-                        <i class="fa fa-arrow-circle-down on"></i>
+                        <span ng-repeat="b in e.buttonStates track by $index" class="buttonpress" ng-class="{activated: b}" ng-click="e.pressFloorButton($index)">{{$index}}</span>
                     </span>
                 </div>
-                <i style="display: none" class="fa fa-male user movable userprototype"></i>
+                <i ng-repeat="u in world.users" ng-style="{left: u.worldX, top: u.worldY}" class="fa user movable" ng-class="{leaving: u.done, 'fa-child': u.displayType == 'child', 'fa-female': u.displayType == 'female', 'fa-male': u.displayType == 'male'}"></i>
             </div>
         </div>
 

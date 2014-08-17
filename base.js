@@ -1,6 +1,6 @@
 
 
-var TIMESTEP = 1000/50; // ms
+var TIMESTEP = 1000/30.0; // ms
 var EPSILON = 0.00001;
 
 var linearInterpolate = function(value0, value1, x) {
@@ -33,57 +33,66 @@ var asEmittingEvent = function(obj, eventName) {
     return obj;
 }
 
-var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc) {
+var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
     obj.x = 0.0;
     obj.y = 0.0;
     obj.parent = null;
+    obj.worldX = 0.0;
+    obj.worldY = 0.0;
+    obj.busy = false;
+
+    obj.updateDisplayPosition = function() {
+        var worldPos = obj.getWorldPosition();
+        obj.worldX = worldPos[0];
+        obj.worldY = worldPos[1];
+    };
 
     obj.moveTo = function(newX, newY) {
         if(newX === null) { newX = obj.x; }
         if(newY === null) { newY = obj.y; }
-        obj.x = newX;
-        obj.y = newY;
-        obj.onNewState();
+        obj.setPosition([newX, newY]);
     };
 
+    obj.makeSureNotBusy = function() {
+        if(obj.busy) {
+            console.error("Attempt to use movable while it was busy", obj);
+            throw({message: "Object is busy - you should use callback", obj: obj});
+        }
+    }
+
     obj.wait = function(millis, cb) {
-        setTimeoutFunc(cb, millis);
+        obj.makeSureNotBusy();
+        obj.busy = true;
+        return setTimeoutFunc(millis, function() { obj.busy = false; if(cb) { cb() } });
     };
 
     obj.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
+        if(obj.makeSureNotBusy()) { return; }
+        obj.busy = true;
         if(newX === null) { newX = obj.x; }
         if(newY === null) { newY = obj.y; }
         if(typeof interpolator === "undefined") { interpolator = DEFAULT_INTERPOLATOR; }
         var origX = obj.x;
         var origY = obj.y;
         var timeSpent = 0.0;
-        var intervalId = setIntervalFunc(function (dt) {
+        var intervalHandle = setIntervalFunc(TIMESTEP, function (dt) {
             timeSpent = Math.min(timeToSpend, timeSpent + dt);
             if(timeSpent === timeToSpend) { // Epsilon issues?
-                clearIntervalFunc(intervalId);
-                obj.x = newX;
-                obj.y = newY;
+                intervalHandle.cancel = true;
+                obj.setPosition([newX, newY]);
+                obj.busy = false;
                 if(cb) { cb(); }
             } else {
                 var factor = timeSpent / timeToSpend;
-                obj.x = interpolator(origX, newX, factor);
-                obj.y = interpolator(origY, newY, factor);
+                obj.setPosition([interpolator(origX, newX, factor), interpolator(origY, newY, factor)]);
             }
-            obj.onNewState();
-        }, TIMESTEP);
+        });
     };
-
-    // obj.moveToPhysically = function(newX, newY, accelerationRate, maxVelocity, cb) {
-    //     if(newX === null) { newX = obj.x; }
-    //     if(newY === null) { newY = obj.y; }
-    //     setIntervalFunc(function () {
-            
-    //     }, TIMESTEP);
-    // }
 
     obj.setPosition = function(position) {
         obj.x = position[0];
         obj.y = position[1];
+        obj.updateDisplayPosition();
         obj.onNewState();
     }
 
@@ -100,6 +109,7 @@ var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc
     };
 
     obj.parentStateListener = function() {
+        obj.updateDisplayPosition();
         obj.onNewState();
     };
 
@@ -130,15 +140,3 @@ var asMovable = function(obj, setIntervalFunc, clearIntervalFunc, setTimeoutFunc
     return obj;
 }
 
-// var asFloorPositionable = function(movable, floorHeight, floorCount, objectHeight, desiredOffset) {
-
-//     movable.currentFloor = 0;
-
-//     movable.setFloorPosition = function(floor) {
-//         movable.moveTo(null, (floorCount - 1) - floor * floorHeight - objectHeight * 0.5 - desiredOffset);
-//         onPositionedAtFloor();
-//         movable.onNewState();
-//     }
-//     asEmittingEvent("onPositionedAtFloor");
-//     return movable;
-// }

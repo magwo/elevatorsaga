@@ -1,9 +1,9 @@
 
 
-
 var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.currentFloor = 0;
     movable.destinationFloor = 0;
+    movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
     movable.inTransit = false;
     movable.removed = false;
     movable.userSlots = [
@@ -32,6 +32,15 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return false;
     }
 
+    movable.pressFloorButton = function(floorNumber) {
+        movable.buttonStates[floorNumber] = true;
+
+        if(!movable.busy) {
+            //movable.goToFloor(floorNumber);
+        }
+        // TODO: Emit event?
+    }
+
     movable.userExiting = function(user) {
         _.each(movable.userSlots, function(slot) {
             if(slot.user === user) {
@@ -41,9 +50,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     }
 
     movable.goToFloor = function(floor, cb) {
-        if(movable.inTransit) { throw "Can not move to new floor while in transit"; }
-        if(movable.removed) { return cb("This elevator has been removed") };
-        movable.inTransit = true;
+        movable.makeSureNotBusy();
         movable.destinationFloor = floor;
         var distance = Math.abs(movable.destinationFloor - movable.currentFloor);
         var timeToTravel = 1000.0 * distance / speedFloorsPerSec;
@@ -51,6 +58,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
         movable.moveToOverTime(null, destination, timeToTravel, undefined, function() {
             movable.currentFloor = movable.destinationFloor;
+            movable.buttonStates[movable.currentFloor] = false;
             movable.onNewCurrentFloor();
             movable.onStoppedAtFloor();
             // Need to allow users to get off first, so that new ones
@@ -60,6 +68,22 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             movable.inTransit = false;
             if(cb) { cb(); }
         });
+    }
+
+    movable.getFirstPressedFloor = function() {
+        for(var i=0; i<movable.buttonStates.length; i++) {
+            if(movable.buttonStates[i]) { return i; }
+        }
+        return 0;
+    }
+
+
+    movable.goingUp = function() {
+        return true; // TODO: Make usercode returnable
+    }
+
+    movable.goingDown = function() {
+        return true; // TODO: Make usercode returnable
     }
 
     movable.onNewState(function() {

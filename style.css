@@ -82,8 +82,19 @@ button {
     z-index: 2;
 }
 
-.user.done {
-    z-index: 0;
+.user.happy {
+}
+
+.user.frustrated {
+    color: yellow;
+}
+
+.user.disappointed {
+    color: red;
+}
+
+.user.leaving {
+    color: #eee;
 }
 
 .elevator {
@@ -109,13 +120,14 @@ button {
     top: 15px;
     width: 100%;
     text-align: center;
-    font-size: 8px;
+    font-size: 9px;
     color: rgba(255, 255, 255, 0.3);
 }
 .elevator .buttonpress {
+    cursor: pointer;
     display: inline-block;
 }
-.elevator .buttonpress.on {
+.elevator .buttonpress.activated {
     color: rgba(255, 255, 255, 0.8);
 }
 
@@ -129,13 +141,12 @@ button {
 }
 
 .floor .buttonindicator {
+    cursor: pointer;
     line-height: 50px;
     padding-left: 36px;
-}
-.floor .buttonindicator {
     color: rgba(255, 255, 255, 0.2);
 }
-.floor .buttonindicator .on {
+.floor .buttonindicator .activated {
     color: rgba(55, 255, 55, 1.0);
 }
 
