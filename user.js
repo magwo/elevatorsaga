@@ -33,6 +33,7 @@ var asUser = function(movable, floorCount, floorHeight) {
             movable.setParent(elevator);
             movable.trigger("entered_elevator", elevator);
 
+            // TODO: Consider what happens if user is busy at this moment
             movable.moveToOverTime(pos[0], pos[1], 1000, undefined, function() {
                 elevator.pressFloorButton(movable.destinationFloor);
             });
@@ -44,11 +45,13 @@ var asUser = function(movable, floorCount, floorHeight) {
                     movable.setParent(null);
                     var destination = movable.x + 100
                     movable.moveToOverTime(destination, null, 1000 + Math.random()*500, linearInterpolate, function() {
-                        movable.trigger("removable");
+                        movable.removeMe = true;
+                        movable.trigger("removed");
                         movable.off("*");
                     });
                     movable.done = true;
                     movable.trigger("exited_elevator", elevator);
+                    movable.trigger("new_state");
 
                     // Remove self as event listener
                     elevator.off("exit_available", exitAvailableHandler);

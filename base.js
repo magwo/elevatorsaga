@@ -15,7 +15,20 @@ var coolInterpolate = function(value0, value1, x) {
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
 
-var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
+// A generic promiese interface by using riot.observable
+// Borrowed from https://github.com/muut/riotjs-admin
+function Promise(fn) {
+    var self = riot.observable(this);
+
+    $.map(['done', 'fail', 'always'], function(name) {
+        self[name] = function(arg) {
+            return self[$.isFunction(arg) ? 'on' : 'trigger'](name, arg);
+        };
+    });
+}
+
+
+var asMovable = function(obj) {
     riot.observable(obj);
 
     obj.x = 0.0;
@@ -23,7 +36,7 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
     obj.parent = null;
     obj.worldX = 0.0;
     obj.worldY = 0.0;
-    obj.busy = false;
+    obj.currentTask = null;
 
     obj.updateDisplayPosition = function() {
         var worldPos = obj.getWorldPosition();
@@ -38,7 +51,7 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
     };
 
     obj.makeSureNotBusy = function() {
-        if(obj.busy) {
+        if(obj.currentTask !== null) {
             console.error("Attempt to use movable while it was busy", obj);
             throw({message: "Object is busy - you should use callback", obj: obj});
         }
@@ -46,32 +59,44 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
 
     obj.wait = function(millis, cb) {
         obj.makeSureNotBusy();
-        obj.busy = true;
-        return setTimeoutFunc(millis, function() { obj.busy = false; if(cb) { cb() } });
+        var timeSpent = 0.0;
+        obj.currentTask = function(dt) {
+            timeSpent += dt;
+            if(timeSpent > millis) {
+                obj.currentTask = null;
+                if(cb) { cb(); }
+            }
+        };
     };
 
     obj.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
-        if(obj.makeSureNotBusy()) { return; }
-        obj.busy = true;
+        obj.makeSureNotBusy();
+        obj.currentTask = true;
         if(newX === null) { newX = obj.x; }
         if(newY === null) { newY = obj.y; }
         if(typeof interpolator === "undefined") { interpolator = DEFAULT_INTERPOLATOR; }
         var origX = obj.x;
         var origY = obj.y;
         var timeSpent = 0.0;
-        var intervalHandle = setIntervalFunc(TIMESTEP, function (dt) {
+
+        obj.currentTask = function (dt) {
             timeSpent = Math.min(timeToSpend, timeSpent + dt);
             if(timeSpent === timeToSpend) { // Epsilon issues?
-                intervalHandle.cancel = true;
                 obj.setPosition([newX, newY]);
-                obj.busy = false;
+                obj.currentTask = null;
                 if(cb) { cb(); }
             } else {
                 var factor = timeSpent / timeToSpend;
                 obj.setPosition([interpolator(origX, newX, factor), interpolator(origY, newY, factor)]);
             }
-        });
+        };
     };
+
+    obj.update = function(dt) {
+        if(obj.currentTask !== null) {
+            obj.currentTask(dt);
+        }
+    }
 
     obj.setPosition = function(position) {
         obj.x = position[0];

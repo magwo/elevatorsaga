@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elevator Crush Saga - the elevator programming game</title>
+    <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
+    <link rel="stylesheet" href="libs/codemirror/codemirror.css">
+    <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
+    <link rel="stylesheet" href="style.css" type="text/css" media="all">
+    
+    <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="libs/lodash.min.js"></script>
+    <script type="text/javascript" src="libs/riot.js"></script>
+
+    <script type="text/javascript" src="libs/codemirror/codemirror.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
+
+    <script type="text/javascript" src="base.js"></script>
+    <script type="text/javascript" src="floor.js"></script>
+    <script type="text/javascript" src="user.js"></script>
+    <script type="text/javascript" src="elevator.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="presenters.js"></script>
+    <script type="text/javascript" src="riotapp.js"></script>
+
+
+    <script type="text/template" id="user-template">
+        <i class="fa user movable fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px" ></i>
+    </script>
+
+    <script type="text/template" id="floor-template">
+        <div class="floor" style="top: {yPosition}px">
+            <span class="floornumber">{level}</span>
+            <span class="buttonindicator">
+                <i class="fa fa-arrow-circle-up {buttonStates.up}"></i>
+                <i class="fa fa-arrow-circle-down {buttonStates.down}"></i>
+            </span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevator-template">
+        <div class="elevator movable" style="left: {e.worldX}px; top: {e.worldY}px">
+            <span class="floorindicator">{e.currentFloor}</span>
+            <span class="buttonindicator">
+                {buttons}
+            </span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevatorbutton-template">
+        <span class="buttonpress {state}">{floorNum}</span>
+    </script>
+
+    <script type="text/template" id="stats-template">
+        <span class="stats">Transported: {transportedCounter} ({transportedPerSec} per second)</span>
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Elevator Crush Saga</h1>
+        <h3>The elevator programming game</h3>
+
+        <h4 class="stats"></h4>
+
+        <div class="world" style="height: height: 200px">
+            <div class="innerworld" style="height: 200px">
+            </div>
+        </div>
+
+        <div class="code">
+            <textarea name="Code" id="code"></textarea>
+        </div>
+        <button id="button_reset" style="float: left">Reset</button>
+        <button id="button_resetundo" style="float: left">Undo reset</button>
+        <button id="button_apply" style="float: right">Apply</button>
+        <button id="button_save" style="float: right">Save</button>
+        <span id="save_message" style="float: right"></span>
+        <div style="clear:both;"></div>
+        <div class="footer">
+            <h4>Made by Magnus Wolffelt</h4>
+        </div>
+    </div>
+</body>
+</html>

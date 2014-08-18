@@ -1,71 +1,66 @@
 
+var timeout = window.setTimeout;
+
 var getRandomInt = function(min, max) {
     return min + Math.round(Math.random() * (max - min));
 }
 
-var elevatorApp = angular.module('elevatorApp', []);
+var dateService = {
+    nowMillis: function() { return new Date().getTime(); }
+};
 
-elevatorApp.service("dateService", function() {
-    return {
-        nowMillis: function() { return new Date().getTime(); }
-    }
-});
-
-elevatorApp.service("timingService", function($timeout, dateService) {
+var timingService = {
     // This service solves several problems:
     // 1. setInterval/setTimeout not being externally controllable with regards to cancellation
-    // 2. setInterval/setTimeout not triggering angular dirty checks
-    // 3. setInterval/setTimeout not supporting time scale factor
-    // 4. setInterval/setTimeout not providing a delta time in the call
-    return {
-        createSetIntervalReplacement: function(timeScale) {
-            // Almost went insane writing this code
-            // TODO: Could use promise object?
-            var thisObj = {timeScale: timeScale, disabled: false};
-            thisObj.setInterval = function(millis, fn) {
-                var handle = { cancel: false };
-                var prevT = dateService.nowMillis();
+    // 2. setInterval/setTimeout not supporting time scale factor
+    // 3. setInterval/setTimeout not providing a delta time in the call
+    createSetIntervalReplacement: function(timeScale) {
+        // Almost went insane writing this code
+        // TODO: Could use promise object?
+        var thisObj = {timeScale: timeScale, disabled: false};
+        thisObj.setInterval = function(millis, fn) {
+            var handle = { cancel: false };
+            var prevT = dateService.nowMillis();
 
-                var doCall = function() {
-                    var currentT = dateService.nowMillis();
-                    var dt = (currentT - prevT) * thisObj.timeScale;
-                    prevT = currentT;
+            var doCall = function() {
+                var currentT = dateService.nowMillis();
+                var dt = (currentT - prevT) * thisObj.timeScale;
+                prevT = currentT;
+                fn(dt);
+            }
+            var timeoutFunction = function() {
+                if(!handle.cancel) {
+                    if(!thisObj.disabled) {
+                        doCall();
+                    }
+                    timeout(timeoutFunction, millis / thisObj.timeScale);
+                }
+            }
+            timeout(timeoutFunction, millis / thisObj.timeScale);
+            return handle;
+        };
+        return thisObj;
+    },
+    createSetTimeoutReplacement: function(timeScale) {
+        var thisObj = {timeScale: timeScale, disabled: false};
+        thisObj.setTimeout = function(millis, fn) {
+            var handle = { cancel: false };
+            var schedulationTime = dateService.nowMillis();
+            timeout(function() {
+                if(!handle.cancel && !thisObj.disabled) {
+                    var callTime = dateService.nowMillis();
+                    var dt = (callTime - schedulationTime) * thisObj.timeScale;
                     fn(dt);
                 }
-                var timeoutFunction = function() {
-                    if(!handle.cancel) {
-                        if(!thisObj.disabled) {
-                            doCall();
-                        }
-                        $timeout(timeoutFunction, millis / thisObj.timeScale);
-                    }
-                }
-                $timeout(timeoutFunction, millis / thisObj.timeScale);
-                return handle;
-            };
-            return thisObj;
-        },
-        createSetTimeoutReplacement: function(timeScale) {
-            var thisObj = {timeScale: timeScale, disabled: false};
-            thisObj.setTimeout = function(millis, fn) {
-                var handle = { cancel: false };
-                var schedulationTime = dateService.nowMillis();
-                $timeout(function() {
-                    if(!handle.cancel && !thisObj.disabled) {
-                        var callTime = dateService.nowMillis();
-                        var dt = (callTime - schedulationTime) * thisObj.timeScale;
-                        fn(dt);
-                    }
-                }, millis / thisObj.timeScale);
-                return handle;
-            };
-            return thisObj;
-        }
+            }, millis / thisObj.timeScale);
+            return handle;
+        };
+        return thisObj;
     }
-});
+};
 
 
-elevatorApp.controller("WorldController", function($scope, $document, timingService, dateService) {
+ var createScope = function($scope, $) {
     window.controller = $scope;
     window.timingService = timingService;
     $scope.execMode = "code";
@@ -90,9 +85,9 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
         });
         return floors;
     };
-    $scope.createElevators = function(elevatorCount, floorCount, floorHeight, intervalSetter, timeoutSetter) {
+    $scope.createElevators = function(elevatorCount, floorCount, floorHeight) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
-            var elevator = asMovable({}, intervalSetter, timeoutSetter);
+            var elevator = asMovable({});
             elevator.moveTo(200+60*i, null);
             elevator = asElevator(elevator, 2.0, floorCount, floorHeight);
             elevator.setFloorPosition(1);
@@ -101,8 +96,8 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
         return elevators;
     };
 
-    $scope.createRandomUser = function(floorCount, floorHeight, intervalSetter, timeoutSetter) {
-        var user = asMovable({}, intervalSetter, timeoutSetter);
+    $scope.createRandomUser = function(floorCount, floorHeight) {
+        var user = asMovable({});
         user = asUser(user, floorCount, floorHeight);
         if(Math.random() < 0.02) {
             user.displayType = "child";
@@ -114,8 +109,8 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
         return user;
     }
 
-    $scope.spawnUserRandomly = function(floorCount, floorHeight, floors, intervalSetter, timeoutSetter) {
-        var user = $scope.createRandomUser(floorCount, floorHeight, intervalSetter, timeoutSetter);
+    $scope.spawnUserRandomly = function(floorCount, floorHeight, floors) {
+        var user = $scope.createRandomUser(floorCount, floorHeight);
         user = asUser(user, floorCount, floorHeight);
         user.moveTo(100+Math.random()*40, 0);
         var currentFloor = Math.random() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
@@ -145,24 +140,28 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
         world.intervalObj = timingService.createSetIntervalReplacement(1.0);
         
         world.floors = $scope.createFloors(options.floorCount, floorHeight);
-        world.elevators = $scope.createElevators(options.elevatorCount, options.floorCount, floorHeight, world.intervalObj.setInterval, world.timeoutObj.setTimeout);
+        world.elevators = $scope.createElevators(options.elevatorCount, options.floorCount, floorHeight);
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.startTime = dateService.nowMillis();
 
+        riot.observable(world);
+
         var registerUser = function(user) {
             world.users.push(user);
+            world.trigger("new_user", user);
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
                 world.transportedPerSec = world.transportedCounter / (0.001 * (dateService.nowMillis() - world.startTime));
             });
             user.on("removable", function() {
-                _.pull(world.users, user);
+                console.log("Removing user from users", user);
+                
             });
         }
         world.intervalObj.setInterval(500, function(){
-            registerUser($scope.spawnUserRandomly(options.floorCount, floorHeight, world.floors, world.intervalObj.setInterval, world.timeoutObj.setTimeout));
+            registerUser($scope.spawnUserRandomly(options.floorCount, floorHeight, world.floors));
         });
 
         // Bind them all together
@@ -187,25 +186,31 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
         console.log("SETTING WORLD", world);
         $scope.world = world;
 
+        // TODO: Need to turn this thing off when resetting?
+        world.intervalObj.setInterval(1000/30, function(dt) {
+            _.each(world.elevators, function(e) { e.update(dt); });
+            _.each(world.users, function(u) { u.update(dt); });
+            _.remove(world.users, function(u) { return u.removeMe; });
+        });
+
         codeObj.init(options.floorCount, world.elevators, world.timeoutObj.setTimeout);
     }
 
     $scope.init = function() {
-        $document.ready(function() {
-            // TODO: Could make editor stuff into a service or something...
-            // This line fucks with testability
-            $scope.editor = createEditor();
+        // TODO: Could make editor stuff into a service or something...
+        // This line fucks with testability
+        $scope.editor = createEditor();
 
-            // setInterval(function() {
-            //     var transportedPerSecond = counter / (0.001 * (new Date().getTime() - startTime));
-            //     $(".stats").text("Transported: " + counter + " (" + transportedPerSecond.toPrecision(4) + " per sec)");
-            // }, 1000);
+        // setInterval(function() {
+        //     var transportedPerSecond = counter / (0.001 * (new Date().getTime() - startTime));
+        //     $(".stats").text("Transported: " + counter + " (" + transportedPerSecond.toPrecision(4) + " per sec)");
+        // }, 1000);
 
-            $scope.createWorld({floorCount: 6, elevatorCount: 4}, $scope.editor.getCodeObj());
-            $scope.$apply();
-        });
+        $scope.createWorld({floorCount: 12, elevatorCount: 8}, $scope.editor.getCodeObj());
     };
-});
+
+    return $scope;
+};
 
 var createEditor = function() {
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized", mode: "javascript" });

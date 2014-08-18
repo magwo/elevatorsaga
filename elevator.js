@@ -4,7 +4,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.currentFloor = 0;
     movable.destinationFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
-    movable.inTransit = false;
     movable.removed = false;
     movable.userSlots = [
         {pos: [2, 30], user: null},
@@ -64,7 +63,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             // can enter on the same floor
             movable.trigger("exit_available", movable.currentFloor);
             movable.trigger("entrance_available", movable);
-            movable.inTransit = false;
             if(cb) { cb(); }
         });
     }

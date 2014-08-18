@@ -1,27 +1,26 @@
 
-
 var asFloor = function(obj, floorLevel, yPosition) {
     obj.level = floorLevel;
     obj.yPosition = yPosition;
-    obj.buttonStates = {up: false, down: false}
+    obj.buttonStates = {up: "", down: ""}
 
 
     obj.pressUpButton = function() {
-        obj.buttonStates.up = true;
+        obj.buttonStates.up = "activated";
         // TODO: Emit event?
     }
 
     obj.pressDownButton = function() {
-        obj.buttonStates.down = true;
+        obj.buttonStates.down = "activated";
         // TODO: Emit event?
     }
 
     obj.elevatorAvailable = function(elevator) {
         if(elevator.goingUp()) {
-            obj.buttonStates.up = false;
+            obj.buttonStates.up = "";
         }
         if(elevator.goingDown()) {
-            obj.buttonStates.down = false;
+            obj.buttonStates.down = "";
         }
     }
 
