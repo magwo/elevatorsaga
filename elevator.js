@@ -15,10 +15,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     movable.setFloorPosition = function(floor) {
         var destination = (floorCount - 1) * floorHeight - floor * floorHeight;
-        movable.moveTo(null, destination);
         movable.currentFloor = floor;
         movable.destinationFloor = floor;
-        movable.onNewState();
+        movable.moveTo(null, destination);
     }
 
     movable.userEntering = function(user) {
@@ -59,12 +58,12 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         movable.moveToOverTime(null, destination, timeToTravel, undefined, function() {
             movable.currentFloor = movable.destinationFloor;
             movable.buttonStates[movable.currentFloor] = false;
-            movable.onNewCurrentFloor();
-            movable.onStoppedAtFloor();
+            movable.trigger("new_current_floor", movable.currentFloor);
+            movable.trigger("stopped_at_floor", movable.currentFloor);
             // Need to allow users to get off first, so that new ones
             // can enter on the same floor
-            movable.onExitAvailable();
-            movable.onEntranceAvailable();
+            movable.trigger("exit_available", movable.currentFloor);
+            movable.trigger("entrance_available", movable);
             movable.inTransit = false;
             if(cb) { cb(); }
         });
@@ -86,19 +85,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return true; // TODO: Make usercode returnable
     }
 
-    movable.onNewState(function() {
+    movable.on("new_state", function() {
         // Recalculate the floor number
         var currentFloor = Math.round(((floorCount - 1) * floorHeight - movable.y) / floorHeight);
         if(currentFloor != movable.currentFloor) {
             movable.currentFloor = currentFloor;
-            movable.onNewCurrentFloor();
+            movable.trigger("new_current_floor", movable.currentFloor);
         }
     });
-
-    movable = asEmittingEvent(movable, "onStoppedAtFloor");
-    movable = asEmittingEvent(movable, "onExitAvailable");
-    movable = asEmittingEvent(movable, "onEntranceAvailable");
-    movable = asEmittingEvent(movable, "onNewCurrentFloor");
 
     return movable;
 }

@@ -8,9 +8,9 @@ var asUser = function(movable, floorCount, floorHeight) {
 
     movable.appearOnFloor = function(floor, destinationFloorNum) {
         var floorPosY = (floorCount - 1) * floorHeight - floor.level * floorHeight + 30;
-        movable.moveTo(null, floorPosY);
         movable.currentFloor = floor.level;
         movable.destinationFloor = destinationFloorNum;
+        movable.moveTo(null, floorPosY);
         movable.pressFloorButton(floor);
     };
 
@@ -31,38 +31,34 @@ var asUser = function(movable, floorCount, floorHeight) {
         if(pos) {
             // Success
             movable.setParent(elevator);
-            movable.onEnteredElevator();
+            movable.trigger("entered_elevator", elevator);
 
             movable.moveToOverTime(pos[0], pos[1], 1000, undefined, function() {
                 elevator.pressFloorButton(movable.destinationFloor);
             });
 
-
-            elevator.onExitAvailable(function(elev, self) {
+            var exitAvailableHandler = function(floorNum) {
                 if(elevator.currentFloor === movable.destinationFloor) {
-                    elev.userExiting(movable);
+                    elevator.userExiting(movable);
                     movable.currentFloor = elevator.currentFloor;
                     movable.setParent(null);
                     var destination = movable.x + 100
                     movable.moveToOverTime(destination, null, 1000 + Math.random()*500, linearInterpolate, function() {
-                        movable.onRemovable();
+                        movable.trigger("removable");
+                        movable.off("*");
                     });
                     movable.done = true;
-                    movable.onExitedElevator();
+                    movable.trigger("exited_elevator", elevator);
 
                     // Remove self as event listener
-                    elev.remove_onStoppedAtFloor(self);
+                    elevator.off("exit_available", exitAvailableHandler);
                 }
-            });
+            };
+            elevator.on("exit_available", exitAvailableHandler);
         } else {
             movable.pressFloorButton(floor);
         }
-        
     };
-
-    asEmittingEvent(movable, "onEnteredElevator");
-    asEmittingEvent(movable, "onExitedElevator");
-    asEmittingEvent(movable, "onRemovable");
 
     return movable;
 }

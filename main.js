@@ -153,11 +153,11 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
 
         var registerUser = function(user) {
             world.users.push(user);
-            user.onExitedElevator(function() {
+            user.on("exited_elevator", function() {
                 world.transportedCounter++;
                 world.transportedPerSec = world.transportedCounter / (0.001 * (dateService.nowMillis() - world.startTime));
             });
-            user.onRemovable(function() {
+            user.on("removable", function() {
                 _.pull(world.users, user);
             });
         }
@@ -167,8 +167,8 @@ elevatorApp.controller("WorldController", function($scope, $document, timingServ
 
         // Bind them all together
         _.each(world.elevators, function(elevator) {
-            elevator.onEntranceAvailable(function() {
-                // Order of floors/user is significant, because overflowing users
+            elevator.on("entrance_available", function() {
+                // Notify floors first because overflowing users
                 // will press buttons again
                 _.each(world.floors, function(floor, i) {
                     if(elevator.currentFloor == i) {

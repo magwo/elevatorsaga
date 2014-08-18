@@ -15,25 +15,9 @@ var coolInterpolate = function(value0, value1, x) {
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
 
-var asEmittingEvent = function(obj, eventName) {
-    var handlers = [];
-    obj[eventName] = function(handler, arg) {
-        if(typeof handler !== "undefined") {
-            handlers.push(handler);
-        } else {
-            _.remove(handlers, function(h) { return h._remove });
-            _.each(handlers, function(h) {
-                h(obj, h);
-            });
-        }
-    };
-    obj["remove_" + eventName] = function(handler) {
-        handler._remove = true;
-    }
-    return obj;
-}
-
 var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
+    riot.observable(obj);
+
     obj.x = 0.0;
     obj.y = 0.0;
     obj.parent = null;
@@ -93,7 +77,7 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
         obj.x = position[0];
         obj.y = position[1];
         obj.updateDisplayPosition();
-        obj.onNewState();
+        obj.trigger('new_state');
     }
 
     obj.getWorldPosition = function() {
@@ -110,13 +94,13 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
 
     obj.parentStateListener = function() {
         obj.updateDisplayPosition();
-        obj.onNewState();
+        obj.trigger('new_state', obj);
     };
 
     obj.setParent = function(movableParent) {
         if(obj.parent !== null) {
             // Clean up listener
-            obj.parent.remove_onNewState(obj.parentStateListener);
+            obj.parent.off("new_state", obj.parentStateListener);
         }
         if(movableParent === null) {
             if(obj.parent !== null) {
@@ -130,13 +114,12 @@ var asMovable = function(obj, setIntervalFunc, setTimeoutFunc) {
             var parentWorld = movableParent.getWorldPosition();
             obj.parent = movableParent;
             obj.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
-            movableParent.onNewState(obj.parentStateListener);
+            obj.trigger('new_state');
+            movableParent.on("new_state", obj.parentStateListener);
         }
     };
 
-    obj = asEmittingEvent(obj, "onNewState");
-
-    obj.onNewState();
+    obj.trigger('new_state', obj);
     return obj;
 }
 
