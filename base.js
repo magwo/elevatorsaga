@@ -19,7 +19,7 @@ var DEFAULT_INTERPOLATOR = coolInterpolate;
 // Borrowed from https://github.com/muut/riotjs-admin
 function Promise(fn) {
     var self = riot.observable(this);
-
+    var resolved = false;
     $.map(['done', 'fail', 'always'], function(name) {
         self[name] = function(arg) {
             return self[$.isFunction(arg) ? 'on' : 'trigger'](name, arg);

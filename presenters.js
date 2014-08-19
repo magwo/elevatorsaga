@@ -4,14 +4,29 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
 
     $world.css("height", world.floorHeight * world.floors.length);
 
-    $world.append(_.map(world.floors, function(f) { return riot.render(floorTempl, f); }));
+    $world.append(_.map(world.floors, function(f) {
+        var $floor = $(riot.render(floorTempl, f));
+        f.on("buttonstate_change", function(buttonStates) {
+            $floor.find(".up").removeClass("activated").addClass(buttonStates.up ? "activated" : "");
+            $floor.find(".down").removeClass("activated").addClass(buttonStates.down ? "activated" : "");
+        });
+        $floor.find(".up").on("click", function() {
+            f.pressUpButton();
+        });
+        $floor.find(".down").on("click", function() {
+            f.pressDownButton();
+        });
+        return $floor;
+    }));
 
     $world.append(_.map(world.elevators, function(e) {
-        var buttons = _.map(e.buttonStates, function(b, i) {return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""})});
-        var buttonsHtml = buttons.join("");
-        console.log("buttons is", buttons);
-        var elevatorHtml = riot.render(elevatorTempl, {e: e, buttons: buttonsHtml});
-        var $elevator = $(elevatorHtml);
+        var renderButtons = function(states) {
+            return _.map(states, function(b, i) {
+                return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""})
+            }).join("");
+        };
+        var buttonsHtml = renderButtons(e.buttonStates);
+        var $elevator = $(riot.render(elevatorTempl, {e: e, buttons: buttonsHtml}));
         $elevator.on("click", ".buttonpress", function() {
             console.log("clicked!");
             e.pressFloorButton(parseInt($(this).text()));
@@ -19,6 +34,12 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
 
         e.on("new_state", function() {
             $elevator.css({left: e.worldX, top: e.worldY});
+        });
+        e.on("new_current_floor", function(floor) {
+            $elevator.find(".floorindicator").text(floor);
+        });
+        e.on("floor_buttons_changed", function(states) {
+            $elevator.find(".buttonindicator").html(renderButtons(states));
         });
         return $elevator;
     }));

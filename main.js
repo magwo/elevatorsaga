@@ -136,8 +136,12 @@ var timingService = {
         var floorHeight = 50;
         var world = {floorHeight: floorHeight, transportedCounter: 0};
         
-        world.timeoutObj = timingService.createSetTimeoutReplacement(1.0);
-        world.intervalObj = timingService.createSetIntervalReplacement(1.0);
+        // Conclusion: Need to implement our own timeout generator
+        // to get reliable high-speed time
+        var timeScale = 1;
+
+        world.timeoutObj = timingService.createSetTimeoutReplacement(timeScale);
+        world.intervalObj = timingService.createSetIntervalReplacement(timeScale);
         
         world.floors = $scope.createFloors(options.floorCount, floorHeight);
         world.elevators = $scope.createElevators(options.elevatorCount, options.floorCount, floorHeight);
@@ -187,7 +191,9 @@ var timingService = {
         $scope.world = world;
 
         // TODO: Need to turn this thing off when resetting?
-        world.intervalObj.setInterval(1000/30, function(dt) {
+        // Note: Division by timeScale lets us do high timescale without
+        // destroying performance
+        world.intervalObj.setInterval(1000/(60/timeScale), function(dt) {
             _.each(world.elevators, function(e) { e.update(dt); });
             _.each(world.users, function(u) { u.update(dt); });
             _.remove(world.users, function(u) { return u.removeMe; });
@@ -206,7 +212,7 @@ var timingService = {
         //     $(".stats").text("Transported: " + counter + " (" + transportedPerSecond.toPrecision(4) + " per sec)");
         // }, 1000);
 
-        $scope.createWorld({floorCount: 12, elevatorCount: 8}, $scope.editor.getCodeObj());
+        $scope.createWorld({floorCount: 8, elevatorCount: 8}, $scope.editor.getCodeObj());
     };
 
     return $scope;

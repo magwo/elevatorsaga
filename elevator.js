@@ -36,7 +36,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         if(!movable.busy) {
             //movable.goToFloor(floorNumber);
         }
-        // TODO: Emit event?
+        movable.trigger("floor_buttons_changed", movable.buttonStates);
     }
 
     movable.userExiting = function(user) {
@@ -57,6 +57,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         movable.moveToOverTime(null, destination, timeToTravel, undefined, function() {
             movable.currentFloor = movable.destinationFloor;
             movable.buttonStates[movable.currentFloor] = false;
+            movable.trigger("floor_buttons_changed", movable.buttonStates);
             movable.trigger("new_current_floor", movable.currentFloor);
             movable.trigger("stopped_at_floor", movable.currentFloor);
             // Need to allow users to get off first, so that new ones
