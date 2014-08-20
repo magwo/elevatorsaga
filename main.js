@@ -138,7 +138,7 @@ var timingService = {
         
         // Conclusion: Need to implement our own timeout generator
         // to get reliable high-speed time
-        var timeScale = 1;
+        var timeScale = 2;
 
         world.timeoutObj = timingService.createSetTimeoutReplacement(timeScale);
         world.intervalObj = timingService.createSetIntervalReplacement(timeScale);
@@ -158,10 +158,7 @@ var timingService = {
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
                 world.transportedPerSec = world.transportedCounter / (0.001 * (dateService.nowMillis() - world.startTime));
-            });
-            user.on("removable", function() {
-                console.log("Removing user from users", user);
-                
+                world.trigger("stats_changed");
             });
         }
         world.intervalObj.setInterval(500, function(){
@@ -195,7 +192,15 @@ var timingService = {
         // destroying performance
         world.intervalObj.setInterval(1000/(60/timeScale), function(dt) {
             _.each(world.elevators, function(e) { e.update(dt); });
-            _.each(world.users, function(u) { u.update(dt); });
+
+            _.each(world.users, function(u) {
+                if(u.done && typeof u.cleanupFunction === "function") {
+                    // Conclusion: Be careful using "off" riot function from event handlers - it alters 
+                    // riot's callback list resulting in uncalled event handlers.
+                    u.cleanupFunction();
+                    u.cleanupFunction = null;
+                }
+                u.update(dt); });
             _.remove(world.users, function(u) { return u.removeMe; });
         });
 
@@ -207,10 +212,6 @@ var timingService = {
         // This line fucks with testability
         $scope.editor = createEditor();
 
-        // setInterval(function() {
-        //     var transportedPerSecond = counter / (0.001 * (new Date().getTime() - startTime));
-        //     $(".stats").text("Transported: " + counter + " (" + transportedPerSecond.toPrecision(4) + " per sec)");
-        // }, 1000);
 
         $scope.createWorld({floorCount: 8, elevatorCount: 8}, $scope.editor.getCodeObj());
     };

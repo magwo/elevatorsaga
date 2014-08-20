@@ -1,5 +1,13 @@
 
 
+var presentStats = function($parent, world, statsTempl) {
+    world.on("stats_changed", function() {
+        $parent.html(riot.render(statsTempl, {transportedCounter: world.transportedCounter, transportedPerSec: world.transportedPerSec.toPrecision(3)}));
+    });
+    world.trigger("stats_changed");
+};
+
+
 var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
 
     $world.css("height", world.floorHeight * world.floors.length);
@@ -49,7 +57,6 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         
         user.on("new_state", function() {
             $user.css({left: user.worldX, top: user.worldY});
-            $user.removeClass("leaving");
             if(user.done) { $user.addClass("leaving"); }
         });
         user.on("removed", function() {

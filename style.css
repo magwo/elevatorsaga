@@ -120,11 +120,12 @@ button {
     top: 15px;
     width: 100%;
     text-align: center;
-    font-size: 9px;
+    font-size: 8px;
     color: rgba(255, 255, 255, 0.3);
 }
 .elevator .buttonpress {
     cursor: pointer;
+    width: 4px;
     display: inline-block;
 }
 .elevator .buttonpress.activated {

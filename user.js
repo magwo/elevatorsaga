@@ -23,7 +23,7 @@ var asUser = function(movable, floorCount, floorHeight) {
     }
 
     movable.elevatorAvailable = function(elevator, floor) {
-        if(movable.done || movable.parent !== null) {
+        if(movable.done || movable.parent !== null || movable.isBusy()) {
             return;
         }
         
@@ -43,18 +43,22 @@ var asUser = function(movable, floorCount, floorHeight) {
                     elevator.userExiting(movable);
                     movable.currentFloor = elevator.currentFloor;
                     movable.setParent(null);
-                    var destination = movable.x + 100
+                    var destination = movable.x + 100;
+                    movable.done = true;
+                    movable.trigger("exited_elevator", elevator);
+                    movable.trigger("new_state");
+
                     movable.moveToOverTime(destination, null, 1000 + Math.random()*500, linearInterpolate, function() {
                         movable.removeMe = true;
                         movable.trigger("removed");
                         movable.off("*");
                     });
-                    movable.done = true;
-                    movable.trigger("exited_elevator", elevator);
-                    movable.trigger("new_state");
 
-                    // Remove self as event listener
-                    elevator.off("exit_available", exitAvailableHandler);
+                    // Remove self as event listener - must be done after this,
+                    // or riot's event calling loops bugs out (we're currently in it)
+                    movable.cleanupFunction = function() {
+                        elevator.off("exit_available", exitAvailableHandler);
+                    }
                 }
             };
             elevator.on("exit_available", exitAvailableHandler);

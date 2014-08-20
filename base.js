@@ -50,8 +50,12 @@ var asMovable = function(obj) {
         obj.setPosition([newX, newY]);
     };
 
+    obj.isBusy = function() {
+        return obj.currentTask !== null;
+    }
+
     obj.makeSureNotBusy = function() {
-        if(obj.currentTask !== null) {
+        if(obj.isBusy()) {
             console.error("Attempt to use movable while it was busy", obj);
             throw({message: "Object is busy - you should use callback", obj: obj});
         }
