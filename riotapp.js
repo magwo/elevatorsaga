@@ -2,7 +2,7 @@
 
 $(function() {
     var $world = $(".innerworld");
-    var $stats = $(".stats");
+    var $stats = $(".statscontainer");
     console.log("stats is", $stats);
     var floorTempl = document.getElementById("floor-template").innerHTML.trim();
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();

@@ -51,7 +51,11 @@
     </script>
 
     <script type="text/template" id="stats-template">
-        <span class="stats">Transported: {transportedCounter} ({transportedPerSec} per second)</span>
+        <div><span class="key">Transported</span><span class="value">{transportedCounter}</span></div>
+        <div><span class="key">Transported/s</span><span class="value">{transportedPerSec}</span></div>
+        <div><span class="key">Energy usage</span><span class="value">0 kWh</span></div>
+        <div><span class="key">Avg wait time</span><span class="value"></span></div>
+        <div><span class="key">Max wait time</span><span class="value"></span></div>
     </script>
 
 </head>
@@ -60,11 +64,10 @@
         <h1>Elevator Crush Saga</h1>
         <h3>The elevator programming game</h3>
 
-        <h4 class="stats"></h4>
-
         <div class="world" style="height: height: 200px">
             <div class="innerworld" style="height: 200px">
             </div>
+            <div class="statscontainer"></div>
         </div>
 
         <div class="code">

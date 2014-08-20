@@ -21,7 +21,7 @@ h2, h3, h4, h5 {
 }
 
 .container {
-    width: 1100px;
+    width: 1280px;
     margin: 0 auto;
     padding: 20px 40px 40px 40px;
     background-color: #84B4BA;
@@ -58,7 +58,8 @@ button {
 }
 
 .world {
-    width: 1100px;
+    position: relative;
+    width: 1280px;
     background-color: #333;
     padding: 0;
 }
@@ -66,8 +67,38 @@ button {
 .innerworld {
     position: relative;
     height: 100%;
-    width: 1100px;
+    width: 998px;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
+
+.statscontainer {
+    font: 12px Consolas, Monaco, monospace;
+    line-height: 12px;
+    color: #999;
+    position: absolute;
+    top: 0;
+    right: 0px;
+    width: 240px;
+    height: 200px;
+    padding: 20px;
+    z-index: 1;
+}
+
+.statscontainer div {
+    width: 240px;
+    height: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.statscontainer .key {
+    float: left;
+}
+.statscontainer .value {
+    float: right;
+}
+
 
 .movable {
     position: absolute;

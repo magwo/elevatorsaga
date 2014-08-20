@@ -138,7 +138,7 @@ var timingService = {
         
         // Conclusion: Need to implement our own timeout generator
         // to get reliable high-speed time
-        var timeScale = 2;
+        var timeScale = 1;
 
         world.timeoutObj = timingService.createSetTimeoutReplacement(timeScale);
         world.intervalObj = timingService.createSetIntervalReplacement(timeScale);
@@ -213,7 +213,7 @@ var timingService = {
         $scope.editor = createEditor();
 
 
-        $scope.createWorld({floorCount: 8, elevatorCount: 8}, $scope.editor.getCodeObj());
+        $scope.createWorld({floorCount: 5, elevatorCount: 2}, $scope.editor.getCodeObj());
     };
 
     return $scope;
