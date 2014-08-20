@@ -1,4 +1,9 @@
 
+var clearAll = function($world, $stats) {
+    $stats.empty();
+    $world.empty();
+}
+
 
 var presentStats = function($parent, world, statsTempl) {
     world.on("stats_changed", function() {
@@ -36,7 +41,6 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         var buttonsHtml = renderButtons(e.buttonStates);
         var $elevator = $(riot.render(elevatorTempl, {e: e, buttons: buttonsHtml}));
         $elevator.on("click", ".buttonpress", function() {
-            console.log("clicked!");
             e.pressFloorButton(parseInt($(this).text()));
         });
 

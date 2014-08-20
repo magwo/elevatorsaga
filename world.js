@@ -1,83 +1,10 @@
 
-var timeout = window.setTimeout;
-
-var getRandomInt = function(min, max) {
-    return min + Math.round(Math.random() * (max - min));
-}
-
-var dateService = {
-    nowMillis: function() { return new Date().getTime(); }
-};
-
-var timingService = {
-    // This service solves several problems:
-    // 1. setInterval/setTimeout not being externally controllable with regards to cancellation
-    // 2. setInterval/setTimeout not supporting time scale factor
-    // 3. setInterval/setTimeout not providing a delta time in the call
-    createSetIntervalReplacement: function(timeScale) {
-        // Almost went insane writing this code
-        // TODO: Could use promise object?
-        var thisObj = {timeScale: timeScale, disabled: false};
-        thisObj.setInterval = function(millis, fn) {
-            var handle = { cancel: false };
-            var prevT = dateService.nowMillis();
-
-            var doCall = function() {
-                var currentT = dateService.nowMillis();
-                var dt = (currentT - prevT) * thisObj.timeScale;
-                prevT = currentT;
-                fn(dt);
-            }
-            var timeoutFunction = function() {
-                if(!handle.cancel) {
-                    if(!thisObj.disabled) {
-                        doCall();
-                    }
-                    timeout(timeoutFunction, millis / thisObj.timeScale);
-                }
-            }
-            timeout(timeoutFunction, millis / thisObj.timeScale);
-            return handle;
-        };
-        return thisObj;
-    },
-    createSetTimeoutReplacement: function(timeScale) {
-        var thisObj = {timeScale: timeScale, disabled: false};
-        thisObj.setTimeout = function(millis, fn) {
-            var handle = { cancel: false };
-            var schedulationTime = dateService.nowMillis();
-            timeout(function() {
-                if(!handle.cancel && !thisObj.disabled) {
-                    var callTime = dateService.nowMillis();
-                    var dt = (callTime - schedulationTime) * thisObj.timeScale;
-                    fn(dt);
-                }
-            }, millis / thisObj.timeScale);
-            return handle;
-        };
-        return thisObj;
-    }
-};
 
 
- var createScope = function($scope, $) {
-    window.controller = $scope;
-    window.timingService = timingService;
-    $scope.execMode = "code";
-    $scope.world = {};
+var createWorldCreator = function(timingService) {
+    var creator = {};
 
-    $scope.newExecutionMode = function() {
-        // TODO: Fix brokenness
-        if($scope.execMode === "code") {
-            $scope.world.timeoutObj.disabled = false;
-            $scope.world.intervalObj.disabled = false;
-        } else if($scope.execmode === "manual") {
-            $scope.world.timeoutObj.disabled = true;
-            $scope.world.intervalObj.disabled = true;
-        }
-    }
-
-    $scope.createFloors = function(floorCount, floorHeight) {
+    creator.createFloors = function(floorCount, floorHeight) {
         var floors = _.map(_.range(floorCount), function(e, i) {
             var yPos = (floorCount - 1 - i) * floorHeight;
             var floor = asFloor({}, i, yPos);
@@ -85,7 +12,7 @@ var timingService = {
         });
         return floors;
     };
-    $scope.createElevators = function(elevatorCount, floorCount, floorHeight) {
+    creator.createElevators = function(elevatorCount, floorCount, floorHeight) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
             elevator.moveTo(200+60*i, null);
@@ -96,7 +23,7 @@ var timingService = {
         return elevators;
     };
 
-    $scope.createRandomUser = function(floorCount, floorHeight) {
+    creator.createRandomUser = function(floorCount, floorHeight) {
         var user = asMovable({});
         user = asUser(user, floorCount, floorHeight);
         if(Math.random() < 0.02) {
@@ -109,8 +36,8 @@ var timingService = {
         return user;
     }
 
-    $scope.spawnUserRandomly = function(floorCount, floorHeight, floors) {
-        var user = $scope.createRandomUser(floorCount, floorHeight);
+    creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
+        var user = creator.createRandomUser(floorCount, floorHeight);
         user = asUser(user, floorCount, floorHeight);
         user.moveTo(100+Math.random()*40, 0);
         var currentFloor = Math.random() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
@@ -130,39 +57,41 @@ var timingService = {
         return user;
     }
 
-    $scope.createWorld = function(options, codeObj) {
-        console.log("CREATING WORLD");
-        console.log("options is", options);
-        var floorHeight = 50;
-        var world = {floorHeight: floorHeight, transportedCounter: 0};
+    creator.createWorld = function(setTimeoutFunc, options, codeObj) {
+        console.log("Creating world with options", options);
+        var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
+        options = _.defaults(_.clone(options), defaultOptions);
+        console.log("Options after default are", options);
+        var world = {floorHeight: options.floorHeight, transportedCounter: 0};
+        riot.observable(world);
         
         // Conclusion: Need to implement our own timeout generator
-        // to get reliable high-speed time
-        var timeScale = 1;
-
-        world.timeoutObj = timingService.createSetTimeoutReplacement(timeScale);
-        world.intervalObj = timingService.createSetIntervalReplacement(timeScale);
+        // to get reliable high time factor (>100)
+        var timeScale = 5;
+        world.timingObj = timingService.createTimingReplacement(setTimeoutFunc, timeScale);
         
-        world.floors = $scope.createFloors(options.floorCount, floorHeight);
-        world.elevators = $scope.createElevators(options.elevatorCount, options.floorCount, floorHeight);
+        world.floors = creator.createFloors(options.floorCount, world.floorHeight);
+        world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
-        world.startTime = dateService.nowMillis();
+        world.elapsedTime = 0.0;
 
-        riot.observable(world);
+        var recalculateStats = function() {
+            world.transportedPerSec = world.transportedCounter / (0.001 * world.elapsedTime);
+            world.trigger("stats_changed");
+        };
 
         var registerUser = function(user) {
             world.users.push(user);
             world.trigger("new_user", user);
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
-                world.transportedPerSec = world.transportedCounter / (0.001 * (dateService.nowMillis() - world.startTime));
-                world.trigger("stats_changed");
+                recalculateStats();
             });
         }
-        world.intervalObj.setInterval(500, function(){
-            registerUser($scope.spawnUserRandomly(options.floorCount, floorHeight, world.floors));
+        world.timingObj.setInterval(1000/options.spawnRate, function(){
+            registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
         });
 
         // Bind them all together
@@ -184,13 +113,17 @@ var timingService = {
             });
         });
 
-        console.log("SETTING WORLD", world);
-        $scope.world = world;
+        // Stats update ticker
+        world.timingObj.setInterval(1000/(3/timeScale), function(dt) {
+            recalculateStats();
+        });
 
         // TODO: Need to turn this thing off when resetting?
         // Note: Division by timeScale lets us do high timescale without
         // destroying performance
-        world.intervalObj.setInterval(1000/(60/timeScale), function(dt) {
+        // Movables update ticker
+        world.timingObj.setInterval(1000/(60/timeScale), function(dt) {
+            world.elapsedTime += dt;
             _.each(world.elevators, function(e) { e.update(dt); });
 
             _.each(world.users, function(u) {
@@ -204,94 +137,12 @@ var timingService = {
             _.remove(world.users, function(u) { return u.removeMe; });
         });
 
-        codeObj.init(options.floorCount, world.elevators, world.timeoutObj.setTimeout);
-    }
+        codeObj.init(options.floorCount, world.elevators, world.timingObj.setTimeout);
 
-    $scope.init = function() {
-        // TODO: Could make editor stuff into a service or something...
-        // This line fucks with testability
-        $scope.editor = createEditor();
+        return world;
 
-
-        $scope.createWorld({floorCount: 5, elevatorCount: 2}, $scope.editor.getCodeObj());
+        
     };
 
-    return $scope;
+    return creator;
 };
-
-var createEditor = function() {
-    var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized", mode: "javascript" });
-
-    var reset = function() {
-        cm.setValue("{\n    init: function(floorCount, elevators, timeoutSetter) {\n        var doMovement = function(e, i) {\n            e.goToFloor(Math.round(Math.random()*(floorCount - 1)), function() {\n                e.wait(1000, function() {\n                    e.goToFloor(e.getFirstPressedFloor(), function() {\n                        e.wait(1000, function() {\n                            timeoutSetter(0, function() {\n                                doMovement(e, i);\n                            });\n                        });\n                    });\n                });\n            });\n        };\n        _.each(elevators, function(e, i) {\n            doMovement(e, i);\n        });\n    },\n    update: function() {\n    }\n}");
-    };
-    var saveCode = function() {
-        localStorage.setItem("develevateCode", cm.getValue());
-        $("#save_message").text("Code saved " + new Date().toTimeString());
-    };
-
-
-    var existingCode = localStorage.getItem("develevateCode");
-    if(existingCode) {
-        cm.setValue(existingCode);
-    } else {
-        reset();
-    }
-
-    // $("#button_apply").click(function() {
-    //     try {
-    //         applyCode();
-    //         $('html, body').animate({
-    //             scrollTop: ($(".world").offset().top - 20)
-    //         }, 300);
-    //     }
-    //     catch(e) {
-    //         console.log(e);
-    //         alert("Could not apply code: " + e);
-    //     }
-    // });
-
-    $("#button_save").click(function() {
-        saveCode();
-        cm.focus();
-    });
-
-    $("#button_reset").click(function() {
-        if(confirm("Do you really want to reset to the default implementation?")) {
-            localStorage.setItem("develevateBackupCode", cm.getValue());
-            reset();
-        }
-        cm.focus();
-    });
-
-    $("#button_resetundo").click(function() {
-        if(confirm("Do you want to bring back the code as before the last reset?")) {
-            cm.setValue(localStorage.getItem("develevateBackupCode") || "");
-        }
-        cm.focus();
-    });
-
-    var autoSaver = _.debounce(saveCode, 1000);
-    cm.on("change", function() {
-        autoSaver();
-    });
-
-    return {
-        getCode: function() {
-            return cm.getValue();
-        },
-        getCodeObj: function() {
-            console.log("Getting code...");
-            var code = cm.getValue();
-            obj = eval("(" + code + ")");
-            console.log("Code is", obj);
-            if(typeof obj.init !== "function") {
-                throw "Code object must contain an init function";
-            }
-            if(typeof obj.update !== "function") {
-                throw "Code object must contain an update function";
-            }
-            return obj;
-        }
-    };
-}
