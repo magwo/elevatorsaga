@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="elevatorApp">
+<html>
 <head>
     <title>Elevator Crush Saga - the elevator programming game</title>
     <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
@@ -10,7 +10,6 @@
     <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="libs/lodash.min.js"></script>
     <script type="text/javascript" src="libs/riot.js"></script>
-    <script type="text/javascript" src="libs/angular.min.js"></script>
 
     <script type="text/javascript" src="libs/codemirror/codemirror.js"></script>
     <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
@@ -20,35 +19,51 @@
     <script type="text/javascript" src="user.js"></script>
     <script type="text/javascript" src="elevator.js"></script>
     <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="presenters.js"></script>
+    <script type="text/javascript" src="riotapp.js"></script>
+
+
+    <script type="text/template" id="user-template">
+        <i class="movable fa user fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px;"></i>
+    </script>
+
+    <script type="text/template" id="floor-template">
+        <div class="floor" style="top: {yPosition}px">
+            <span class="floornumber">{level}</span>
+            <span class="buttonindicator">
+                <i class="fa fa-arrow-circle-up up"></i>
+                <i class="fa fa-arrow-circle-down down"></i>
+            </span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevator-template">
+        <div class="elevator movable" style="left: {e.worldX}px; top: {e.worldY}px">
+            <span class="floorindicator">{e.currentFloor}</span>
+            <span class="buttonindicator">
+                {buttons}
+            </span>
+        </div>
+    </script>
+
+    <script type="text/template" id="elevatorbutton-template">
+        <span class="buttonpress {state}">{floorNum}</span>
+    </script>
+
+    <script type="text/template" id="stats-template">
+        <span class="stats">Transported: {transportedCounter} ({transportedPerSec} per second)</span>
+    </script>
+
 </head>
-<body ng-controller="WorldController" ng-init="init()">
+<body>
     <div class="container">
         <h1>Elevator Crush Saga</h1>
         <h3>The elevator programming game</h3>
 
-        <h4><span class="stats">Transported: {{ world.transportedCounter}} ({{ world.transportedPerSec | number:2}} per second)</span></h4>
+        <h4 class="stats"></h4>
 
-<!--         <form>
-            <input type="radio" ng-model="execMode" value="manual" ng-change="newExecutionMode()"> Manual
-            <input type="radio" ng-model="execMode" value="code" ng-change="newExecutionMode()"> Code
-        </form> -->
-
-        <div class="world ng-cloak" ng-cloak ng-style="{ height: world.floors.length * world.floorHeight }">
-            <div class="innerworld" ng-style="{height: world.floors.length * world.floorHeight }">
-                <div ng-repeat="floor in world.floors" class="floor" ng-style="{top: floor.yPosition}">
-                    <span class="floornumber">{{ floor.level }}</span>
-                    <span class="buttonindicator">
-                        <i class="fa fa-arrow-circle-up" ng-class="{activated: floor.buttonStates.up}" ng-click="floor.pressUpButton()"></i>
-                        <i class="fa fa-arrow-circle-down" ng-class="{activated: floor.buttonStates.down}" ng-click="floor.pressDownButton()"></i>
-                    </span>
-                </div>
-                <div ng-repeat="e in world.elevators" class="elevator movable" ng-style="{left: e.worldX, top: e.worldY}">
-                    <span class="floorindicator">{{ e.currentFloor }}</span>
-                    <span class="buttonindicator">
-                        <span ng-repeat="b in e.buttonStates track by $index" class="buttonpress" ng-class="{activated: b}" ng-click="e.pressFloorButton($index)">{{$index}}</span>
-                    </span>
-                </div>
-                <i ng-repeat="u in world.users" ng-style="{left: u.worldX, top: u.worldY}" class="fa user movable" ng-class="{leaving: u.done, 'fa-child': u.displayType == 'child', 'fa-female': u.displayType == 'female', 'fa-male': u.displayType == 'male'}"></i>
+        <div class="world" style="height: height: 200px">
+            <div class="innerworld" style="height: 200px">
             </div>
         </div>
 
