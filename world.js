@@ -17,7 +17,8 @@ var createWorldCreator = function(timingService) {
             var elevator = asMovable({});
             elevator.moveTo(200+60*i, null);
             elevator = asElevator(elevator, 2.0, floorCount, floorHeight);
-            elevator.setFloorPosition(1);
+            elevator.setFloorPosition(0);
+            elevator.updateDisplayPosition();
             return elevator;
         });
         return elevators;
@@ -67,8 +68,8 @@ var createWorldCreator = function(timingService) {
         
         // Conclusion: Need to implement our own timeout generator
         // to get reliable high time factor (>100)
-        var timeScale = 3;
-        world.timingObj = timingService.createTimingReplacement(setTimeoutFunc, timeScale);
+        world.timeScale = 1.0;
+        world.timingObj = timingService.createTimingReplacement(setTimeoutFunc, 1);
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
@@ -77,6 +78,8 @@ var createWorldCreator = function(timingService) {
         world.transportedPerSec = 0.0;
         world.elapsedTime = 0.0;
 
+        world.paused = true;
+
         var recalculateStats = function() {
             world.transportedPerSec = world.transportedCounter / (0.001 * world.elapsedTime);
             world.trigger("stats_changed");
@@ -84,15 +87,13 @@ var createWorldCreator = function(timingService) {
 
         var registerUser = function(user) {
             world.users.push(user);
+            user.updateDisplayPosition();
             world.trigger("new_user", user);
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
                 recalculateStats();
             });
         }
-        world.timingObj.setInterval(1000/options.spawnRate, function(){
-            registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
-        });
 
         // Bind them all together
         _.each(world.elevators, function(elevator) {
@@ -113,28 +114,45 @@ var createWorldCreator = function(timingService) {
             });
         });
 
-        // Stats update ticker
-        world.timingObj.setInterval(1000/(3/timeScale), function(dt) {
-            recalculateStats();
-        });
+        var elapsedSinceSpawn = 0.0;
+        var elapsedSinceStatsUpdate = 0.0;
 
-        // TODO: Need to turn this thing off when resetting?
-        // Note: Division by timeScale lets us do high timescale without
-        // destroying performance
-        // Movables update ticker
-        world.timingObj.setInterval(1000/(60/timeScale), function(dt) {
-            world.elapsedTime += dt;
-            _.each(world.elevators, function(e) { e.update(dt); });
+        // Main update loop
+        var DT_MAX = 1000/55; // Need a max dt (sub stepping) for reliable simulaton at high timescale
+        world.timingObj.setInterval(1000/60, function(dt) {
+            if(!world.paused) {
+                var scaledDt = dt * world.timeScale;
 
-            _.each(world.users, function(u) {
-                if(u.done && typeof u.cleanupFunction === "function") {
-                    // Conclusion: Be careful using "off" riot function from event handlers - it alters 
-                    // riot's callback list resulting in uncalled event handlers.
-                    u.cleanupFunction();
-                    u.cleanupFunction = null;
+                var substeppingDt = scaledDt;
+                while(substeppingDt > 0.0) {
+                    var thisDt = Math.min(DT_MAX, substeppingDt);
+                    world.elapsedTime += thisDt;
+                    elapsedSinceSpawn += thisDt;
+                    elapsedSinceStatsUpdate += thisDt;
+                    while(elapsedSinceSpawn > 1000/options.spawnRate) {
+                        elapsedSinceSpawn -= 1000/options.spawnRate;
+                        registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+                    }
+                    while(elapsedSinceStatsUpdate > 1000/4) {
+                        elapsedSinceStatsUpdate -= 1000/4;
+                        recalculateStats();
+                    }
+
+                    _.each(world.elevators, function(e) { e.update(thisDt); });
+                    _.each(world.users, function(u) {
+                        if(u.done && typeof u.cleanupFunction === "function") {
+                            // Conclusion: Be careful using "off" riot function from event handlers - it alters 
+                            // riot's callback list resulting in uncalled event handlers.
+                            u.cleanupFunction();
+                            u.cleanupFunction = null;
+                        }
+                        u.update(thisDt); });
+                    _.remove(world.users, function(u) { return u.removeMe; });
+                    substeppingDt -= DT_MAX;
                 }
-                u.update(dt); });
-            _.remove(world.users, function(u) { return u.removeMe; });
+            }
+            _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
+            _.each(world.users, function(u) { u.updateDisplayPosition(); });
         });
 
 

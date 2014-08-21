@@ -54,14 +54,20 @@
 
     <script type="text/template" id="stats-template">
         <div><span class="key">Transported</span><span class="value">{transportedCounter}</span></div>
+        <div><span class="key">Elapsed time</span><span class="value">{elapsedTime}s</span></div>
         <div><span class="key">Transported/s</span><span class="value">{transportedPerSec}</span></div>
-        <div><span class="key">Energy usage</span><span class="value">0 kWh</span></div>
-        <div><span class="key">Avg wait time</span><span class="value"></span></div>
-        <div><span class="key">Max wait time</span><span class="value"></span></div>
     </script>
 
     <script type="text/template" id="challenge-template">
-        <h3>Challenge #{num}: {challenge.condition.description}</h3>
+        <div class="left">
+            <h3>Challenge #{num}: {challenge.condition.description}</h3>
+        </div>
+        <button class="right startstop" style="width: 100px">{startButtonText}</button>
+        <h3 class="right">
+            <i class="fa fa-minus-square timescale_decrease"></i>
+            <span class="emphasis-color" style="display: inline-block; width: 22px; text-align: center">{timeScale}</span>
+            <i class="fa fa-plus-square timescale_increase"></i>
+        </h3>
     </script>
 
 </head>
@@ -72,7 +78,9 @@
             <p style="width: 700px">So what is this? This is a game of programming. Your task is to program the movement of elevators. Sounds easy? Well, the customer has certain demands.</p>
         </div>
 
-        <div class="challenge"></div>
+        <div class="challenge" style="height: 40px">
+            
+        </div>
 
         <div class="world">
             <div class="innerworld">
@@ -91,6 +99,7 @@
         <div style="clear:both;"></div>
         <div class="footer">
             <h4>Made by Magnus Wolffelt</h4>
+            <h4>Version <span class="emphasis-color">0.8</span></h4>
             <h4><a href="https://github.com/magwo/elevatorcrush">Source code</a> on GitHub</h4>
         </div>
     </div>

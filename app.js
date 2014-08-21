@@ -20,19 +20,6 @@ var createEditor = function() {
         reset();
     }
 
-    // $("#button_apply").click(function() {
-    //     try {
-    //         applyCode();
-    //         $('html, body').animate({
-    //             scrollTop: ($(".world").offset().top - 20)
-    //         }, 300);
-    //     }
-    //     catch(e) {
-    //         console.log(e);
-    //         alert("Could not apply code: " + e);
-    //     }
-    // });
-
     $("#button_save").click(function() {
         saveCode();
         cm.focus();
@@ -58,7 +45,7 @@ var createEditor = function() {
         autoSaver();
     });
 
-    return {
+    returnObj = {
         getCode: function() {
             return cm.getValue();
         },
@@ -75,30 +62,35 @@ var createEditor = function() {
             }
             return obj;
         }
-    };
+    }
+    riot.observable(returnObj);
+
+    $("#button_apply").click(function() {
+        returnObj.trigger("apply_code");
+    });
+    return returnObj;
 }
 
 
-var requireUserCountAtMinRate = function(userCount, minRate) {
+
+var requireUserCountWithinTime = function(userCount, timeLimit) {
     return {
-        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people at <span class='emphasis-color'>" + minRate.toPrecision(2) + "</span> per second or better",
+        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people in <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> seconds or less",
         evaluate: function(world) {
-            if(world.transportedCounter >= userCount) {
-                return world.transportedPerSec >= minRate;
+            if(world.elapsedTime >= timeLimit*1000 || world.transportedCounter >= userCount) {
+                return world.elapsedTime <= timeLimit*1000 && world.transportedCounter >= userCount;
             } else {
                 return null;
             }
         }
     }
 };
-
-
 var challenges = [
-     {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountAtMinRate(15, 0.2)}
-    ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountAtMinRate(20, 0.3)}
-    ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.5}, condition: requireUserCountAtMinRate(25, 0.38)}
-    ,{options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountAtMinRate(30, 0.49)}
-    ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.5}, condition: requireUserCountAtMinRate(70, 1.3)}
+     {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
+    ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}
+    ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.5}, condition: requireUserCountWithinTime(25, 60)}
+    ,{options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountWithinTime(28, 60)}
+    ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.5}, condition: requireUserCountWithinTime(100, 60)}
 ];
 
 
@@ -117,33 +109,51 @@ $(function() {
     var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
 
     var worldCreator = createWorldCreator(timingService);
+    var world = undefined;
 
-    var startChallenge = function(challengeIndex, oldWorld) {
-        if(typeof oldWorld != "undefined") {
+    var currentChallengeIndex = 0;
+
+    var startChallenge = function(challengeIndex, autoStart) {
+        var timeScale = 1.0;
+        if(typeof world != "undefined") {
+            timeScale = world.timeScale;
             // Do any cleanup of pending timers etc that might be needed..
-            oldWorld.unWind();
+            world.unWind();
             // TODO: Investigate if memory leaks happen here
         }
-        var world = worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options, editor.getCodeObj());
+        currentChallengeIndex = challengeIndex;
+        world = worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options, editor.getCodeObj());
+        world.timeScale = timeScale;
+        world.paused = !autoStart;
+        window.world = world;
 
         clearAll([$world, $stats]);
         presentStats($stats, world, statsTempl);
-        presentChallenge($challenge, challenges[challengeIndex], challengeIndex + 1, challengeTempl);
+        presentChallenge($challenge, challenges[challengeIndex], world, challengeIndex + 1, challengeTempl);
         presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
+
+        world.on("timescale_changed", function() {
+            presentChallenge($challenge, challenges[challengeIndex], world, challengeIndex + 1, challengeTempl);
+        });
 
         world.on("stats_changed", function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
             if(challengeStatus !== null) {
                 if(challengeStatus) {
-                    //alert("Success! Challenge completed, loading next level...");
-                    startChallenge(challengeIndex+1, world);
+                    alert("Challenge completed. Prepare for the next challenge...");
+                    startChallenge(challengeIndex+1, false);
                 } else {
-                    //alert("Failure! Not good enough, try again...");
-                    startChallenge(challengeIndex, world);
+                    alert("Challenge failed. Maybe your program needs an improvement?");
+                    startChallenge(challengeIndex, false);
                 }
             }
         });
     };
-    // TODO: Load highest completed level from localstorage
-    startChallenge(0);
+
+    editor.on("apply_code", function() {
+        startChallenge(currentChallengeIndex, true);
+    });
+
+    // TODO: Load highest previously completed level from localstorage
+    startChallenge(currentChallengeIndex, false);
 });

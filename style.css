@@ -25,7 +25,8 @@ h1, h2, h3, h4, h5, p {
 }
 
 a {
-    color: #333;
+    color: #444;
+    font-weight: bold;
 }
 
 h2, h3, h4, h5 {
@@ -44,14 +45,15 @@ h2, h3, h4, h5 {
 
 button {
     height: 30px;
-    line-height: 30px;
-    font: 16px bold Arial, Helvetica, sans-serif;
+    line-height: 14px;
+    font-size: 14px;
+    font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
-    color: #eee;
+    color: #333;
     background-color: #777;
-    text-shadow: 0 1px 1px #333;
-    border: 0;
+    text-shadow: 0 0 3px #aaa;
+    border: 1px solid #666;
     border-radius: 5px;
 }
 
@@ -62,6 +64,24 @@ button {
     margin: 0 20px;
 }
 
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.timescale_decrease, .timescale_increase {
+    padding: 4px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.timescale_increase {
+    margin-right: 10px;
+}
 
 
 .code {

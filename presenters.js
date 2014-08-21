@@ -8,13 +8,36 @@ var clearAll = function($elems) {
 
 var presentStats = function($parent, world, statsTempl) {
     world.on("stats_changed", function() {
-        $parent.html(riot.render(statsTempl, {transportedCounter: world.transportedCounter, transportedPerSec: world.transportedPerSec.toPrecision(3)}));
+        $parent.html(riot.render(statsTempl, {transportedCounter: world.transportedCounter, elapsedTime: (world.elapsedTime*0.001).toFixed(0), transportedPerSec: world.transportedPerSec.toPrecision(3)}));
     });
     world.trigger("stats_changed");
 };
 
-var presentChallenge = function($parent, challenge, challengeNum, challengeTempl) {
-    $parent.html(riot.render(challengeTempl, {challenge: challenge, num: challengeNum }));
+var presentChallenge = function($parent, challenge, world, challengeNum, challengeTempl) {
+    var $challenge = $(riot.render(challengeTempl, {
+        challenge: challenge, 
+        num: challengeNum, 
+        timeScale: world.timeScale.toFixed(0) + "x",
+        startButtonText: world.paused ? "Start" : "Pause"
+    }));
+    $parent.html($challenge);
+
+    $parent.find(".startstop").on("click", function() {
+        world.paused = !world.paused;
+        world.trigger("timescale_changed");
+    });
+    $parent.find(".timescale_increase").on("click", function() {
+        if(world.timeScale < 20) {
+            world.timeScale = Math.round(world.timeScale * 1.67);
+            world.trigger("timescale_changed");
+        }
+    });
+    $parent.find(".timescale_decrease").on("click", function() {
+        world.timeScale = Math.round(world.timeScale / 1.67);
+        world.trigger("timescale_changed");
+    });
+
+
 }
 
 var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {

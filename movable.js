@@ -26,6 +26,7 @@ var asMovable = function(obj) {
         var worldPos = obj.getWorldPosition();
         obj.worldX = worldPos[0];
         obj.worldY = worldPos[1];
+        obj.trigger('new_state', obj);
     };
 
     obj.moveTo = function(newX, newY) {
@@ -89,7 +90,7 @@ var asMovable = function(obj) {
     obj.setPosition = function(position) {
         obj.x = position[0];
         obj.y = position[1];
-        obj.updateDisplayPosition();
+        //obj.updateDisplayPosition();
         obj.trigger('new_state');
     }
 
@@ -106,8 +107,7 @@ var asMovable = function(obj) {
     };
 
     obj.parentStateListener = function() {
-        obj.updateDisplayPosition();
-        obj.trigger('new_state', obj);
+        //obj.updateDisplayPosition();
     };
 
     obj.setParent = function(movableParent) {
@@ -127,7 +127,6 @@ var asMovable = function(obj) {
             var parentWorld = movableParent.getWorldPosition();
             obj.parent = movableParent;
             obj.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
-            obj.trigger('new_state');
             movableParent.on("new_state", obj.parentStateListener);
         }
     };
