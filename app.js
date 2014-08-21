@@ -2,7 +2,7 @@
 
 
 var createEditor = function() {
-    var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized", mode: "javascript" });
+    var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized light", mode: "javascript" });
 
     var reset = function() {
         cm.setValue("{\n    init: function(floorCount, elevators, timeoutSetter) {\n        var doMovement = function(e, i) {\n            e.goToFloor(Math.round(Math.random()*(floorCount - 1)), function() {\n                e.wait(1000, function() {\n                    e.goToFloor(e.getFirstPressedFloor(), function() {\n                        e.wait(1000, function() {\n                            timeoutSetter(0, function() {\n                                doMovement(e, i);\n                            });\n                        });\n                    });\n                });\n            });\n        };\n        _.each(elevators, function(e, i) {\n            doMovement(e, i);\n        });\n    },\n    update: function() {\n    }\n}");
@@ -81,7 +81,7 @@ var createEditor = function() {
 
 var requireUserCountAtMinRate = function(userCount, minRate) {
     return {
-        description: "Transport " + userCount + " people at " + minRate.toPrecision(2) + " per second or better",
+        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people at <span class='emphasis-color'>" + minRate.toPrecision(2) + "</span> per second or better",
         evaluate: function(world) {
             if(world.transportedCounter >= userCount) {
                 return world.transportedPerSec >= minRate;
@@ -135,10 +135,10 @@ $(function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
             if(challengeStatus !== null) {
                 if(challengeStatus) {
-                    alert("Success! Challenge completed, loading next level...");
+                    //alert("Success! Challenge completed, loading next level...");
                     startChallenge(challengeIndex+1, world);
                 } else {
-                    alert("Failure! Not good enough, try again...");
+                    //alert("Failure! Not good enough, try again...");
                     startChallenge(challengeIndex, world);
                 }
             }

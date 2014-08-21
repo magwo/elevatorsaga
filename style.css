@@ -1,31 +1,46 @@
 
 
 html, body {
-    background-color: #D7BFA2;
+    background-color: #BFBD9F;
     color: white;
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Oswald, Arial, Helvetica, sans-serif;
 }
 h1, h2, h3, h4, h5 {
     margin-top: 0.2em;
     margin-bottom: 0.5em;
-    color: white;
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
+
+h1, h2, h3, h4, h5, p {
+    color: #555;
+}
+
+.emphasis-color {
+    color: #F1F2D8;
+    text-shadow: 0 2px 0.4pt #555;
+}
+
+a {
+    color: #333;
+}
+
 h2, h3, h4, h5 {
     font-weight: normal;
 }
+
+
 
 .container {
     width: 1280px;
     margin: 0 auto;
     padding: 20px 40px 40px 40px;
-    background-color: #84B4BA;
+    background-color: #BFBD9F;
 }
+
 
 button {
     height: 30px;
@@ -33,14 +48,15 @@ button {
     font: 16px bold Arial, Helvetica, sans-serif;
     padding-left: 10px;
     padding-right: 10px;
-    color: white;
-    background-color: #4F8686;
+    color: #eee;
+    background-color: #777;
+    text-shadow: 0 1px 1px #333;
     border: 0;
     border-radius: 5px;
 }
 
 #save_message {
-    color: white;
+    color: #555;
     font-size: 11px;
     line-height: 30px;
     margin: 0 20px;
@@ -55,6 +71,10 @@ button {
 
 .code textarea {
     font: 13px Consolas, Monaco, monospace;
+    resize: vertical;
+    height: 900px;
+    min-height: 150px;
+    max-height: 1000px;
 }
 
 .world {
@@ -70,6 +90,7 @@ button {
     width: 998px;
     border-right: 1px solid black;
     border-left: 1px solid black;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .statscontainer {
@@ -198,32 +219,18 @@ button {
     font-size: 13px;
 }
 
-.color1 {
-    background-color: #4F8686;
-    color: white;
+.color-1 {
+    color: #4E9CB5;
 }
-
-.color2 {
-    background-color: #DD7A79;
-    color: white;
+.color-2 {
+    color: #02779E;
 }
-
-.color3 {
-    background-color: #B7C64C;
-    color: white;
+.color-3 {
+    color: #A8D26E;
 }
-
-.color4 {
-    background-color: #E57B41;
-    color: white;
+.color-4 {
+    color: #EDEDED;
 }
-
-.color5 {
-    background-color: #84B4BA;
-    color: white;
-}
-
-.color6 {
-    background-color: #D7BFA2;
-    color: white;
+.color-5 {
+    color: #5D656C;
 }

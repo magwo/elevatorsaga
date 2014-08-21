@@ -26,9 +26,9 @@ var createWorldCreator = function(timingService) {
     creator.createRandomUser = function(floorCount, floorHeight) {
         var user = asMovable({});
         user = asUser(user, floorCount, floorHeight);
-        if(Math.random() < 0.02) {
+        if(_.random(40) === 0) {
             user.displayType = "child";
-        } else if(Math.random() < 0.5) {
+        } else if(_.random(1) === 0) {
             user.displayType = "female";
         } else {
             user.displayType = "male";
@@ -39,16 +39,16 @@ var createWorldCreator = function(timingService) {
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
         user = asUser(user, floorCount, floorHeight);
-        user.moveTo(100+Math.random()*40, 0);
-        var currentFloor = Math.random() < 0.5 ? 0 : getRandomInt(0, floorCount - 1);
+        user.moveTo(100+_.random(40), 0);
+        var currentFloor = _.random(1) == 0 ? 0 : _.random(floorCount - 1);
         var destinationFloor;
         if(currentFloor === 0) {
             // Definitely going up
-            destinationFloor = getRandomInt(1, floorCount - 1);
+            destinationFloor = _.random(1, floorCount - 1);
         } else {
             // Usually going down, but sometimes not
-            if(Math.random() < 0.2) {
-                destinationFloor = (currentFloor + getRandomInt(1, floorCount - 1)) % floorCount;
+            if(_.random(10) == 0) {
+                destinationFloor = (currentFloor + _.random(1, floorCount - 1)) % floorCount;
             } else {
                 destinationFloor = 0;
             }

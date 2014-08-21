@@ -1,9 +1,4 @@
 
-
-var getRandomInt = function(min, max) {
-    return min + Math.round(Math.random() * (max - min));
-}
-
 // A generic promiese interface by using riot.observable
 // Borrowed from https://github.com/muut/riotjs-admin
 function Promise(fn) {

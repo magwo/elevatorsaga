@@ -3,6 +3,7 @@
 <head>
     <title>Elevator Crush Saga - the elevator programming game</title>
     <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="libs/codemirror/codemirror.css">
     <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
     <link rel="stylesheet" href="style.css" type="text/css" media="all">
@@ -60,18 +61,21 @@
     </script>
 
     <script type="text/template" id="challenge-template">
-        <h4>Challenge #{num}: {challenge.condition.description}</h4>
+        <h3>Challenge #{num}: {challenge.condition.description}</h3>
     </script>
 
 </head>
 <body>
     <div class="container">
-        <h3>Elevator Crush Saga - the elevator programming game</h3>
+        <div class="header">
+            <h1>Elevator Crush Saga <em class="emphasis-color">The elevator programming game</em></h1>
+            <p style="width: 700px">So what is this? This is a game of programming. Your task is to program the movement of elevators. Sounds easy? Well, the customer has certain demands.</p>
+        </div>
 
         <div class="challenge"></div>
 
-        <div class="world" style="height: height: 200px">
-            <div class="innerworld" style="height: 200px">
+        <div class="world">
+            <div class="innerworld">
             </div>
             <div class="statscontainer"></div>
         </div>
@@ -87,6 +91,7 @@
         <div style="clear:both;"></div>
         <div class="footer">
             <h4>Made by Magnus Wolffelt</h4>
+            <h4><a href="https://github.com/magwo/elevatorcrush">Source code</a> on GitHub</h4>
         </div>
     </div>
 </body>
