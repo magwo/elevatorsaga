@@ -67,7 +67,7 @@ var createWorldCreator = function(timingService) {
         
         // Conclusion: Need to implement our own timeout generator
         // to get reliable high time factor (>100)
-        var timeScale = 5;
+        var timeScale = 3;
         world.timingObj = timingService.createTimingReplacement(setTimeoutFunc, timeScale);
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
@@ -136,6 +136,16 @@ var createWorldCreator = function(timingService) {
                 u.update(dt); });
             _.remove(world.users, function(u) { return u.removeMe; });
         });
+
+
+        world.unWind = function() {
+            _.each(world.elevators.concat(world.users).concat(world.floors).concat([world]), function(obj) {
+                obj.off("*");
+                delete obj;
+            });
+            world.elevators = world.users = world.floors = [];
+            world.timingObj.cancelEverything = true;
+        }
 
         codeObj.init(options.floorCount, world.elevators, world.timingObj.setTimeout);
 

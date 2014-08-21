@@ -59,10 +59,16 @@
         <div><span class="key">Max wait time</span><span class="value"></span></div>
     </script>
 
+    <script type="text/template" id="challenge-template">
+        <h4>Challenge #{num}: {challenge.condition.description}</h4>
+    </script>
+
 </head>
 <body>
     <div class="container">
         <h3>Elevator Crush Saga - the elevator programming game</h3>
+
+        <div class="challenge"></div>
 
         <div class="world" style="height: height: 200px">
             <div class="innerworld" style="height: 200px">

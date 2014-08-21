@@ -1,7 +1,8 @@
 
-var clearAll = function($world, $stats) {
-    $stats.empty();
-    $world.empty();
+var clearAll = function($elems) {
+    _.each($elems, function($elem) {
+        $elem.empty();
+    });
 }
 
 
@@ -12,6 +13,9 @@ var presentStats = function($parent, world, statsTempl) {
     world.trigger("stats_changed");
 };
 
+var presentChallenge = function($parent, challenge, challengeNum, challengeTempl) {
+    $parent.html(riot.render(challengeTempl, {challenge: challenge, num: challengeNum }));
+}
 
 var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
 

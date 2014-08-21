@@ -79,24 +79,26 @@ var createEditor = function() {
 }
 
 
-var createLevels = function() {
-}
-
 var requireUserCountAtMinRate = function(userCount, minRate) {
-    return function(world) {
-        return world.transportedCounter >= userCount &&
-                world.transportedPerSec >= minRate;
+    return {
+        description: "Transport " + userCount + " people at " + minRate.toPrecision(2) + " per second or better",
+        evaluate: function(world) {
+            if(world.transportedCounter >= userCount) {
+                return world.transportedPerSec >= minRate;
+            } else {
+                return null;
+            }
+        }
     }
 };
 
 
 var challenges = [
-    // TODO: Add challenge completion functions
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountAtMinRate(15, 0.2)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountAtMinRate(20, 0.3)}
     ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.5}, condition: requireUserCountAtMinRate(25, 0.38)}
     ,{options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountAtMinRate(30, 0.49)}
-    ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.5}, condition: requireUserCountAtMinRate(50, 1.3)}
+    ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.5}, condition: requireUserCountAtMinRate(70, 1.3)}
 ];
 
 
@@ -105,34 +107,42 @@ $(function() {
 
     var $world = $(".innerworld");
     var $stats = $(".statscontainer");
+    var $challenge = $(".challenge");
 
     var floorTempl = document.getElementById("floor-template").innerHTML.trim();
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
     var elevatorButtonTempl = document.getElementById("elevatorbutton-template").innerHTML.trim();
     var userTempl = document.getElementById("user-template").innerHTML.trim();
     var statsTempl = document.getElementById("stats-template").innerHTML.trim();
+    var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
 
     var worldCreator = createWorldCreator(timingService);
 
     var startChallenge = function(challengeIndex, oldWorld) {
         if(typeof oldWorld != "undefined") {
             // Do any cleanup of pending timers etc that might be needed..
-            oldWorld.timingObj.cancelEverything = true;
-            // TODO: Investigate if memory leaks happen here if event handles are not unregistered
+            oldWorld.unWind();
+            // TODO: Investigate if memory leaks happen here
         }
         var world = worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options, editor.getCodeObj());
 
-        world.on("stats_changed", function() {
-            if(challenges[challengeIndex].condition(world)) {
-                alert("Success! Challenge completed, loading next level...");
-                startChallenge(challengeIndex+1, world);
-            }
-        });
-        clearAll($world, $stats);
+        clearAll([$world, $stats]);
         presentStats($stats, world, statsTempl);
+        presentChallenge($challenge, challenges[challengeIndex], challengeIndex + 1, challengeTempl);
         presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
-
+        world.on("stats_changed", function() {
+            var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
+            if(challengeStatus !== null) {
+                if(challengeStatus) {
+                    alert("Success! Challenge completed, loading next level...");
+                    startChallenge(challengeIndex+1, world);
+                } else {
+                    alert("Failure! Not good enough, try again...");
+                    startChallenge(challengeIndex, world);
+                }
+            }
+        });
     };
     // TODO: Load highest completed level from localstorage
     startChallenge(0);
