@@ -45,8 +45,8 @@ h2, h3, h4, h5 {
 
 button {
     height: 30px;
-    line-height: 14px;
-    font-size: 14px;
+    line-height: 16px;
+    font-size: 16px;
     font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
@@ -59,7 +59,7 @@ button {
 
 #save_message {
     color: #555;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 30px;
     margin: 0 20px;
 }

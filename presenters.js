@@ -8,7 +8,13 @@ var clearAll = function($elems) {
 
 var presentStats = function($parent, world, statsTempl) {
     world.on("stats_changed", function() {
-        $parent.html(riot.render(statsTempl, {transportedCounter: world.transportedCounter, elapsedTime: (world.elapsedTime*0.001).toFixed(0), transportedPerSec: world.transportedPerSec.toPrecision(3)}));
+        $parent.html(riot.render(statsTempl, {
+            transportedCounter: world.transportedCounter,
+            elapsedTime: (world.elapsedTime*0.001).toFixed(0),
+            transportedPerSec: world.transportedPerSec.toPrecision(3),
+            avgWaitTime: (world.avgWaitTime*0.001).toFixed(1),
+            maxWaitTime: (world.maxWaitTime*0.001).toFixed(1),
+        }));
     });
     world.trigger("stats_changed");
 };
@@ -28,12 +34,12 @@ var presentChallenge = function($parent, challenge, world, challengeNum, challen
     });
     $parent.find(".timescale_increase").on("click", function() {
         if(world.timeScale < 20) {
-            world.timeScale = Math.round(world.timeScale * 1.67);
+            world.timeScale = Math.round(world.timeScale * 1.618);
             world.trigger("timescale_changed");
         }
     });
     $parent.find(".timescale_decrease").on("click", function() {
-        world.timeScale = Math.round(world.timeScale / 1.67);
+        world.timeScale = Math.round(world.timeScale / 1.618);
         world.trigger("timescale_changed");
     });
 

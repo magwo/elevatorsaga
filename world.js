@@ -77,6 +77,8 @@ var createWorldCreator = function(timingService) {
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.elapsedTime = 0.0;
+        world.maxWaitTime = 0.0;
+        world.avgWaitTime = 0.0;
 
         world.paused = true;
 
@@ -88,9 +90,12 @@ var createWorldCreator = function(timingService) {
         var registerUser = function(user) {
             world.users.push(user);
             user.updateDisplayPosition();
+            user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
+                world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - user.spawnTimestamp);
+                world.avgWaitTime = (world.avgWaitTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
         }
@@ -146,7 +151,10 @@ var createWorldCreator = function(timingService) {
                             u.cleanupFunction();
                             u.cleanupFunction = null;
                         }
-                        u.update(thisDt); });
+                        u.update(thisDt);
+                        world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+                    });
+
                     _.remove(world.users, function(u) { return u.removeMe; });
                     substeppingDt -= DT_MAX;
                 }
