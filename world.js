@@ -58,7 +58,7 @@ var createWorldCreator = function(timingService) {
         return user;
     }
 
-    creator.createWorld = function(setTimeoutFunc, options, codeObj) {
+    creator.createWorld = function(setTimeoutFunc, options) {
         console.log("Creating world with options", options);
         var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
         options = _.defaults(_.clone(options), defaultOptions);
@@ -73,6 +73,7 @@ var createWorldCreator = function(timingService) {
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
+        world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e); });
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
@@ -98,7 +99,7 @@ var createWorldCreator = function(timingService) {
                 world.avgWaitTime = (world.avgWaitTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
-        }
+        };
 
         // Bind them all together
         _.each(world.elevators, function(elevator) {
@@ -127,6 +128,10 @@ var createWorldCreator = function(timingService) {
         world.timingObj.setInterval(1000/60, function(dt) {
             if(!world.paused) {
                 var scaledDt = dt * world.timeScale;
+
+                try {
+                    world.codeObj.update(scaledDt, world.elapsedTime, world.elevatorInterfaces, world.floors);
+                } catch(e) { world.paused = true; console.log("MOO", e); world.trigger("code_error", e); }
 
                 var substeppingDt = scaledDt;
                 while(substeppingDt > 0.0) {
@@ -165,19 +170,22 @@ var createWorldCreator = function(timingService) {
 
 
         world.unWind = function() {
-            _.each(world.elevators.concat(world.users).concat(world.floors).concat([world]), function(obj) {
+            _.each(world.elevators.concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), function(obj) {
                 obj.off("*");
                 delete obj;
             });
-            world.elevators = world.users = world.floors = [];
+            world.elevators = world.elevatorInterfaces = world.users = world.floors = [];
             world.timingObj.cancelEverything = true;
         }
 
-        codeObj.init(options.floorCount, world.elevators, world.timingObj.setTimeout);
+        world.init = function(codeObj) {
+            try {
+                world.codeObj = codeObj;
+                world.codeObj.init(world.elevatorInterfaces, world.floors, world.timingObj.setTimeout);
+            } catch(e) { world.paused = true; world.trigger("code_error", e); }
+        };
 
         return world;
-
-        
     };
 
     return creator;

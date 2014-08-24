@@ -7,13 +7,17 @@ var asFloor = function(obj, floorLevel, yPosition) {
     obj.buttonStates = {up: "", down: ""}
 
     obj.pressUpButton = function() {
+        var prev = obj.buttonStates.up;
         obj.buttonStates.up = "activated";
         obj.trigger("buttonstate_change", obj.buttonStates);
+        if(prev !== obj.buttonStates.up) { obj.trigger("up_button_pressed"); }
     }
 
     obj.pressDownButton = function() {
+        var prev = obj.buttonStates.down;
         obj.buttonStates.down = "activated";
         obj.trigger("buttonstate_change", obj.buttonStates);
+        if(prev !== obj.buttonStates.down) { obj.trigger("down_button_pressed"); }
     }
 
     obj.elevatorAvailable = function(elevator) {

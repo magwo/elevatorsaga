@@ -45,25 +45,26 @@ var createEditor = function() {
         autoSaver();
     });
 
-    returnObj = {
-        getCode: function() {
-            return cm.getValue();
-        },
-        getCodeObj: function() {
-            console.log("Getting code...");
-            var code = cm.getValue();
+    returnObj = riot.observable({});
+    returnObj.getCodeObj = function() {
+        console.log("Getting code...");
+        var code = cm.getValue();
+        try {
             obj = eval("(" + code + ")");
             console.log("Code is", obj);
             if(typeof obj.init !== "function") {
-                throw "Code object must contain an init function";
+                throw "Code must contain an init function";
             }
             if(typeof obj.update !== "function") {
-                throw "Code object must contain an update function";
+                throw "Code must contain an update function";
             }
-            return obj;
+            returnObj.trigger("code_success");
+        } catch(e) {
+            returnObj.trigger("code_error", e);
+            return null;
         }
-    }
-    riot.observable(returnObj);
+        return obj;
+    };
 
     $("#button_apply").click(function() {
         returnObj.trigger("apply_code");
@@ -79,6 +80,7 @@ $(function() {
     var $world = $(".innerworld");
     var $stats = $(".statscontainer");
     var $challenge = $(".challenge");
+    var $codestatus = $(".codestatus");
 
     var floorTempl = document.getElementById("floor-template").innerHTML.trim();
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
@@ -86,6 +88,7 @@ $(function() {
     var userTempl = document.getElementById("user-template").innerHTML.trim();
     var statsTempl = document.getElementById("stats-template").innerHTML.trim();
     var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
+    var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
 
     var worldCreator = createWorldCreator(timingService);
     var world = undefined;
@@ -101,7 +104,11 @@ $(function() {
             // TODO: Investigate if memory leaks happen here
         }
         currentChallengeIndex = challengeIndex;
-        world = worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options, editor.getCodeObj());
+        world = worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options);
+        world.on("code_error", function(e) {
+            console.log("World raised code error", e);
+            editor.trigger("code_error", e);
+        });
         world.timeScale = timeScale;
         world.paused = !autoStart;
         window.world = world;
@@ -127,10 +134,20 @@ $(function() {
                 }
             }
         });
+
+        var codeObj = editor.getCodeObj();
+        world.init(codeObj);
     };
 
     editor.on("apply_code", function() {
         startChallenge(currentChallengeIndex, true);
+    });
+
+    editor.on("code_success", function() {
+        presentCodeStatus($codestatus, codeStatusTempl);
+    });
+    editor.on("code_error", function(error) {
+        presentCodeStatus($codestatus, codeStatusTempl, error);
     });
 
     // TODO: Load highest previously completed level from localstorage

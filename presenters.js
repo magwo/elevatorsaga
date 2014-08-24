@@ -101,6 +101,18 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         });
         $world.append($user);
     });
-    
+}
 
+
+var presentCodeStatus = function($parent, templ, error) {
+    console.log(error);
+    var errorDisplay = error ? "block" : "none";
+    var successDisplay = error ? "none" : "block";
+    var errorMessage = error;
+    if(error && error.stack) {
+        errorMessage = error.stack;
+        errorMessage = errorMessage.replace(/\n/g, "<br>");
+    }
+    var status = riot.render(templ, {errorMessage: errorMessage, errorDisplay: errorDisplay, successDisplay: successDisplay});
+    $parent.html(status);
 }

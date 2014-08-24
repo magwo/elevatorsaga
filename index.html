@@ -20,6 +20,7 @@
     <script type="text/javascript" src="floor.js"></script>
     <script type="text/javascript" src="user.js"></script>
     <script type="text/javascript" src="elevator.js"></script>
+    <script type="text/javascript" src="interfaces.js"></script>
     <script type="text/javascript" src="world.js"></script>
     <script type="text/javascript" src="presenters.js"></script>
     <script type="text/javascript" src="challenges.js"></script>
@@ -73,6 +74,10 @@
         </h3>
     </script>
 
+    <script type="text/template" id="codestatus-template">
+        <h5 class="error" style="display: {errorDisplay}"><i class="fa fa-warning error-color"></i> There is a problem with your code: {errorMessage}</h5>
+    </script>
+
 </head>
 <body>
     <div class="container">
@@ -91,6 +96,7 @@
             <div class="statscontainer"></div>
         </div>
 
+        <div class="codestatus"></div>
         <div class="code">
             <textarea name="Code" id="code"></textarea>
         </div>
@@ -100,6 +106,16 @@
         <button id="button_save" style="float: right">Save</button>
         <span id="save_message" style="float: right"></span>
         <div style="clear:both;"></div>
+        
+        <div class="help">
+            <h3>How to control an elevator, by example</h3>
+            <dl>
+                <dt>elevator.goToFloor(1)</dt>
+                    <dd>Tell the elevator to move to floor 1</dd>
+                <dt>elevator.wait(1000)</dt>
+                    <dd>Tell the elevator to wait for 1000 milliseconds</dd>
+            </dl>
+        </div>
         <div class="footer">
             <h4>Made by Magnus Wolffelt</h4>
             <h4>Version <span class="emphasis-color">0.8</span></h4>

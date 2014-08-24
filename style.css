@@ -11,8 +11,8 @@ body {
     font-family: Oswald, Arial, Helvetica, sans-serif;
 }
 h1, h2, h3, h4, h5 {
-    margin-top: 0.2em;
-    margin-bottom: 0.5em;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
 }
 
 h1, h2, h3, h4, h5, p {
@@ -24,6 +24,10 @@ h1, h2, h3, h4, h5, p {
     text-shadow: 0 2px 0.4pt #555;
 }
 
+.error-color {
+    color: #d54;
+}
+
 a {
     color: #444;
     font-weight: bold;
@@ -33,6 +37,16 @@ h2, h3, h4, h5 {
     font-weight: normal;
 }
 
+dl {
+    color: #555;
+}
+dl dt {
+    font: 15px Consolas, Monaco, monospace;
+}
+dl dd {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
 
 
 .container {
@@ -84,9 +98,13 @@ button {
 }
 
 
+.codestatus {
+    padding-top: 10px;
+}
+
 .code {
     width: 1280px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 .code textarea {

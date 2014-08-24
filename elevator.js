@@ -32,10 +32,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     movable.pressFloorButton = function(floorNumber) {
         movable.buttonStates[floorNumber] = true;
-
-        if(!movable.busy) {
-            //movable.goToFloor(floorNumber);
-        }
+        movable.trigger("floor_button_pressed", floorNumber);
         movable.trigger("floor_buttons_changed", movable.buttonStates);
     }
 
