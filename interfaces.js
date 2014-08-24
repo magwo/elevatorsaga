@@ -40,20 +40,31 @@ var asElevatorInterface = function(obj, elevator) {
     }
 
     obj.queueGoToFloor = function(floorNum) {
-        taskQueue.push(createTask(function (taskObj) {
+        var task = createTask(function (taskObj) {
             elevator.goToFloor(floorNum, function() {
                 elevator.wait(1000, function() {
                     taskObj.setDone();
                 });
             });
-        }));
-        obj.pumpTaskQueue();
+        });
+        task.destinationFloor = floorNum;
+        _.each(taskQueue, function(t) {
+            if(typeof t.destinationFloor !== "undefined") {
+                if(t.destinationFloor === task.destinationFloor) {
+                    task = null;
+                    return false;
+                }
+            }
+        });
+        if(task) {
+            taskQueue.push(task);
+            obj.pumpTaskQueue();
+        }
     }
 
 
     obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }
     elevator.on("floor_button_pressed", function(floorNum) {
-        console.log("FloooOOOR");
         obj.trigger("floor_button_pressed", floorNum);
     });
 

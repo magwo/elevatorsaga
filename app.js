@@ -5,15 +5,15 @@ var createEditor = function() {
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized light", mode: "javascript" });
 
     var reset = function() {
-        cm.setValue("{\n    init: function(floorCount, elevators, timeoutSetter) {\n        var doMovement = function(e, i) {\n            e.goToFloor(Math.round(Math.random()*(floorCount - 1)), function() {\n                e.wait(1000, function() {\n                    e.goToFloor(e.getFirstPressedFloor(), function() {\n                        e.wait(1000, function() {\n                            timeoutSetter(0, function() {\n                                doMovement(e, i);\n                            });\n                        });\n                    });\n                });\n            });\n        };\n        _.each(elevators, function(e, i) {\n            doMovement(e, i);\n        });\n    },\n    update: function() {\n    }\n}");
+        cm.setValue('{\n    init: function(elevators, floors, timeoutSetter) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.queueGoToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.queueGoToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.queueGoToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elapsedTime, elevators, floors) {\n    }\n}');
     };
     var saveCode = function() {
-        localStorage.setItem("develevateCode", cm.getValue());
+        localStorage.setItem("develevateCode2", cm.getValue());
         $("#save_message").text("Code saved " + new Date().toTimeString());
     };
 
 
-    var existingCode = localStorage.getItem("develevateCode");
+    var existingCode = localStorage.getItem("develevateCode2");
     if(existingCode) {
         cm.setValue(existingCode);
     } else {

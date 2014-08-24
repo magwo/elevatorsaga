@@ -11,7 +11,7 @@ body {
     font-family: Oswald, Arial, Helvetica, sans-serif;
 }
 h1, h2, h3, h4, h5 {
-    margin-top: 0.3em;
+    margin-top: 0.4em;
     margin-bottom: 0.3em;
 }
 
@@ -42,10 +42,14 @@ dl {
 }
 dl dt {
     font: 15px Consolas, Monaco, monospace;
+    color: #F1F2D8;
+    text-shadow: 0 1px 0.4pt #555;
 }
 dl dd {
-    font-size: 15px;
-    margin-bottom: 10px;
+    font: 15px Arial, Helvetica, sans-serif;
+    margin-bottom: 1em;
+    margin-left: 1em;
+    width: 40%;
 }
 
 
@@ -156,6 +160,12 @@ button {
 }
 .statscontainer .value {
     float: right;
+}
+
+
+.help {
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 

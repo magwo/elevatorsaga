@@ -110,10 +110,20 @@
         <div class="help">
             <h3>How to control an elevator, by example</h3>
             <dl>
-                <dt>elevator.goToFloor(1)</dt>
-                    <dd>Tell the elevator to move to floor 1</dd>
-                <dt>elevator.wait(1000)</dt>
-                    <dd>Tell the elevator to wait for 1000 milliseconds</dd>
+                <dt>elevator.queueGoToFloor(1)</dt>
+                    <dd>Tell the elevator to move to floor 1 after completing other tasks, if any. Note that this will have no effect if the elevator is already queued to go to that floor.</dd>
+                <dt>elevator.clearTaskQueue()</dt>
+                    <dd>Removes any tasks that have been previously issued to the elevator, except the currently ongoing task, if there is one.</dd>
+            </dl>
+            <h3>Events emitted by the floors and elevator objects</h3>
+            <p>It is possible to listen for events, like when stopping at a floor, or a button has been pressed.</p>
+            <dl>
+                <dt>elevator.on("idle", function() { elevator.queueGoToFloor(0); });</dt>
+                    <dd>Listen for the "idle" event issued by the elevator, when the task queue has been emptied and the elevator is doing nothing. In this example we tell it to move to floor 0.</dd>
+                <dt>elevator.on("floor_button_pressed", function(floorNum) { ... } );</dt>
+                    <dd>Listen for the "floor_button_pressed" event, issued when a user pressed a button inside the elevator. This indicates that the user wants to go to that floor.</dd>
+                <dt>floor.on("up_button_pressed down_button_pressed", function(floorNum) { ... } );</dt>
+                    <dd>Listen for the "up_button_pressed" and "down_button_pressed" events, issued when a user pressed a button on the floor they are waiting on. This indicates that the user wants to go to another floor. Note that it is possible to listen for multiple events.</dd>
             </dl>
         </div>
         <div class="footer">
