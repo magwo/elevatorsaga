@@ -120,7 +120,7 @@ var createWorldCreator = function(timingService) {
             });
         });
 
-        var elapsedSinceSpawn = 0.0;
+        var elapsedSinceSpawn = 1001/options.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
 
         // Main update loop
@@ -184,6 +184,7 @@ var createWorldCreator = function(timingService) {
             try {
                 world.codeObj = codeObj;
                 world.codeObj.init(world.elevatorInterfaces, world.floors, world.timingObj.setTimeout);
+                _.each(world.elevatorInterfaces, function(ei) { ei.pumpTaskQueue(); });
             } catch(e) { world.paused = true; world.trigger("code_error", e); }
         };
 
