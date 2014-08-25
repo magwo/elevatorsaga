@@ -110,7 +110,6 @@ $(function() {
             editor.trigger("code_error", e);
         });
         world.timeScale = timeScale;
-        world.paused = !autoStart;
         window.world = world;
 
         clearAll([$world, $stats]);
@@ -125,9 +124,11 @@ $(function() {
         world.on("stats_changed", function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
             if(challengeStatus !== null) {
+                world.paused = true;
+                world.timingObj.cancelEverything = true;
                 if(challengeStatus) {
                     alert("Challenge completed. Prepare for the next challenge...");
-                    startChallenge(challengeIndex+1, false);
+                    riot.route("#challenge" + (challengeIndex + 2));
                 } else {
                     alert("Challenge failed. Maybe your program needs an improvement?");
                     startChallenge(challengeIndex, false);
@@ -137,12 +138,12 @@ $(function() {
 
         var codeObj = editor.getCodeObj();
         world.init(codeObj);
+        world.paused = !autoStart;
     };
 
     editor.on("apply_code", function() {
         startChallenge(currentChallengeIndex, true);
     });
-
     editor.on("code_success", function() {
         presentCodeStatus($codestatus, codeStatusTempl);
     });
@@ -150,6 +151,22 @@ $(function() {
         presentCodeStatus($codestatus, codeStatusTempl, error);
     });
 
-    // TODO: Load highest previously completed level from localstorage
+    riot.route(function(path) {
+        var match = path.match(/^#challenge(\d+)$/);
+        if(match && match.length == 2) {
+            var requestedChallenge = _.parseInt(match[1]) - 1;
+            if(requestedChallenge >= 0 && requestedChallenge < challenges.length) {
+                startChallenge(requestedChallenge, false);
+                return;
+            } else {
+                console.log("Invalid challenge index", requestedChallenge);
+            }
+        } else {
+            console.log("Invalid route detected", path);
+        }
+        riot.route("#challenge1");
+    });
+
+    // TODO: Load highest previously completed level from localstorage?
     startChallenge(currentChallengeIndex, false);
 });

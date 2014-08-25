@@ -34,4 +34,5 @@ var challenges = [
     ,{options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountWithinTime(28, 60)}
     ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.7}, condition: requireUserCountWithinTime(100, 65)}
     ,{options: {floorCount: 6, elevatorCount: 2, spawnRate: 1.0}, condition: requireUserCountWithMaxWaitTime(40, 10)}
+    ,{options: {floorCount: 10, elevatorCount: 2, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(40, 11)}
 ];

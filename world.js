@@ -124,7 +124,7 @@ var createWorldCreator = function(timingService) {
         var elapsedSinceStatsUpdate = 0.0;
 
         // Main update loop
-        var DT_MAX = 1000/55; // Need a max dt (sub stepping) for reliable simulaton at high timescale
+        var DT_MAX = 1000/58; // Need a max dt (sub stepping) for reliable simulaton at high timescale
         world.timingObj.setInterval(1000/60, function(dt) {
             if(!world.paused) {
                 var scaledDt = dt * world.timeScale;
@@ -134,7 +134,7 @@ var createWorldCreator = function(timingService) {
                 } catch(e) { world.paused = true; console.log("MOO", e); world.trigger("code_error", e); }
 
                 var substeppingDt = scaledDt;
-                while(substeppingDt > 0.0) {
+                while(substeppingDt > 0.0 && !world.timingObj.cancelEverything) {
                     var thisDt = Math.min(DT_MAX, substeppingDt);
                     world.elapsedTime += thisDt;
                     elapsedSinceSpawn += thisDt;
@@ -142,10 +142,6 @@ var createWorldCreator = function(timingService) {
                     while(elapsedSinceSpawn > 1000/options.spawnRate) {
                         elapsedSinceSpawn -= 1000/options.spawnRate;
                         registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
-                    }
-                    while(elapsedSinceStatsUpdate > 1000/4) {
-                        elapsedSinceStatsUpdate -= 1000/4;
-                        recalculateStats();
                     }
 
                     _.each(world.elevators, function(e) { e.update(thisDt); });
@@ -161,6 +157,12 @@ var createWorldCreator = function(timingService) {
                     });
 
                     _.remove(world.users, function(u) { return u.removeMe; });
+
+                    // Update stats last, because the event raised might cause this loop to stop
+                    while(elapsedSinceStatsUpdate > 1000/4 && !world.timingObj.cancelEverything) {
+                        elapsedSinceStatsUpdate -= 1000/4;
+                        recalculateStats();
+                    }
                     substeppingDt -= DT_MAX;
                 }
             }
@@ -170,12 +172,12 @@ var createWorldCreator = function(timingService) {
 
 
         world.unWind = function() {
+            world.timingObj.cancelEverything = true;
             _.each(world.elevators.concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), function(obj) {
                 obj.off("*");
                 delete obj;
             });
             world.elevators = world.elevatorInterfaces = world.users = world.floors = [];
-            world.timingObj.cancelEverything = true;
         }
 
         world.init = function(codeObj) {
