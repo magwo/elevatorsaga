@@ -1,4 +1,10 @@
 
+
+var limitNumber = function(num, min, max) {
+    return Math.min(max, Math.max(num, min));
+}
+
+
 // A generic promiese interface by using riot.observable
 // Borrowed from https://github.com/muut/riotjs-admin
 function Promise(fn) {

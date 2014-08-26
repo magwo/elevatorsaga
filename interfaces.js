@@ -4,7 +4,7 @@
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
-var asElevatorInterface = function(obj, elevator) {
+var asElevatorInterface = function(obj, elevator, floorCount) {
     riot.observable(obj);
 
     var taskQueue = [];
@@ -40,6 +40,7 @@ var asElevatorInterface = function(obj, elevator) {
     }
 
     obj.queueGoToFloor = function(floorNum) {
+        floorNum = limitNumber(floorNum, 0, floorCount - 1);
         var task = createTask(function (taskObj) {
             elevator.goToFloor(floorNum, function() {
                 elevator.wait(1000, function() {

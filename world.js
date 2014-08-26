@@ -73,10 +73,11 @@ var createWorldCreator = function(timingService) {
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
-        world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e); });
+        world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
+        world.moveCount = 0;
         world.elapsedTime = 0.0;
         world.maxWaitTime = 0.0;
         world.avgWaitTime = 0.0;
@@ -85,6 +86,7 @@ var createWorldCreator = function(timingService) {
 
         var recalculateStats = function() {
             world.transportedPerSec = world.transportedCounter / (0.001 * world.elapsedTime);
+            world.moveCount = _.reduce(world.elevators, function(sum, elevator) { return sum+elevator.moveCount; }, 0);
             world.trigger("stats_changed");
         };
 
@@ -130,7 +132,7 @@ var createWorldCreator = function(timingService) {
                 var scaledDt = dt * world.timeScale;
 
                 try {
-                    world.codeObj.update(scaledDt, world.elapsedTime, world.elevatorInterfaces, world.floors);
+                    world.codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
                 } catch(e) { world.paused = true; console.log("MOO", e); world.trigger("code_error", e); }
 
                 var substeppingDt = scaledDt;
@@ -183,7 +185,7 @@ var createWorldCreator = function(timingService) {
         world.init = function(codeObj) {
             try {
                 world.codeObj = codeObj;
-                world.codeObj.init(world.elevatorInterfaces, world.floors, world.timingObj.setTimeout);
+                world.codeObj.init(world.elevatorInterfaces, world.floors);
                 _.each(world.elevatorInterfaces, function(ei) { ei.pumpTaskQueue(); });
             } catch(e) { world.paused = true; world.trigger("code_error", e); }
         };

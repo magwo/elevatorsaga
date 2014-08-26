@@ -1,13 +1,13 @@
 
-window.testingImpl = '{\n    init: function(elevators, floors, timeoutSetter) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.queueGoToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.queueGoToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.queueGoToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elapsedTime, elevators, floors) {\n    }\n}';
+window.testingImpl = '{\n    init: function(elevators, floors) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.queueGoToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.queueGoToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.queueGoToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}';
 
 var createEditor = function() {
-    var lsKey = "elevatorCrushCode_v3"
+    var lsKey = "elevatorCrushCode_v4"
 
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), { lineNumbers: true, indentUnit: 4, indentWithTabs: false, theme: "solarized light", mode: "javascript" });
 
     var reset = function() {
-        cm.setValue('{\n    init: function(elevators, floors, timeoutSetter) {\n        _.each(elevators, function(elevator) {\n            elevator.on("idle", function() {\n                // Go to all the floors\n                elevator.queueGoToFloor(0);\n                elevator.queueGoToFloor(1);\n            });\n        });\n    },\n    update: function(dt, elapsedTime, elevators, floors) {\n    }\n}');
+        cm.setValue('{\n    init: function(elevators, floors) {\n        _.each(elevators, function(elevator) {\n            elevator.on("idle", function() {\n                // Go to all the floors\n                elevator.queueGoToFloor(0);\n                elevator.queueGoToFloor(1);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}');
     };
     var saveCode = function() {
         localStorage.setItem(lsKey, cm.getValue());

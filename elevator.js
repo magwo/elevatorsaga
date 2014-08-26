@@ -4,6 +4,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.currentFloor = 0;
     movable.destinationFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
+    movable.moveCount = 0;
     movable.removed = false;
     movable.userSlots = [
         {pos: [2, 30], user: null},
@@ -31,6 +32,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     }
 
     movable.pressFloorButton = function(floorNumber) {
+        floorNumber = limitNumber(floorNumber, 0, floorCount - 1);
         movable.buttonStates[floorNumber] = true;
         movable.trigger("floor_button_pressed", floorNumber);
         movable.trigger("floor_buttons_changed", movable.buttonStates);
@@ -55,7 +57,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             movable.currentFloor = movable.destinationFloor;
             movable.buttonStates[movable.currentFloor] = false;
             movable.trigger("floor_buttons_changed", movable.buttonStates);
-            movable.trigger("new_current_floor", movable.currentFloor);
             movable.trigger("stopped_at_floor", movable.currentFloor);
             // Need to allow users to get off first, so that new ones
             // can enter on the same floor
@@ -81,10 +82,13 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return true; // TODO: Make usercode returnable
     }
 
+
+
     movable.on("new_state", function() {
-        // Recalculate the floor number
+        // Recalculate the floor number etc
         var currentFloor = Math.round(((floorCount - 1) * floorHeight - movable.y) / floorHeight);
         if(currentFloor != movable.currentFloor) {
+            movable.moveCount++;
             movable.currentFloor = currentFloor;
             movable.trigger("new_current_floor", movable.currentFloor);
         }

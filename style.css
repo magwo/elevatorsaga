@@ -73,6 +73,12 @@ button {
     text-shadow: 0 0 3px #aaa;
     border: 1px solid #666;
     border-radius: 5px;
+    margin-right: 5px;
+}
+
+button.right {
+    margin-left: 5px;
+    margin-right: 0;
 }
 
 #save_message {
@@ -137,7 +143,7 @@ button {
 
 .statscontainer {
     font: 12px Consolas, Monaco, monospace;
-    line-height: 12px;
+    line-height: 10px;
     color: #999;
     position: absolute;
     top: 0;
@@ -150,8 +156,8 @@ button {
 
 .statscontainer div {
     width: 240px;
-    height: 12px;
-    margin-bottom: 10px;
+    height: 10px;
+    margin-bottom: 8px;
     border-bottom: 1px solid #444;
 }
 
