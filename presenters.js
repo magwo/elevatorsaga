@@ -30,7 +30,7 @@ var presentChallenge = function($parent, challenge, world, challengeNum, challen
     $parent.html($challenge);
 
     $parent.find(".startstop").on("click", function() {
-        world.paused = !world.paused;
+        world.setPaused(!world.paused);
         world.trigger("timescale_changed");
     });
     $parent.find(".timescale_increase").on("click", function() {

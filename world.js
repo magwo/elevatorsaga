@@ -83,6 +83,10 @@ var createWorldCreator = function(timingService) {
         world.avgWaitTime = 0.0;
 
         world.paused = true;
+        var setPaused = function(paused) {
+            world.paused = paused;
+            world.trigger("timescale_changed");
+        }
 
         var recalculateStats = function() {
             world.transportedPerSec = world.transportedCounter / (0.001 * world.elapsedTime);

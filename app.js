@@ -125,7 +125,7 @@ $(function() {
         world.on("stats_changed", function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
             if(challengeStatus !== null) {
-                world.paused = true;
+                world.setPaused(true);
                 world.timingObj.cancelEverything = true;
                 if(challengeStatus) {
                     alert("Challenge completed. Prepare for the next challenge...");
@@ -139,7 +139,7 @@ $(function() {
 
         var codeObj = editor.getCodeObj();
         world.init(codeObj);
-        world.paused = !autoStart;
+        world.setPaused(!autoStart);
     };
 
     editor.on("apply_code", function() {
