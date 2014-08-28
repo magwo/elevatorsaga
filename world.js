@@ -83,7 +83,7 @@ var createWorldCreator = function(timingService) {
         world.avgWaitTime = 0.0;
 
         world.paused = true;
-        var setPaused = function(paused) {
+        world.setPaused = function(paused) {
             world.paused = paused;
             world.trigger("timescale_changed");
         }
