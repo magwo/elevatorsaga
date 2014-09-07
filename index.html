@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Elevator Crush Saga - the elevator programming game</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="libs/codemirror/codemirror.css">
@@ -54,24 +55,32 @@
         <span class="buttonpress {state}">{floorNum}</span>
     </script>
 
+    <script type="text/template" id="feedback-template">
+        <div class="feedback">
+            <h2 class="emphasis-color">{title}</h2>
+            <p class="emphasis-color">{message}</p>
+            <a href="{url}" class="emphasis-color">Next challenge</a>
+        </div>
+    </script>
+
     <script type="text/template" id="stats-template">
         <div><span class="key">Transported</span><span class="value">{transportedCounter}</span></div>
         <div><span class="key">Elapsed time</span><span class="value">{elapsedTime}s</span></div>
         <div><span class="key">Transported/s</span><span class="value">{transportedPerSec}</span></div>
         <div><span class="key">Avg waiting time</span><span class="value">{avgWaitTime}s</span></div>
         <div><span class="key">Max waiting time</span><span class="value">{maxWaitTime}s</span></div>
-        <div><span class="key">Moves by elevators</span><span class="value">{moveCount}</span></div>
+        <div><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value">{moveCount}</span></div>
     </script>
 
     <script type="text/template" id="challenge-template">
         <div class="left">
             <h3>Challenge #{num}: {challenge.condition.description}</h3>
         </div>
-        <button class="right startstop" style="width: 100px">{startButtonText}</button>
+        <button class="right startstop unselectable" style="width: 110px">{startButtonText}</button>
         <h3 class="right">
-            <i class="fa fa-minus-square timescale_decrease"></i>
+            <i class="fa fa-minus-square timescale_decrease unselectable"></i>
             <span class="emphasis-color" style="display: inline-block; width: 22px; text-align: center">{timeScale}</span>
-            <i class="fa fa-plus-square timescale_increase"></i>
+            <i class="fa fa-plus-square timescale_increase unselectable"></i>
         </h3>
     </script>
 
@@ -84,8 +93,8 @@
     <div class="container">
         <div class="header">
             <h1>Elevator Crush Saga <em class="emphasis-color">The elevator programming game</em></h1>
-            <p style="width: 700px">So what is this? This is a game of programming. Your task is to program the movement of elevators. Sounds easy? Well, the customer has certain demands.</p>
-            <p><small>Dislaimer: The game is currently in a beta state, and some challenges may be very hard or impossible to complete. If you feel that something is broken, please create an <a href="https://github.com/magwo/elevatorcrush/issues">issue on GitHub</a></small></p>
+            <!-- <p style="width: 700px">So what is this? This is a game of programming. Your task is to program the movement of elevators. Sounds easy? Well, the customer has certain demands.</p> -->
+            <!-- <p><small>Dislaimer: The game is currently in a beta state, and some challenges may be very hard or impossible to complete. If you feel that something is broken, please create an <a href="https://github.com/magwo/elevatorcrush/issues">issue on GitHub</a></small></p> -->
         </div>
 
         <div class="challenge" style="height: 40px">
@@ -93,6 +102,7 @@
         </div>
 
         <div class="world">
+            <div class="feedbackcontainer"></div>
             <div class="innerworld">
             </div>
             <div class="statscontainer"></div>

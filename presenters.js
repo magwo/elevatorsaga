@@ -20,31 +20,37 @@ var presentStats = function($parent, world, statsTempl) {
     world.trigger("stats_changed");
 };
 
-var presentChallenge = function($parent, challenge, world, challengeNum, challengeTempl) {
+var presentChallenge = function($parent, challenge, app, challengeNum, challengeTempl) {
     var $challenge = $(riot.render(challengeTempl, {
         challenge: challenge, 
         num: challengeNum, 
         timeScale: world.timeScale.toFixed(0) + "x",
-        startButtonText: world.paused ? "Start" : "Pause"
+        startButtonText: world.timingObj.cancelEverything ? "<i class='fa fa-repeat'></i> Restart" : (world.paused ? "Start" : "Pause")
     }));
     $parent.html($challenge);
 
     $parent.find(".startstop").on("click", function() {
-        world.setPaused(!world.paused);
-        world.trigger("timescale_changed");
+        app.startStopOrRestart();
     });
-    $parent.find(".timescale_increase").on("click", function() {
+    $parent.find(".timescale_increase").on("click", function(e) {
+        e.preventDefault();
         if(world.timeScale < 20) {
             world.timeScale = Math.round(world.timeScale * 1.618);
             world.trigger("timescale_changed");
         }
     });
-    $parent.find(".timescale_decrease").on("click", function() {
+    $parent.find(".timescale_decrease").on("click", function(e) {
+        e.preventDefault();
         world.timeScale = Math.round(world.timeScale / 1.618);
         world.trigger("timescale_changed");
     });
+}
 
-
+var presentFeedback = function($parent, feedbackTempl, world, title, message, url) {
+    $parent.html(riot.render(feedbackTempl, {title: title, message: message, url: url, paddingTop: world.floors.length * world.floorHeight * 0.2}));
+    if(!url) {
+        $parent.find("a").remove();
+    }
 }
 
 var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
