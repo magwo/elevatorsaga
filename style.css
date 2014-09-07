@@ -259,7 +259,7 @@ button.right {
     display: inline-block;
 }
 .elevator .buttonpress.activated {
-    color: rgba(255, 255, 255, 0.8);
+    color: #33ff44;
 }
 
 .floor {

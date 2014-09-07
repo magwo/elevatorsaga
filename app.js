@@ -78,6 +78,9 @@ var createEditor = function() {
         }
         return obj;
     };
+    returnObj.setCode = function(code) {
+        cm.setValue(code);
+    };
 
     $("#button_apply").click(function() {
         returnObj.trigger("apply_code");
@@ -85,10 +88,18 @@ var createEditor = function() {
     return returnObj;
 }
 
+var createParamsUrl = function(current, overrides) {
+    return "#" + _.map(_.merge(current, overrides), function(val, key) {
+        return key + "=" + val;
+    }).join(",");
+}
+
 
 
 $(function() {
     var editor = createEditor();
+
+    var params = {};
 
     var $world = $(".innerworld");
     var $stats = $(".statscontainer");
@@ -119,10 +130,9 @@ $(function() {
         }
     };
 
-    app.startChallenge = function(challengeIndex, autoStart) {
-        var timeScale = 1.0;
+    app.startChallenge = function(challengeIndex, autoStart, timeScale) {
         if(typeof app.world != "undefined") {
-            timeScale = app.world.timeScale;
+            timeScale =  timeScale || app.world.timeScale;
             // Do any cleanup of pending timers etc that might be needed..
             app.world.unWind();
             // TODO: Investigate if memory leaks happen here
@@ -151,8 +161,7 @@ $(function() {
                 app.world.timingObj.cancelEverything = true;
                 app.world.setPaused(true);
                 if(challengeStatus) {
-                    //alert("Challenge completed. Prepare for the next challenge...");
-                    presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", "#challenge" + (challengeIndex + 2));
+                    presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
                     
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
@@ -176,25 +185,36 @@ $(function() {
     });
 
     riot.route(function(path) {
-        var match = path.match(/^#challenge(\d+)$/);
-        if(match && match.length == 2) {
-            var requestedChallenge = _.parseInt(match[1]) - 1;
-            if(requestedChallenge >= 0 && requestedChallenge < challenges.length) {
-                app.startChallenge(requestedChallenge, false);
-                return;
-            } else {
-                console.log("Invalid challenge index", requestedChallenge);
+        params = _.reduce(path.split(","), function(result, p) {
+            var match = p.match(/(\w+)=(\w+$)/);
+            if(match) { result[match[1]] = match[2]; } return result;
+        }, {});
+        var requestedChallenge = -1;
+        var autoStart = false;
+        var timeScale = 1.0;
+        _.each(params, function(val, key) {
+            if(key === "challenge") {
+                requestedChallenge = _.parseInt(val) - 1;
+                if(requestedChallenge < 0 || requestedChallenge >= challenges.length) {
+                    requestedChallenge = -1;
+                    console.log("Invalid challenge index", requestedChallenge);
+                }
+            } else if(key === "autostart") {
+                autoStart = val === "false" ? false : true;
+            } else if(key === "timescale") {
+                timeScale = parseFloat(val);
+            } else if(key === "devtest") {
+                editor.setCode(testingImpl);
             }
-        } else {
-            console.log("Invalid route detected", path);
-        }
-        console.log("Selecting challenge 1 as backup");
-        setTimeout(function() {
-            riot.route("#challenge1");
-        }, 1);
-        
-    });
+        });
 
-    // TODO: Load highest previously completed level from localstorage?
-    app.startChallenge(app.currentChallengeIndex, false);
+        if(requestedChallenge >= 0) {
+            app.startChallenge(requestedChallenge, autoStart, timeScale);
+        } else {
+            console.log("Defaulting challenge to 1", requestedChallenge);
+            setTimeout(function() {
+                riot.route(createParamsUrl(params, { challenge: 1 }));
+            }, 1);
+        }
+    });
 });

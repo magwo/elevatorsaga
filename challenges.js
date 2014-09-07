@@ -12,7 +12,6 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
     }
 };
 
-
 var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
     return {
         description: "Transport <span class='emphasis-color'>" + userCount + "</span> people and let noone wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(0) + "</span> seconds",
@@ -39,6 +38,13 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
     }
 };
 
+var requireDemo = function() {
+    return {
+        description: "Perpetual demo",
+        evaluate: function() { return null; }
+    }
+}
+
 
 var challenges = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
@@ -50,4 +56,5 @@ var challenges = [
     ,{options: {floorCount: 7, elevatorCount: 3, spawnRate: 1.5}, condition: requireUserCountWithMaxWaitTime(40, 16)}
     ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.8}, condition: requireUserCountWithinMoves(45, 30)}
     ,{options: {floorCount: 3, elevatorCount: 3, spawnRate: 3.0}, condition: requireUserCountWithinMoves(120, 40)}
+    ,{options: {floorCount: 10, elevatorCount: 10, spawnRate: 3.0}, condition: requireDemo()}
 ];
