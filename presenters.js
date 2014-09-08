@@ -123,3 +123,8 @@ var presentCodeStatus = function($parent, templ, error) {
     var status = riot.render(templ, {errorMessage: errorMessage, errorDisplay: errorDisplay, successDisplay: successDisplay});
     $parent.html(status);
 }
+
+var makeDemoFullscreen = function() {
+    $("body .container > *").not(".world").css("visibility", "hidden");
+    $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
+}

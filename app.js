@@ -205,6 +205,8 @@ $(function() {
                 timeScale = parseFloat(val);
             } else if(key === "devtest") {
                 editor.setCode(testingImpl);
+            } else if(key === "fullscreen") {
+                makeDemoFullscreen();
             }
         });
 
