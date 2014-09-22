@@ -16,7 +16,7 @@ var createWorldCreator = function(timingService) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
             elevator.moveTo(200+60*i, null);
-            elevator = asElevator(elevator, 2.0, floorCount, floorHeight);
+            elevator = asElevator(elevator, 2.4, floorCount, floorHeight);
             elevator.setFloorPosition(0);
             elevator.updateDisplayPosition();
             return elevator;

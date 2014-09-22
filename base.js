@@ -17,6 +17,17 @@ function Promise(fn) {
     });
 }
 
+window.distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
+    // v² = u² + 2a * d
+    var requiredDistance = (Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / (2 * acceleration);
+    return requiredDistance;
+}
+window.accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
+    // v² = u² + 2a * d
+    var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
+    return requiredAcceleration;
+}
+
 
 var dateService = {
     nowMillis: function() { return new Date().getTime(); }

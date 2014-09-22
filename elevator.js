@@ -1,6 +1,11 @@
 
 
 var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
+
+    var ACCELERATION = floorHeight * 1.8;
+    var DECELERATION = floorHeight * 2.3;
+    var MAXSPEED = floorHeight * speedFloorsPerSec;
+
     movable.currentFloor = 0;
     movable.destinationFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
@@ -50,10 +55,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         movable.makeSureNotBusy();
         movable.destinationFloor = floor;
         var distance = Math.abs(movable.destinationFloor - movable.currentFloor);
-        var timeToTravel = 1000.0 * distance / speedFloorsPerSec;
         var destination = (floorCount - 1) * floorHeight - floor * floorHeight;
 
-        movable.moveToOverTime(null, destination, timeToTravel, undefined, function() {
+        movable.movePhysically(null, destination, ACCELERATION, DECELERATION, MAXSPEED, function() {
             movable.currentFloor = movable.destinationFloor;
             movable.buttonStates[movable.currentFloor] = false;
             movable.trigger("floor_buttons_changed", movable.buttonStates);

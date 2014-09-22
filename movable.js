@@ -81,6 +81,43 @@ var asMovable = function(obj) {
         };
     };
 
+    obj.movePhysically = function(newX, newY, constantAcceleration, constantDeceleration, maxSpeed, cb) {
+        obj.makeSureNotBusy();
+        if(newX === null) { newX = obj.x; }
+        if(newY === null) { newY = obj.y; }
+        var origX = obj.x;
+        var origY = obj.y;
+        var speed = 0.0;
+        var isStopping = false;
+        var distanceToTravel = Math.sqrt(Math.pow(newX - obj.x, 2) + Math.pow(newY - obj.y, 2));
+        var position = 0.0;
+        obj.currentTask = function(dt) {
+            dt *= 0.001;
+            if(position === distanceToTravel) {
+                obj.currentTask = null;
+                if(cb) { cb(); }
+                return;
+            }
+            if(isStopping || position - distanceNeededToAchieveSpeed(speed, 0, constantDeceleration) > distanceToTravel) {
+                // Use isStopping variable to prevent jerky behavior due to floating precision roundings
+                isStopping = true;
+                var desiredAcceleration = accelerationNeededToAchieveChangeDistance(speed, 0, Math.max(0.0000001, distanceToTravel - position));
+                speed += desiredAcceleration * dt;
+                speed = Math.max(0.000001, speed);
+                if(speed <= 0.00001) {
+                    speed = 0.0;
+                    position = distanceToTravel;
+                }
+            } else if(speed < maxSpeed) {
+                speed = Math.min(maxSpeed, speed + constantAcceleration * dt);
+            }
+            
+            position += speed * dt;
+            var posFactor = position / distanceToTravel;
+            obj.setPosition([linearInterpolate(origX, newX, posFactor), linearInterpolate(origY, newY, posFactor)]);
+        }
+    };
+
     obj.update = function(dt) {
         if(obj.currentTask !== null) {
             obj.currentTask(dt);
