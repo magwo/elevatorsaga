@@ -39,7 +39,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         }
     }
 
-    obj.queueGoToFloor = function(floorNum) {
+    obj.goToFloor = function(floorNum) {
         floorNum = limitNumber(floorNum, 0, floorCount - 1);
         var task = createTask(function (taskObj) {
             elevator.goToFloor(floorNum, function() {
