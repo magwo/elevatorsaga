@@ -2,8 +2,8 @@
 
 var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
-    var ACCELERATION = floorHeight * 1.8;
-    var DECELERATION = floorHeight * 2.3;
+    var ACCELERATION = floorHeight * 2.1;
+    var DECELERATION = floorHeight * 2.6;
     var MAXSPEED = floorHeight * speedFloorsPerSec;
 
     movable.currentFloor = 0;
