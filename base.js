@@ -1,4 +1,13 @@
 
+// Console shim
+(function () {
+    var f = function () {};
+    if (!window.console) {
+        window.console = {
+            log:f, info:f, warn:f, debug:f, error:f
+        };
+    }
+}());
 
 var limitNumber = function(num, min, max) {
     return Math.min(max, Math.max(num, min));
