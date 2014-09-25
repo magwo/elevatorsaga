@@ -77,5 +77,5 @@ var challenges = [
     ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(110, 15)}
     ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(120, 14)}
 
-    ,{options: {floorCount: 10, elevatorCount: 10, spawnRate: 3.0}, condition: requireDemo()}
+    ,{options: {floorCount: 10, elevatorCount: 10, spawnRate: 2.0}, condition: requireDemo()}
 ];
