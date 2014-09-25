@@ -14,17 +14,33 @@ var limitNumber = function(num, min, max) {
 }
 
 
-// A generic promiese interface by using riot.observable
-// Borrowed from https://github.com/muut/riotjs-admin
-function Promise(fn) {
+
+// Simple Promise pattern using riot.observable
+function Promise() {
     var self = riot.observable(this);
-    var resolved = false;
+    self.resolution = null;
     $.map(['done', 'fail', 'always'], function(name) {
         self[name] = function(arg) {
-            return self[$.isFunction(arg) ? 'on' : 'trigger'](name, arg);
+            if($.isFunction(arg)) {
+                self.one(name, arg);
+                if(self.resolution === name) {
+                    self.trigger(name);
+                }
+            } else {
+                if(name === 'always') {
+                    throw new Error('Invalid argument for "always" function: ' + arg);
+                }
+                if(self.resolution !== null) {
+                    throw new Error('Can not resolve promise - already resolved to ' + self.resolution)
+                }
+                self.resolution = name;
+                self.trigger(name, arg).trigger('always', arg);
+            }
+            return self;
         };
     });
 }
+
 
 window.distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
     // v² = u² + 2a * d
