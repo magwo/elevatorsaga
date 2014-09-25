@@ -91,4 +91,12 @@ describe("Promise object", function() {
 		expect(handlers.otherHandler).toHaveBeenCalled();
 		expect(handlers.thirdHandler).toHaveBeenCalled();
 	});
+	it("calls handlers with argument even if registered after resolution", function() {
+		p.done("moo");
+		p.done(handlers.someHandler).fail(handlers.thirdHandler);
+		p.always(handlers.otherHandler)
+		expect(handlers.someHandler).toHaveBeenCalledWith("moo");
+		expect(handlers.otherHandler).toHaveBeenCalledWith("moo");
+		expect(handlers.thirdHandler).not.toHaveBeenCalled();
+	});
 });

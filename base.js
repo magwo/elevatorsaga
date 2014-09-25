@@ -19,12 +19,13 @@ var limitNumber = function(num, min, max) {
 function Promise() {
     var self = riot.observable(this);
     self.resolution = null;
+    self.result = null;
     $.map(['done', 'fail', 'always'], function(name) {
         self[name] = function(arg) {
             if($.isFunction(arg)) {
                 self.one(name, arg);
-                if(self.resolution === name) {
-                    self.trigger(name);
+                if(self.resolution === name || (self.resolution !== null && name === 'always')) {
+                    self.trigger(name, self.result);
                 }
             } else {
                 if(name === 'always') {
@@ -34,7 +35,8 @@ function Promise() {
                     throw new Error('Can not resolve promise - already resolved to ' + self.resolution)
                 }
                 self.resolution = name;
-                self.trigger(name, arg).trigger('always', arg);
+                self.result = arg;
+                self.trigger(name, self.result).trigger('always', self.result);
             }
             return self;
         };
