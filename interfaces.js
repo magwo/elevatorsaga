@@ -40,6 +40,10 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     }
 
     obj.goToFloor = function(floorNum) {
+    // TODO: Add support for smart ordered goto
+    // TODO: Add support for canceling current task, by means of
+    // knowing in the stopping routine if it has started braking at a floor or not.
+    // TODO: Also, could add support for stopping anywhere
         floorNum = limitNumber(floorNum, 0, floorCount - 1);
         var task = createTask(function (taskObj) {
             elevator.goToFloor(floorNum, function() {
