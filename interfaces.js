@@ -47,7 +47,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         floorNum = limitNumber(floorNum, 0, floorCount - 1);
         var task = createTask(function (taskObj) {
             elevator.goToFloor(floorNum, function() {
-                elevator.wait(1000, function() {
+                elevator.wait(1, function() {
                     taskObj.setDone();
                 });
             });

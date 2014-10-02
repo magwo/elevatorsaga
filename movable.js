@@ -29,9 +29,16 @@ var asMovable = function(obj) {
         obj.trigger('new_state', obj);
     };
 
+    obj.setPosition = function(position) {
+        obj.x = position[0];
+        obj.y = position[1];
+        obj.trigger('new_state');
+    }
+
     obj.moveTo = function(newX, newY) {
         if(newX === null) { newX = obj.x; }
         if(newY === null) { newY = obj.y; }
+        obj.trigger('new_state');
         obj.setPosition([newX, newY]);
     };
 
@@ -92,7 +99,6 @@ var asMovable = function(obj) {
         var distanceToTravel = Math.sqrt(Math.pow(newX - obj.x, 2) + Math.pow(newY - obj.y, 2));
         var position = 0.0;
         obj.currentTask = function(dt) {
-            dt *= 0.001;
             if(position === distanceToTravel) {
                 obj.currentTask = null;
                 if(cb) { cb(); }
@@ -124,13 +130,6 @@ var asMovable = function(obj) {
         }
     }
 
-    obj.setPosition = function(position) {
-        obj.x = position[0];
-        obj.y = position[1];
-        //obj.updateDisplayPosition();
-        obj.trigger('new_state');
-    }
-
     obj.getWorldPosition = function() {
         var resultX = obj.x;
         var resultY = obj.y;
@@ -143,15 +142,7 @@ var asMovable = function(obj) {
         return [resultX, resultY];
     };
 
-    obj.parentStateListener = function() {
-        //obj.updateDisplayPosition();
-    };
-
     obj.setParent = function(movableParent) {
-        if(obj.parent !== null) {
-            // Clean up listener
-            obj.parent.off("new_state", obj.parentStateListener);
-        }
         if(movableParent === null) {
             if(obj.parent !== null) {
                 var objWorld = obj.getWorldPosition();
@@ -164,7 +155,6 @@ var asMovable = function(obj) {
             var parentWorld = movableParent.getWorldPosition();
             obj.parent = movableParent;
             obj.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
-            movableParent.on("new_state", obj.parentStateListener);
         }
     };
 

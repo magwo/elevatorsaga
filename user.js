@@ -34,7 +34,7 @@ var asUser = function(user, floorCount, floorHeight) {
             user.trigger("entered_elevator", elevator);
 
             // TODO: Consider what happens if user is busy at this moment
-            user.moveToOverTime(pos[0], pos[1], 1000, undefined, function() {
+            user.moveToOverTime(pos[0], pos[1], 1, undefined, function() {
                 elevator.pressFloorButton(user.destinationFloor);
             });
 
@@ -48,7 +48,7 @@ var asUser = function(user, floorCount, floorHeight) {
                     user.trigger("exited_elevator", elevator);
                     user.trigger("new_state");
 
-                    user.moveToOverTime(destination, null, 1000 + Math.random()*500, linearInterpolate, function() {
+                    user.moveToOverTime(destination, null, 1 + Math.random()*0.5, linearInterpolate, function() {
                         user.removeMe = true;
                         user.trigger("removed");
                         user.off("*");

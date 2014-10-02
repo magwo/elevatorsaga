@@ -126,14 +126,14 @@ var createWorldCreator = function(timingService) {
             });
         });
 
-        var elapsedSinceSpawn = 1001/options.spawnRate;
+        var elapsedSinceSpawn = 1.001/options.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
 
         // Main update loop
-        var DT_MAX = 1000/58; // Need a max dt (sub stepping) for reliable simulaton at high timescale
+        var DT_MAX = 1.0/58; // Need a max dt (sub stepping) for reliable simulaton at high timescale
         world.timingObj.setInterval(1000/60, function(dt) {
             if(!world.paused) {
-                var scaledDt = dt * world.timeScale;
+                var scaledDt = dt * 0.001 * world.timeScale;
 
                 try {
                     world.codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
@@ -145,8 +145,8 @@ var createWorldCreator = function(timingService) {
                     world.elapsedTime += thisDt;
                     elapsedSinceSpawn += thisDt;
                     elapsedSinceStatsUpdate += thisDt;
-                    while(elapsedSinceSpawn > 1000/options.spawnRate) {
-                        elapsedSinceSpawn -= 1000/options.spawnRate;
+                    while(elapsedSinceSpawn > 1.0/options.spawnRate) {
+                        elapsedSinceSpawn -= 1.0/options.spawnRate;
                         registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
                     }
 
@@ -165,8 +165,8 @@ var createWorldCreator = function(timingService) {
                     _.remove(world.users, function(u) { return u.removeMe; });
 
                     // Update stats last, because the event raised might cause this loop to stop
-                    while(elapsedSinceStatsUpdate > 1000/4 && !world.timingObj.cancelEverything) {
-                        elapsedSinceStatsUpdate -= 1000/4;
+                    while(elapsedSinceStatsUpdate > 1.0/4 && !world.timingObj.cancelEverything) {
+                        elapsedSinceStatsUpdate -= 1.0/4;
                         recalculateStats();
                     }
                     substeppingDt -= DT_MAX;
