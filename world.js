@@ -89,7 +89,7 @@ var createWorldCreator = function(timingService) {
         }
 
         var recalculateStats = function() {
-            world.transportedPerSec = world.transportedCounter / (0.001 * world.elapsedTime);
+            world.transportedPerSec = world.transportedCounter / world.elapsedTime;
             world.moveCount = _.reduce(world.elevators, function(sum, elevator) { return sum+elevator.moveCount; }, 0);
             world.trigger("stats_changed");
         };
