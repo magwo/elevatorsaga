@@ -10,10 +10,10 @@ var presentStats = function($parent, world, statsTempl) {
     world.on("stats_changed", function() {
         $parent.html(riot.render(statsTempl, {
             transportedCounter: world.transportedCounter,
-            elapsedTime: (world.elapsedTime*0.001).toFixed(0),
+            elapsedTime: (world.elapsedTime).toFixed(0),
             transportedPerSec: world.transportedPerSec.toPrecision(3),
-            avgWaitTime: (world.avgWaitTime*0.001).toFixed(1),
-            maxWaitTime: (world.maxWaitTime*0.001).toFixed(1),
+            avgWaitTime: (world.avgWaitTime).toFixed(1),
+            maxWaitTime: (world.maxWaitTime).toFixed(1),
             moveCount: (world.moveCount)
         }));
     });
