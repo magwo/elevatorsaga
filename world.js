@@ -129,9 +129,8 @@ var createWorldCreator = function(timingService) {
         var elapsedSinceSpawn = 1.001/options.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
 
-        // Main update loop
-        var DT_MAX = 1.0/58; // Need a max dt (sub stepping) for reliable simulaton at high timescale
-        world.timingObj.setInterval(1000/60, function(dt) {
+        // Main update function
+        world.update = function(dt) {
             if(!world.paused) {
                 var scaledDt = dt * 0.001 * world.timeScale;
 
@@ -174,7 +173,7 @@ var createWorldCreator = function(timingService) {
             }
             _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
             _.each(world.users, function(u) { u.updateDisplayPosition(); });
-        });
+        };
 
 
         world.unWind = function() {
@@ -199,3 +198,28 @@ var createWorldCreator = function(timingService) {
 
     return creator;
 };
+
+
+var createWorldController = function(dtMax) {
+    var controller = {};
+    controller.timeScale = 1.0;
+    controller.isPaused = false;
+    controller.start = function(world, animationFrameRequester) {
+        var lastT = null;
+        var updater = function(t) {
+            if(!controller.isPaused && lastT !== null) {
+                var dt = (t - lastT);
+                while(dt > 0.0) {
+                    var thisDt = Math.min(dtMax, dt);
+                    world.update(thisDt * 0.001 * controller.timeScale);
+                    dt -= dtMax;
+                }
+            }
+            lastT = t;
+            animationFrameRequester(updater);
+        };
+        animationFrameRequester(updater);
+    };
+    return controller;
+};
+

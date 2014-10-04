@@ -73,6 +73,52 @@ describe("Movable object", function() {
 	});
 });
 
+describe("World controller", function() {
+	var controller = null;
+	var fakeWorld = null;
+	var frameRequester = null;
+	var DT_MAX = 1000.0 / 59;
+	var createFrameRequester = function(timeStep) {
+		var currentT = 0.0;
+		var currentCb = null;
+		return {
+			register: function(cb) { currentCb = cb; },
+			trigger: function() { currentT += timeStep; if(currentCb !== null) { currentCb(currentT); } }
+		};
+	}
+	beforeEach(function() {
+		controller = createWorldController(DT_MAX);
+		fakeWorld = { update: function(dt) { console.log("fake with dt", dt)} };
+		frameRequester = createFrameRequester(10.0);
+		spyOn(fakeWorld, "update").and.callThrough();
+	});
+	it("does not update world on first animation frame", function() {
+		controller.start(fakeWorld, frameRequester.register);
+		frameRequester.trigger();
+		expect(fakeWorld.update).not.toHaveBeenCalled();
+	});
+	it("calls world update with correct delta t", function() {
+		controller.start(fakeWorld, frameRequester.register);
+		frameRequester.trigger();
+		frameRequester.trigger();
+		expect(fakeWorld.update).toHaveBeenCalledWith(0.01);
+	});
+	it("calls world update with scaled delta t", function() {
+		controller.timeScale = 2.0;
+		controller.start(fakeWorld, frameRequester.register);
+		frameRequester.trigger();
+		frameRequester.trigger();
+		expect(fakeWorld.update).toHaveBeenCalledWith(0.02);
+	});
+	it("does not update world when paused", function() {
+		controller.start(fakeWorld, frameRequester.register);
+		controller.isPaused = true;
+		frameRequester.trigger();
+		frameRequester.trigger();
+		expect(fakeWorld.update).not.toHaveBeenCalled();
+	});
+});
+
 
 describe("Challenge requirements", function() {
 	var fakeWorld = null;

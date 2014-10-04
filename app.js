@@ -88,11 +88,12 @@ var createEditor = function() {
     return returnObj;
 }
 
+
 var createParamsUrl = function(current, overrides) {
     return "#" + _.map(_.merge(current, overrides), function(val, key) {
         return key + "=" + val;
     }).join(",");
-}
+};
 
 
 
