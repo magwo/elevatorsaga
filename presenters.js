@@ -7,7 +7,7 @@ var clearAll = function($elems) {
 
 
 var presentStats = function($parent, world, statsTempl) {
-    world.on("stats_changed", function() {
+    world.on("stats_display_changed", function() {
         $parent.html(riot.render(statsTempl, {
             transportedCounter: world.transportedCounter,
             elapsedTime: (world.elapsedTime).toFixed(0),
@@ -17,15 +17,15 @@ var presentStats = function($parent, world, statsTempl) {
             moveCount: (world.moveCount)
         }));
     });
-    world.trigger("stats_changed");
+    world.trigger("stats_display_changed");
 };
 
-var presentChallenge = function($parent, challenge, app, challengeNum, challengeTempl) {
+var presentChallenge = function($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
     var $challenge = $(riot.render(challengeTempl, {
         challenge: challenge, 
         num: challengeNum, 
-        timeScale: world.timeScale.toFixed(0) + "x",
-        startButtonText: world.timingObj.cancelEverything ? "<i class='fa fa-repeat'></i> Restart" : (world.paused ? "Start" : "Pause")
+        timeScale: worldController.timeScale.toFixed(0) + "x",
+        startButtonText: world.challengeEnded ? "<i class='fa fa-repeat'></i> Restart" : (worldController.isPaused ? "Start" : "Pause")
     }));
     $parent.html($challenge);
 
@@ -34,15 +34,15 @@ var presentChallenge = function($parent, challenge, app, challengeNum, challenge
     });
     $parent.find(".timescale_increase").on("click", function(e) {
         e.preventDefault();
-        if(world.timeScale < 20) {
-            world.timeScale = Math.round(world.timeScale * 1.618);
-            world.trigger("timescale_changed");
+        if(worldController.timeScale < 20) {
+            var timeScale = Math.round(worldController.timeScale * 1.618);
+            worldController.setTimeScale(timeScale);
         }
     });
     $parent.find(".timescale_decrease").on("click", function(e) {
         e.preventDefault();
-        world.timeScale = Math.round(world.timeScale / 1.618);
-        world.trigger("timescale_changed");
+        var timeScale = Math.round(worldController.timeScale / 1.618);
+        worldController.setTimeScale(timeScale);
     });
 }
 

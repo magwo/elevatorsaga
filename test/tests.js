@@ -76,6 +76,7 @@ describe("Movable object", function() {
 describe("World controller", function() {
 	var controller = null;
 	var fakeWorld = null;
+	var fakeCodeObj = null;
 	var frameRequester = null;
 	var DT_MAX = 1000.0 / 59;
 	var createFrameRequester = function(timeStep) {
@@ -88,30 +89,31 @@ describe("World controller", function() {
 	}
 	beforeEach(function() {
 		controller = createWorldController(DT_MAX);
-		fakeWorld = { update: function(dt) { console.log("fake with dt", dt)} };
+		fakeWorld = { update: function(dt) { console.log("fake with dt", dt)}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
+		fakeCodeObj = { init: function() {}, update: function() {} };
 		frameRequester = createFrameRequester(10.0);
 		spyOn(fakeWorld, "update").and.callThrough();
 	});
 	it("does not update world on first animation frame", function() {
-		controller.start(fakeWorld, frameRequester.register);
+		controller.start(fakeWorld, fakeCodeObj, frameRequester.register, true);
 		frameRequester.trigger();
 		expect(fakeWorld.update).not.toHaveBeenCalled();
 	});
 	it("calls world update with correct delta t", function() {
-		controller.start(fakeWorld, frameRequester.register);
+		controller.start(fakeWorld, fakeCodeObj, frameRequester.register, true);
 		frameRequester.trigger();
 		frameRequester.trigger();
 		expect(fakeWorld.update).toHaveBeenCalledWith(0.01);
 	});
 	it("calls world update with scaled delta t", function() {
 		controller.timeScale = 2.0;
-		controller.start(fakeWorld, frameRequester.register);
+		controller.start(fakeWorld, fakeCodeObj, frameRequester.register, true);
 		frameRequester.trigger();
 		frameRequester.trigger();
 		expect(fakeWorld.update).toHaveBeenCalledWith(0.02);
 	});
 	it("does not update world when paused", function() {
-		controller.start(fakeWorld, frameRequester.register);
+		controller.start(fakeWorld, fakeCodeObj, frameRequester.register, true);
 		controller.isPaused = true;
 		frameRequester.trigger();
 		frameRequester.trigger();

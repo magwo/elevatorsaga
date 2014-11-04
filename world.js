@@ -1,7 +1,7 @@
 
 
 
-var createWorldCreator = function(timingService) {
+var createWorldCreator = function() {
     var creator = {};
 
     creator.createFloors = function(floorCount, floorHeight) {
@@ -58,7 +58,7 @@ var createWorldCreator = function(timingService) {
         return user;
     }
 
-    creator.createWorld = function(setTimeoutFunc, options) {
+    creator.createWorld = function(options) {
         console.log("Creating world with options", options);
         var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
         options = _.defaults(_.clone(options), defaultOptions);
@@ -66,10 +66,6 @@ var createWorldCreator = function(timingService) {
         var world = {floorHeight: options.floorHeight, transportedCounter: 0};
         riot.observable(world);
         
-        // Conclusion: Need to implement our own timeout generator
-        // to get reliable high time factor (>100)
-        world.timeScale = 1.0;
-        world.timingObj = timingService.createTimingReplacement(setTimeoutFunc, 1);
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
@@ -81,12 +77,7 @@ var createWorldCreator = function(timingService) {
         world.elapsedTime = 0.0;
         world.maxWaitTime = 0.0;
         world.avgWaitTime = 0.0;
-
-        world.paused = true;
-        world.setPaused = function(paused) {
-            world.paused = paused;
-            world.trigger("timescale_changed");
-        }
+        world.challengeEnded = false;
 
         var recalculateStats = function() {
             world.transportedPerSec = world.transportedCounter / world.elapsedTime;
@@ -131,66 +122,48 @@ var createWorldCreator = function(timingService) {
 
         // Main update function
         world.update = function(dt) {
-            if(!world.paused) {
-                var scaledDt = dt * 0.001 * world.timeScale;
-
-                try {
-                    world.codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
-                } catch(e) { world.paused = true; console.log("MOO", e); world.trigger("code_error", e); }
-
-                var substeppingDt = scaledDt;
-                while(substeppingDt > 0.0 && !world.timingObj.cancelEverything) {
-                    var thisDt = Math.min(DT_MAX, substeppingDt);
-                    world.elapsedTime += thisDt;
-                    elapsedSinceSpawn += thisDt;
-                    elapsedSinceStatsUpdate += thisDt;
-                    while(elapsedSinceSpawn > 1.0/options.spawnRate) {
-                        elapsedSinceSpawn -= 1.0/options.spawnRate;
-                        registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
-                    }
-
-                    _.each(world.elevators, function(e) { e.update(thisDt); });
-                    _.each(world.users, function(u) {
-                        if(u.done && typeof u.cleanupFunction === "function") {
-                            // Conclusion: Be careful using "off" riot function from event handlers - it alters 
-                            // riot's callback list resulting in uncalled event handlers.
-                            u.cleanupFunction();
-                            u.cleanupFunction = null;
-                        }
-                        u.update(thisDt);
-                        world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
-                    });
-
-                    _.remove(world.users, function(u) { return u.removeMe; });
-
-                    // Update stats last, because the event raised might cause this loop to stop
-                    while(elapsedSinceStatsUpdate > 1.0/4 && !world.timingObj.cancelEverything) {
-                        elapsedSinceStatsUpdate -= 1.0/4;
-                        recalculateStats();
-                    }
-                    substeppingDt -= DT_MAX;
-                }
+            world.elapsedTime += dt;
+            elapsedSinceSpawn += dt;
+            elapsedSinceStatsUpdate += dt;
+            while(elapsedSinceSpawn > 1.0/options.spawnRate) {
+                elapsedSinceSpawn -= 1.0/options.spawnRate;
+                registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
             }
+
+            _.each(world.elevators, function(e) { e.update(dt); });
+            _.each(world.users, function(u) {
+                if(u.done && typeof u.cleanupFunction === "function") {
+                    // Be careful using "off" riot function from event handlers - it alters 
+                    // riot's callback list resulting in uncalled event handlers.
+                    u.cleanupFunction();
+                    u.cleanupFunction = null;
+                }
+                u.update(dt);
+                world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+            });
+
+            _.remove(world.users, function(u) { return u.removeMe; });
+            recalculateStats();
+        };
+
+        world.updateDisplayPositions = function() {
             _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
             _.each(world.users, function(u) { u.updateDisplayPosition(); });
-        };
+        }
 
 
         world.unWind = function() {
-            world.timingObj.cancelEverything = true;
+            console.log("Unwinding", world);
             _.each(world.elevators.concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), function(obj) {
                 obj.off("*");
-                delete obj;
+                delete obj; // (Wat)
             });
+            world.challengeEnded = true;
             world.elevators = world.elevatorInterfaces = world.users = world.floors = [];
         }
 
-        world.init = function(codeObj) {
-            try {
-                world.codeObj = codeObj;
-                world.codeObj.init(world.elevatorInterfaces, world.floors);
-                _.each(world.elevatorInterfaces, function(ei) { ei.pumpTaskQueue(); });
-            } catch(e) { world.paused = true; world.trigger("code_error", e); }
+        world.init = function() {
+            _.each(world.elevatorInterfaces, function(ei) { ei.pumpTaskQueue(); });
         };
 
         return world;
@@ -201,25 +174,51 @@ var createWorldCreator = function(timingService) {
 
 
 var createWorldController = function(dtMax) {
-    var controller = {};
+    var controller = riot.observable({});
     controller.timeScale = 1.0;
-    controller.isPaused = false;
-    controller.start = function(world, animationFrameRequester) {
+    controller.isPaused = true;
+    controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
+        controller.isPaused = !autoStart;
+        controller.challengeEnded = false;
+        try {
+            codeObj.init(world.elevatorInterfaces, world.floors);
+        } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
+        world.init();
         var lastT = null;
         var updater = function(t) {
-            if(!controller.isPaused && lastT !== null) {
+            if(!controller.isPaused && !world.challengeEnded && lastT !== null) {
                 var dt = (t - lastT);
-                while(dt > 0.0) {
-                    var thisDt = Math.min(dtMax, dt);
-                    world.update(thisDt * 0.001 * controller.timeScale);
-                    dt -= dtMax;
+                var scaledDt = dt * 0.001 * controller.timeScale;
+                scaledDt = Math.min(scaledDt, dtMax * 40); // Prevent unhealthy looping
+                while(scaledDt > 0.0 && !world.challengeEnded) {
+                    var thisDt = Math.min(dtMax, scaledDt);
+                    try {
+                        codeObj.update(thisDt, world.elevatorInterfaces, world.floors);
+                    } catch(e) { controller.setPaused(true); console.log("Usercode error on update", e); controller.trigger("code_error", e); }
+                    world.update(thisDt);
+                    scaledDt -= dtMax;
                 }
+                world.updateDisplayPositions();
+                world.trigger("stats_display_changed"); // TODO: Trigger less often for performance reasons etc
             }
             lastT = t;
-            animationFrameRequester(updater);
+            if(!world.challengeEnded) {
+                animationFrameRequester(updater);
+            }
         };
         animationFrameRequester(updater);
     };
+
+    controller.setPaused = function(paused) {
+        console.log("Pause foo", paused);
+        controller.isPaused = paused;
+        controller.trigger("timescale_changed");
+    };
+    controller.setTimeScale = function(timeScale) {
+        controller.timeScale = timeScale;
+        controller.trigger("timescale_changed");
+    }
+
     return controller;
 };
 

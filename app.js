@@ -118,49 +118,48 @@ $(function() {
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
 
     var app = riot.observable({});
-    app.worldCreator = createWorldCreator(timingService);
+    app.worldController = createWorldController(1.0 / 60.0);
+    app.worldController.on("code_error", function(e) {
+        console.log("World raised code error", e);
+        editor.trigger("code_error", e);
+    });
+    
+    console.log(app.worldController);
+    app.worldCreator = createWorldCreator();
     app.world = undefined;
 
     app.currentChallengeIndex = 0;
 
     app.startStopOrRestart = function() {
-        if(app.world.timingObj.cancelEverything) {
+        if(app.world.challengeEnded) {
             app.startChallenge(app.currentChallengeIndex);
         } else {
-            app.world.setPaused(!app.world.paused);
+            app.worldController.setPaused(!app.worldController.isPaused);
         }
     };
 
-    app.startChallenge = function(challengeIndex, autoStart, timeScale) {
+    app.startChallenge = function(challengeIndex, autoStart) {
         if(typeof app.world != "undefined") {
-            timeScale =  timeScale || app.world.timeScale;
-            // Do any cleanup of pending timers etc that might be needed..
             app.world.unWind();
             // TODO: Investigate if memory leaks happen here
         }
         app.currentChallengeIndex = challengeIndex;
-        app.world = app.worldCreator.createWorld(window.setTimeout, challenges[challengeIndex].options);
-        app.world.on("code_error", function(e) {
-            console.log("World raised code error", e);
-            editor.trigger("code_error", e);
-        });
-        app.world.timeScale = timeScale;
-        window.world = app.world;
+        app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
 
         clearAll([$world, $stats, $feedback]);
         presentStats($stats, app.world, statsTempl);
-        presentChallenge($challenge, challenges[challengeIndex], app.world, challengeIndex + 1, challengeTempl);
+        presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
-        app.world.on("timescale_changed", function() {
-            presentChallenge($challenge, challenges[challengeIndex], app, challengeIndex + 1, challengeTempl);
+        app.worldController.on("timescale_changed", function() {
+            presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         });
 
         app.world.on("stats_changed", function() {
-            var challengeStatus = challenges[challengeIndex].condition.evaluate(world);
+            var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
             if(challengeStatus !== null) {
-                app.world.timingObj.cancelEverything = true;
-                app.world.setPaused(true);
+                app.world.challengeEnded = true;
+                app.worldController.setPaused(true);
                 if(challengeStatus) {
                     presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
                     
@@ -171,8 +170,9 @@ $(function() {
         });
 
         var codeObj = editor.getCodeObj();
-        app.world.init(codeObj);
-        app.world.setPaused(!autoStart);
+        console.log("Starting...");
+        app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);
+        //app.world.setPaused(!autoStart); // controller instead
     };
 
     editor.on("apply_code", function() {
