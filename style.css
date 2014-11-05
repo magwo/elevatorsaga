@@ -40,11 +40,6 @@ h2, h3, h4, h5 {
 dl {
     color: #555;
 }
-dl dt {
-    font: 15px Consolas, Monaco, monospace;
-    color: #F1F2D8;
-    text-shadow: 0 1px 0.4pt #555;
-}
 dl dd {
     font: 15px Arial, Helvetica, sans-serif;
     margin-bottom: 1em;

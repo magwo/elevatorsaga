@@ -19,7 +19,7 @@ var createEditor = function() {
     });
 
     var reset = function() {
-        cm.setValue('{\n    init: function(elevators, floors) {\n        _.each(elevators, function(elevator) {\n            elevator.on("idle", function() {\n                // Go to all the floors\n                elevator.goToFloor(0);\n                elevator.goToFloor(1);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}');
+        cm.setValue($("#default-elev-implementation").text().trim());
     };
     var saveCode = function() {
         localStorage.setItem(lsKey, cm.getValue());

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elevator Crush Saga - help and API documentation</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css" type="text/css" media="all">
+
+    <link rel="stylesheet" href="libs/highlight/styles/default.css" type="text/css" media="all">
+    <link rel="stylesheet" href="libs/highlight/styles/solarized_light.css" type="text/css" media="all">
+    <script type="text/javascript" src="libs/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <div class="container" style="width: 768px">
+        <div class="header">
+            <h1>Elevator Crush Saga <em class="emphasis-color">API documentation</em></h1>
+        </div>
+
+        <div class="help">
+            <h2>About the game</h2>
+            <p>
+                This is a game of programming!<br>
+                Your task is to program the movement of elevators, by writing a program in <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide">JavaScript</a>.
+            </p>
+            <p>
+                The goal is to transport people in an efficient manner.<br>
+                Depending on how well you do it, you can progress through the ever more difficult challenges.<br>
+                Only the very best programs will be able to complete all the challenges.
+            </p>
+
+            <h2>How to play</h2>
+            <p>
+                Enter your code in the input window below the game view, and press the <span class="emphasis-color">Apply</span> button to start the challenge.<br>
+                You can increase or decrease the speed of time by pressing the <i class="fa fa-plus emphasis-color"></i> and <i class="fa fa-minus emphasis-color"></i> buttons.
+            </p>
+            <p>
+                If your program contains an error, you can use the developer tools in your web browser to try and debug it.
+                If you want to start over with the code, press the <span class="emphasis-color">Reset</span> button. This will revert the code to a working but simplistic implementation.<br>
+                If you have a favorite text editor, such as <a href="http://www.sublimetext.com/">Sublime Text</a>, feel free to edit the code there and paste it into the game editor.<br>
+                Your code is automatically saved in your local storage, so don't worry - it doesn't disappear if you accidentally close the browser.
+            </p>
+            <h2>Basics</h2>
+            <p>
+                Your code must declare an object containing at least two functions called <span class="emphasis-color">init</span> and <span class="emphasis-color">update</span>. Like this:
+            </p>
+            <div><pre><code>{
+    init: function(elevators, floors) {
+        // Do stuff with the elevators and floors, which are both arrays of objects
+    },
+    update: function(dt, elevators, floors) {
+        // Do more stuff with the elevators and floors
+        // dt is the number of game seconds that passed since the last time update was called
+    }
+}</code></pre></div>
+            <p>These functions will then be called by the game during the challenge.<br>
+            <span class="emphasis-color">init</span> will be called when the challenge starts, and <span class="emphasis-color">update</span> repeatedly during the challenge.
+            </p>
+            <p>
+                Normally you will put most of your code in the <span class="emphasis-color">init</span> function, to set up event listeners and logic.
+            </p>
+            <h2>Code examples</h2>
+            <h3>How to control an elevator</h3>
+            <dl>
+                <dt><pre><code>elevator.goToFloor(1, "Fooo")</code></pre></dt>
+                    <dd>Tell the elevator to move to floor 1 after completing other tasks, if any. Note that this will have no effect if the elevator is already queued to go to that floor.</dd>
+                <dt><pre><code>elevator.clearTaskQueue()</code></pre></dt>
+                    <dd>Removes any tasks that have been previously issued to the elevator, except the currently ongoing task, if there is one.</dd>
+            </dl>
+            <h3>Listening for events</h3>
+            <p>It is possible to listen for events, like when stopping at a floor, or a button has been pressed.</p>
+            <dl>
+                <dt><pre><code>elevator.on("idle", function() { elevator.goToFloor(0); });</code></pre></dt>
+                    <dd>Listen for the "idle" event issued by the elevator, when the task queue has been emptied and the elevator is doing nothing. In this example we tell it to move to floor 0.</dd>
+                <dt><pre><code>elevator.on("floor_button_pressed", function(floorNum) { ... } );</code></pre></dt>
+                    <dd>Listen for the "floor_button_pressed" event, issued when a user pressed a button inside the elevator. This indicates that the user wants to go to that floor.</dd>
+                <dt><pre><code>floor.on("up_button_pressed down_button_pressed", function(event) { ... } );</code></pre></dt>
+                    <dd>Listen for the "up_button_pressed" and "down_button_pressed" events, issued when a user pressed a button on the floor they are waiting on. This indicates that the user wants to go to another floor. Note that it is possible to listen for multiple events.</dd>
+            </dl>
+
+            <h2>Complete object documentation</h2>
+            <h3>Elevator object</h3>
+            <h4>Properties</h4>
+            <p>Coming soon</p>
+            <h4>Events emitted</h4>
+            <p>Coming soon</p>
+            <h3>Floor object</h3>
+            <h4>Properties</h4>
+            <p>Coming soon</p>
+            <h4>Events emitted</h4>
+            <p>Coming soon</p>
+        </div>
+        <div class="footer">
+            <h4>Made by Magnus Wolffelt and contributors</h4>
+            <h4><a href="https://github.com/magwo/elevatorcrush">Source code</a> on GitHub</h4>
+        </div>
+    </div>
+</body>
+</html>
