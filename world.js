@@ -178,7 +178,7 @@ var createWorldController = function(dtMax) {
     controller.timeScale = 1.0;
     controller.isPaused = true;
     controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
-        controller.isPaused = !autoStart;
+        controller.isPaused = true;
         controller.challengeEnded = false;
         try {
             codeObj.init(world.elevatorInterfaces, world.floors);
@@ -206,6 +206,9 @@ var createWorldController = function(dtMax) {
                 animationFrameRequester(updater);
             }
         };
+        if(autoStart) {
+            controller.setPaused(false);
+        }
         animationFrameRequester(updater);
     };
 
