@@ -187,13 +187,6 @@ button.right {
     z-index: 5;
 }
 
-
-.help {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-
 .movable {
     position: absolute;
     top: 0;
@@ -290,4 +283,34 @@ button.right {
 }
 .footer h4 {
     font-size: 13px;
+}
+
+.help {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.help p {
+    max-width: 75%;
+}
+
+.doctable {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #555;
+    border: none;
+}
+
+.doctable th, .doctable td  {
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.doctable tr td:first-child {
+    padding-right: 5px;
+    color: #333;
+}
+
+.doctable td {
+    font: 13px Consolas, Monaco, monospace;
 }

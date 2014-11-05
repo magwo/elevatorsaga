@@ -69,6 +69,12 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
 
 
     obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }
+
+    obj.currentFloor = function() { return elevator.currentFloor; }
+
+    elevator.on("stopped_at_floor", function(floorNum) {
+        obj.trigger("stopped_at_floor", floorNum);
+    });
     elevator.on("floor_button_pressed", function(floorNum) {
         obj.trigger("floor_button_pressed", floorNum);
     });

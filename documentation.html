@@ -13,9 +13,9 @@
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
-    <div class="container" style="width: 768px">
+    <div class="container" style="width: 960px">
         <div class="header">
-            <h1>Elevator Crush Saga <em class="emphasis-color">API documentation</em></h1>
+            <h1>Elevator Crush Saga <em class="emphasis-color">Help and API documentation</em></h1>
         </div>
 
         <div class="help">
@@ -75,21 +75,53 @@
                     <dd>Listen for the "idle" event issued by the elevator, when the task queue has been emptied and the elevator is doing nothing. In this example we tell it to move to floor 0.</dd>
                 <dt><pre><code>elevator.on("floor_button_pressed", function(floorNum) { ... } );</code></pre></dt>
                     <dd>Listen for the "floor_button_pressed" event, issued when a user pressed a button inside the elevator. This indicates that the user wants to go to that floor.</dd>
-                <dt><pre><code>floor.on("up_button_pressed down_button_pressed", function(event) { ... } );</code></pre></dt>
-                    <dd>Listen for the "up_button_pressed" and "down_button_pressed" events, issued when a user pressed a button on the floor they are waiting on. This indicates that the user wants to go to another floor. Note that it is possible to listen for multiple events.</dd>
+                <dt><pre><code>floor.on("up_button_pressed", function(event) { ... } );</code></pre></dt>
+                    <dd>Listen for the "up_button_pressed" event, issued when a user pressed the up button on the floor they are waiting on. This indicates that the user wants to go to another floor.</dd>
             </dl>
 
-            <h2>Complete object documentation</h2>
+            <h2>API documentation</h2>
             <h3>Elevator object</h3>
-            <h4>Properties</h4>
-            <p>Coming soon</p>
-            <h4>Events emitted</h4>
-            <p>Coming soon</p>
+            <table class="doctable">
+                <thead><th width="150">Property</th><th width="90">Type</th><th width="190">Explanation</th><th width="*">Example</th></thead>
+                <tbody>
+                    <tr><td>goToFloor</td><td>function</td><td><small>Queue the elevator to go to specified floor number.</small></td><td><pre><code>elevator.goToFloor(3)</code></pre></td></tr>
+                    <tr><td>clearTaskQueue</td><td>function</td><td><small>Removes any tasks that have been previously issued to the elevator, except the currently ongoing task, if there is one.</small></td><td><pre><code>elevator.clearTaskQueue()</code></pre></td></tr>
+                    <tr><td>currentFloor</td><td>function</td><td><small>Gets the floor number that the elevator currently is on.</small></td><td><pre><code>if(elevator.currentFloor() === 0) {
+    // Do something special?
+}</code></pre></td></tr>
+                </tbody>
+            </table>
+            <table class="doctable">
+                <thead><th width="150">Event</th><th width="280">Explanation</th><th>Example</th></thead>
+                <tbody>
+                    <tr><td>idle</td><td><small>Triggered when the elevator has completed all its tasks and is not doing anything.</small></td><td><pre><code>elevator.on("idle", function() { ... })</code></pre></td></tr>
+                    <tr><td>floor_button_pressed</td><td><small>Triggered when a passenger has pressed a button inside the elevator.</small></td><td><pre><code>elevator.on("floor_button_pressed", function(floorNum) {
+    // Maybe tell the elevator to go to that floor?
+})</code></pre></td></tr>
+                    <tr><td>stopped_at_floor</td><td><small>Triggered when the elevator has arrived at a floor.</small></td><td><pre><code>elevator.on("stopped_at_floor", function(floorNum) {
+    // Maybe decide where to go next?
+})</code></pre></td></tr>
+                </tbody>
+            </table>
             <h3>Floor object</h3>
-            <h4>Properties</h4>
-            <p>Coming soon</p>
-            <h4>Events emitted</h4>
-            <p>Coming soon</p>
+            <table class="doctable">
+                <thead><th width="150">Property</th><th width="90">Type</th><th width="190">Explanation</th><th width="*">Example</th></thead>
+                <tbody>
+                <tr><td>floorNum</td><td>function</td><td><small>Gets the floor number of the floor object.</small></td><td><pre><code>if(floor.floorNum() > 3) { ... }</code></pre></td></tr>
+                </tbody>
+            </table>
+            <table class="doctable">
+                <thead><th width="150">Event</th><th width="280">Explanation</th><th>Example</th></thead>
+                <tbody>
+                    <tr><td>up_button_pressed</td><td><small>Triggered when someone has pressed the up button at a floor.</small></td><td><pre><code>elevator.on("up_button_pressed", function() {
+    // Maybe tell the elevator to go to that floor?
+})</code></pre></td></tr>
+                    <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor.</small></td><td><pre><code>elevator.on("down_button_pressed", function() {
+    // Maybe tell the elevator to go to that floor?
+})</code></pre></td></tr>
+                
+                </tbody>
+            </table>
         </div>
         <div class="footer">
             <h4>Made by Magnus Wolffelt and contributors</h4>

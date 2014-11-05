@@ -31,5 +31,9 @@ var asFloor = function(obj, floorLevel, yPosition) {
         }
     }
 
+    obj.floorNum = function() {
+        return obj.level;
+    }
+
     return obj;
 };
