@@ -210,7 +210,6 @@ var createWorldController = function(dtMax) {
     };
 
     controller.setPaused = function(paused) {
-        console.log("Pause foo", paused);
         controller.isPaused = paused;
         controller.trigger("timescale_changed");
     };
