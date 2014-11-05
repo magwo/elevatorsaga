@@ -63,7 +63,7 @@
             <h2>Code examples</h2>
             <h3>How to control an elevator</h3>
             <dl>
-                <dt><pre><code>elevator.goToFloor(1, "Fooo")</code></pre></dt>
+                <dt><pre><code>elevator.goToFloor(1)</code></pre></dt>
                     <dd>Tell the elevator to move to floor 1 after completing other tasks, if any. Note that this will have no effect if the elevator is already queued to go to that floor.</dd>
                 <dt><pre><code>elevator.clearTaskQueue()</code></pre></dt>
                     <dd>Removes any tasks that have been previously issued to the elevator, except the currently ongoing task, if there is one.</dd>
@@ -113,11 +113,11 @@
             <table class="doctable">
                 <thead><th width="150">Event</th><th width="280">Explanation</th><th>Example</th></thead>
                 <tbody>
-                    <tr><td>up_button_pressed</td><td><small>Triggered when someone has pressed the up button at a floor.</small></td><td><pre><code>elevator.on("up_button_pressed", function() {
-    // Maybe tell the elevator to go to that floor?
+                    <tr><td>up_button_pressed</td><td><small>Triggered when someone has pressed the up button at a floor.</small></td><td><pre><code>floor.on("up_button_pressed", function() {
+    // Maybe tell an elevator to go to this floor?
 })</code></pre></td></tr>
-                    <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor.</small></td><td><pre><code>elevator.on("down_button_pressed", function() {
-    // Maybe tell the elevator to go to that floor?
+                    <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor.</small></td><td><pre><code>floor.on("down_button_pressed", function() {
+    // Maybe tell an elevator to go to this floor?
 })</code></pre></td></tr>
                 
                 </tbody>
