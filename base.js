@@ -1,14 +1,3 @@
-// {
-//     init: function(elevators, floors) {
-//         // Do stuff with the elevators and floors, which are both arrays of objects
-//     },
-//     update: function(dt, elevators, floors) {
-//         // Do more stuff with the elevators and floors
-//         // dt is the number of seconds that passed since the last time update was called
-//     }
-// }
-
-
 // Console shim
 (function () {
     var f = function () {};
@@ -64,9 +53,3 @@ window.accelerationNeededToAchieveChangeDistance = function(currentSpeed, target
     var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
     return requiredAcceleration;
 }
-
-
-var dateService = {
-    nowMillis: function() { return new Date().getTime(); }
-};
-
