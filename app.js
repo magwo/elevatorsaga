@@ -172,7 +172,6 @@ $(function() {
         var codeObj = editor.getCodeObj();
         console.log("Starting...");
         app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);
-        //app.world.setPaused(!autoStart); // controller instead
     };
 
     editor.on("apply_code", function() {
@@ -210,9 +209,10 @@ $(function() {
                 makeDemoFullscreen();
             }
         });
+        app.worldController.setTimeScale(timeScale);
 
         if(requestedChallenge >= 0) {
-            app.startChallenge(requestedChallenge, autoStart, timeScale);
+            app.startChallenge(requestedChallenge, autoStart);
         } else {
             console.log("Defaulting challenge to 1", requestedChallenge);
             setTimeout(function() {

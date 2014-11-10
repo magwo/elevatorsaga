@@ -190,11 +190,11 @@ var createWorldController = function(dtMax) {
                 var dt = (t - lastT);
                 var scaledDt = dt * 0.001 * controller.timeScale;
                 scaledDt = Math.min(scaledDt, dtMax * 40); // Prevent unhealthy looping
+                try {
+                    codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
+                } catch(e) { controller.setPaused(true); console.log("Usercode error on update", e); controller.trigger("code_error", e); }
                 while(scaledDt > 0.0 && !world.challengeEnded) {
                     var thisDt = Math.min(dtMax, scaledDt);
-                    try {
-                        codeObj.update(thisDt, world.elevatorInterfaces, world.floors);
-                    } catch(e) { controller.setPaused(true); console.log("Usercode error on update", e); controller.trigger("code_error", e); }
                     world.update(thisDt);
                     scaledDt -= dtMax;
                 }
