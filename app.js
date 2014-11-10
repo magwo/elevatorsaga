@@ -191,7 +191,7 @@ $(function() {
         }, {});
         var requestedChallenge = -1;
         var autoStart = false;
-        var timeScale = 1.0;
+        var timeScale = 2.0;
         _.each(params, function(val, key) {
             if(key === "challenge") {
                 requestedChallenge = _.parseInt(val) - 1;
