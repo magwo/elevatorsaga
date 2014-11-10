@@ -31,6 +31,10 @@ h1, h2, h3, h4, h5, p {
 a {
     color: #444;
     font-weight: bold;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 h2, h3, h4, h5 {
@@ -84,6 +88,17 @@ button.right {
     margin-right: 0;
 }
 
+.blink {
+  animation: blink 0.5s steps(3, start) infinite;
+  -webkit-animation: blink 0.5s steps(3, start) infinite;
+}
+@keyframes blink {
+  to { visibility: hidden; }
+}
+@-webkit-keyframes blink {
+  to { visibility: hidden; }
+}
+
 #save_message {
     color: #555;
     font-size: 12px;
@@ -99,6 +114,25 @@ button.right {
 .right {
     float: right;
 }
+
+.header {
+    height: 60px;
+}
+
+.header h1 {
+    line-height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.header a {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 20px;
+    line-height: 50px;
+    padding: 0 4px;
+}
+
 
 .timescale_decrease, .timescale_increase {
     padding: 4px;
