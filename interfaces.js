@@ -1,6 +1,4 @@
 
-
-
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
@@ -9,42 +7,40 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
 
     obj.destinationQueue = [];
 
-    obj.checkFloorQueue = function() {
+    obj.checkDestinationQueue = function() {
         if(!elevator.isBusy()) {
             if(obj.destinationQueue.length) {
-                elevator.goToFloor(obj.destinationQueue[0]);
+                elevator.goToFloor(_.first(obj.destinationQueue));
             } else {
                 obj.trigger("idle");
             }
         }
-        
     }
 
     obj.goToFloor = function(floorNum) {
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
-        if(obj.destinationQueue.length && obj.destinationQueue[0] === floorNum) {
+        if(obj.destinationQueue.length && epsilonEquals(_.first(obj.destinationQueue), floorNum)) {
             return;
         }
         obj.destinationQueue.push(floorNum);
-        obj.checkFloorQueue();
+        obj.checkDestinationQueue();
     }
-
 
     obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }
 
     obj.currentFloor = function() { return elevator.currentFloor; }
 
     elevator.on("stopped", function(position) {
-        if(obj.destinationQueue.length && epsilonEquals(obj.destinationQueue[0], position)) {
+        if(obj.destinationQueue.length && epsilonEquals(_.first(obj.destinationQueue), position)) {
             // Pop front of queue
-            obj.destinationQueue = obj.destinationQueue.slice(1);
+            obj.destinationQueue = _.rest(obj.destinationQueue);
             if(elevator.isOnAFloor()) {
                 elevator.wait(1, function() {
-                    obj.checkFloorQueue();
+                    obj.checkDestinationQueue();
                 });
             } else {
-                obj.checkFloorQueue();
+                obj.checkDestinationQueue();
             }
         }
     });
