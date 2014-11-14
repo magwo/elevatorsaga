@@ -268,17 +268,11 @@ describe("Promise object", function() {
 
 describe("Elevator object", function() {
 	var e = null;
-	//var movableHandlers = null;
 	var floorCount = 4;
 	var floorHeight = 44;
 
 	beforeEach(function() {
-		// var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 		e = asElevator(asMovable({}), 1.5, floorCount, floorHeight);
-		// movableHandlers = {
-		// 	someHandler: function() {},
-		// }
-		// spyOn(movableHandlers, "someHandler").and.callThrough();
 	});
 
 	it("moves to floors specified", function() {
@@ -298,10 +292,73 @@ describe("Elevator object", function() {
 		var originalY = e.y;
 		e.goToFloor(1);
 		timeForwarder(0.2, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
-		console.log("Expecting elevator to go back to originalY", originalY);
+		expect(e.y).not.toBe(originalY);
 		e.goToFloor(0);
 		timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
 		expect(e.y).toBe(originalY);
 		expect(e.currentFloor).toBe(0);
 	});
+
+	it("is correctly aware of it being on a floor", function() {
+		e.setPosition([0, 0]);
+		e.setFloorPosition(0);
+		expect(e.isOnAFloor()).toBe(true);
+		e.y = e.y + 0.0000000000000001;
+		expect(e.isOnAFloor()).toBe(true);
+		e.y = e.y + 0.0001;
+		expect(e.isOnAFloor()).toBe(false);
+	});
 });
+
+
+describe("API", function() {
+	var handlers = null;
+
+	beforeEach(function() {
+		handlers = {
+			someHandler: function() {},
+		};
+		$.each(handlers, function(key, value) {
+			spyOn(handlers, key).and.callThrough();
+		});
+	});
+	
+	describe("Elevator interface", function() {
+		var elev = null;
+		var elevInterface = null;
+		beforeEach(function() {
+			elev = asElevator(asMovable({}), 1.5, 4, 40);
+			elevInterface = asElevatorInterface({}, elev, 4);
+		});
+		it("propagates stopped_at_floor event", function() {
+			elevInterface.on("stopped_at_floor", handlers.someHandler);
+			elev.trigger("stopped_at_floor", 3);
+			expect(handlers.someHandler).toHaveBeenCalledWith(3);
+		});
+
+		it("does not propagate stopped event", function() {
+			elevInterface.on("stopped", handlers.someHandler);
+			elev.trigger("stopped", 3.1);
+			expect(handlers.someHandler).not.toHaveBeenCalled();
+		});
+
+		it("triggers idle event at start", function() {
+			elevInterface.on("idle", handlers.someHandler);
+			elevInterface.checkDestinationQueue();
+			expect(handlers.someHandler).toHaveBeenCalled();
+		});
+
+		it("triggers idle event when queue empties", function() {
+			elevInterface.on("idle", handlers.someHandler);
+			elevInterface.destinationQueue = [11, 21];
+			elev.y = 11;
+			elev.trigger("stopped", elev.y);
+			expect(handlers.someHandler).not.toHaveBeenCalled();
+			elev.y = 21;
+			elev.trigger("stopped", elev.y);
+			expect(handlers.someHandler).toHaveBeenCalled();
+		});
+	});
+});
+
+
