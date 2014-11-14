@@ -12,6 +12,10 @@ var limitNumber = function(num, min, max) {
     return Math.min(max, Math.max(num, min));
 }
 
+var epsilonEquals = function(a, b) {
+    return Math.abs(a-b) < 0.00000001;
+}
+
 
 
 // Simple Promise pattern using riot.observable

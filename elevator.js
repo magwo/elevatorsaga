@@ -6,6 +6,11 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     var DECELERATION = floorHeight * 2.6;
     var MAXSPEED = floorHeight * speedFloorsPerSec;
 
+    movable.destinationY = 0.0;
+    movable.velocityY = 0.0;
+    // isMoving flag is needed when going to same floor again - need to re-raise events
+    movable.isMoving = false;
+
     movable.currentFloor = 0;
     movable.destinationFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
@@ -51,23 +56,78 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         });
     }
 
-    movable.goToFloor = function(floor, cb) {
-        movable.makeSureNotBusy();
-        movable.destinationFloor = floor;
-        var distance = Math.abs(movable.destinationFloor - movable.currentFloor);
-        var destination = (floorCount - 1) * floorHeight - floor * floorHeight;
+    movable.updateElevatorMovement = function(dt) {
+        if(movable.isBusy()) {
+            // TODO: Consider if having a nonzero velocity here should throw error..
+            return;
+        }
 
-        movable.movePhysically(null, destination, ACCELERATION, DECELERATION, MAXSPEED, function() {
-            movable.currentFloor = movable.destinationFloor;
-            movable.buttonStates[movable.currentFloor] = false;
+        // Make sure we're not speeding
+        movable.velocityY = limitNumber(movable.velocityY, -MAXSPEED, MAXSPEED);
+
+        // Move elevator
+        movable.y += movable.velocityY * dt;
+
+        var destinationDiff = movable.destinationY - movable.y;
+        var directionSign = Math.sign(destinationDiff);
+        var velocitySign = Math.sign(movable.velocityY);
+        if(destinationDiff !== 0.0) {
+            if(directionSign === velocitySign) {
+                // Moving in correct direction
+                var distanceNeededToStop = distanceNeededToAchieveSpeed(movable.velocityY, 0.0, DECELERATION);
+                if(distanceNeededToStop * 1.05 < -Math.abs(destinationDiff)) {
+                    // Slow down
+                    // Allow a certain factor of extra breaking, to enable a smooth breaking movement after detecting overshoot
+                    var requiredDeceleration = accelerationNeededToAchieveChangeDistance(movable.velocityY, 0.0, destinationDiff);
+                    var deceleration = Math.min(DECELERATION*1.1, Math.abs(requiredDeceleration));
+                    movable.velocityY -= directionSign * deceleration * dt;
+                } else {
+                    // Speed up (or keep max speed...)
+                    var acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
+                    movable.velocityY += directionSign * acceleration * dt;
+                }
+            } else if(velocitySign === 0) {
+                // Standing still - should accelerate
+                var acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
+                movable.velocityY += directionSign * acceleration * dt;
+            } else {
+                // Moving in wrong direction - decelerate as much as possible
+                movable.velocityY -= velocitySign * DECELERATION * dt;
+                // Make sure we don't change direction within this time step - let standstill logic handle it
+                if(Math.sign(movable.velocityY) !== velocitySign) {
+                    movable.velocityY = 0.0;
+                }
+            }
+        }
+
+        if(movable.isMoving && Math.abs(destinationDiff) < 0.5 && Math.abs(movable.velocityY) < 3) {
+            movable.y = movable.destinationY;
+            movable.velocityY = 0.0;
+            movable.isMoving = false;
+            movable.handleDestinationArrival();
+        }
+    }
+
+    movable.handleDestinationArrival = function() {
+        movable.currentFloor = movable.destinationFloor;
+        movable.buttonStates[movable.currentFloor] = false;
+        movable.trigger("stopped", movable.getExactCurrentFloor());
+
+        if(movable.isOnAFloor()) {
             movable.trigger("floor_buttons_changed", movable.buttonStates);
             movable.trigger("stopped_at_floor", movable.currentFloor);
             // Need to allow users to get off first, so that new ones
             // can enter on the same floor
             movable.trigger("exit_available", movable.currentFloor);
             movable.trigger("entrance_available", movable);
-            if(cb) { cb(); }
-        });
+        }
+    }
+
+    movable.goToFloor = function(floor) {
+        movable.makeSureNotBusy();
+        movable.isMoving = true;
+        movable.destinationFloor = floor;
+        movable.destinationY = movable.getDestinationY(floor);
     }
 
     movable.getFirstPressedFloor = function() {
@@ -86,6 +146,23 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return true; // TODO: Make usercode returnable
     }
 
+    movable.getDestinationY = function(floorNum) {
+        return (floorCount - 1) * floorHeight - floorNum * floorHeight;
+    }
+
+    movable.getExactCurrentFloor = function() {
+        var currentFloor = ((floorCount - 1) * floorHeight - movable.y) / floorHeight;
+        return currentFloor;
+    }
+
+    movable.getRoundedCurrentFloor = function() {
+        var currentFloor = Math.round(((floorCount - 1) * floorHeight - movable.y) / floorHeight);
+        return currentFloor;
+    }
+
+    movable.isOnAFloor = function() {
+        return epsilonEquals(movable.getExactCurrentFloor(), movable.getRoundedCurrentFloor());
+    }
 
 
     movable.on("new_state", function() {
@@ -97,6 +174,8 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             movable.trigger("new_current_floor", movable.currentFloor);
         }
     });
+
+    movable.destinationY = movable.getDestinationY(movable.currentFloor);
 
     return movable;
 }

@@ -1,16 +1,17 @@
 
 
+var timeForwarder = function(dt, stepSize, fn) {
+	var accumulated = 0.0;
+	while(accumulated < dt) {
+		accumulated += stepSize;
+		fn(stepSize);
+	}
+};
 
 describe("Movable object", function() {
 	var m = null;
 	var movableHandlers = null;
-	var timeForwarder = function(dt, stepSize, fn) {
-		var accumulated = 0.0;
-		while(accumulated < dt) {
-			accumulated += stepSize;
-			fn(stepSize);
-		}
-	};
+	
 	beforeEach(function() {
 		m = asMovable({});
 		movableHandlers = {
@@ -258,9 +259,49 @@ describe("Promise object", function() {
 	it("calls handlers with argument even if registered after resolution", function() {
 		p.done("moo");
 		p.done(handlers.someHandler).fail(handlers.thirdHandler);
-		p.always(handlers.otherHandler)
+		p.always(handlers.otherHandler);
 		expect(handlers.someHandler).toHaveBeenCalledWith("moo");
 		expect(handlers.otherHandler).toHaveBeenCalledWith("moo");
 		expect(handlers.thirdHandler).not.toHaveBeenCalled();
+	});
+});
+
+describe("Elevator object", function() {
+	var e = null;
+	//var movableHandlers = null;
+	var floorCount = 4;
+	var floorHeight = 44;
+
+	beforeEach(function() {
+		// var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
+		e = asElevator(asMovable({}), 1.5, floorCount, floorHeight);
+		// movableHandlers = {
+		// 	someHandler: function() {},
+		// }
+		// spyOn(movableHandlers, "someHandler").and.callThrough();
+	});
+
+	it("moves to floors specified", function() {
+		_.each(_.range(0, floorCount-1), function(floor) {
+			e.goToFloor(floor);
+			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+			var expectedY = (floorHeight * (floorCount-1)) - floorHeight*floor;
+			expect(e.y).toBe(expectedY);
+			expect(e.currentFloor).toBe(floor);
+		});
+	});
+
+	it("can change direction", function() {
+		e.setPosition([0, 0]);
+		e.setFloorPosition(0);
+		expect(e.currentFloor).toBe(0);
+		var originalY = e.y;
+		e.goToFloor(1);
+		timeForwarder(0.2, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+		console.log("Expecting elevator to go back to originalY", originalY);
+		e.goToFloor(0);
+		timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+		expect(e.y).toBe(originalY);
+		expect(e.currentFloor).toBe(0);
 	});
 });

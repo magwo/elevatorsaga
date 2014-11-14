@@ -7,70 +7,47 @@
 var asElevatorInterface = function(obj, elevator, floorCount) {
     riot.observable(obj);
 
-    var taskQueue = [];
+    obj.destinationQueue = [];
 
-    var createTask = function(fn) {
-        var task = { state: "waiting", fn: fn };
-        task.setDone = function() { task.state = "done"; obj.pumpTaskQueue(); };
-        task.isDone = function() { return task.state === "done"; }
-        task.isWaiting = function() { return task.state === "waiting"; }
-        task.start = function() { task.state = "ongoing"; task.fn(task); }
-        return task;
-    };
-
-    obj.clearTaskQueue = function() {
-        if(taskQueue.length) {
-            taskQueue = [_.first(taskQueue)];
-        }
-    }
-
-    obj.pumpTaskQueue = function () {
-        var currentTask = _.first(taskQueue);
-        if(typeof currentTask !== "undefined") {
-            if(currentTask.isWaiting()) {
-                currentTask.start();
+    obj.checkFloorQueue = function() {
+        if(!elevator.isBusy()) {
+            if(obj.destinationQueue.length) {
+                elevator.goToFloor(obj.destinationQueue[0]);
+            } else {
+                obj.trigger("idle");
             }
-            if(currentTask.isDone()) {
-                taskQueue = _.rest(taskQueue);
-                obj.pumpTaskQueue();
-            }
-        } else {
-            obj.trigger("idle");
         }
+        
     }
 
     obj.goToFloor = function(floorNum) {
-    // TODO: Add support for smart ordered goto
-    // TODO: Add support for canceling current task, by means of
-    // knowing in the stopping routine if it has started braking at a floor or not.
-    // TODO: Also, could add support for stopping anywhere
-        floorNum = limitNumber(floorNum, 0, floorCount - 1);
-        var task = createTask(function (taskObj) {
-            elevator.goToFloor(floorNum, function() {
-                elevator.wait(1, function() {
-                    taskObj.setDone();
-                });
-            });
-        });
-        task.destinationFloor = floorNum;
-        _.each(taskQueue, function(t) {
-            if(typeof t.destinationFloor !== "undefined") {
-                if(t.destinationFloor === task.destinationFloor) {
-                    task = null;
-                    return false;
-                }
-            }
-        });
-        if(task) {
-            taskQueue.push(task);
-            obj.pumpTaskQueue();
+        floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
+        // Auto-prevent immediately duplicate destinations
+        if(obj.destinationQueue.length && obj.destinationQueue[0] === floorNum) {
+            return;
         }
+        obj.destinationQueue.push(floorNum);
+        obj.checkFloorQueue();
     }
 
 
     obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }
 
     obj.currentFloor = function() { return elevator.currentFloor; }
+
+    elevator.on("stopped", function(position) {
+        if(obj.destinationQueue.length && epsilonEquals(obj.destinationQueue[0], position)) {
+            // Pop front of queue
+            obj.destinationQueue = obj.destinationQueue.slice(1);
+            if(elevator.isOnAFloor()) {
+                elevator.wait(1, function() {
+                    obj.checkFloorQueue();
+                });
+            } else {
+                obj.checkFloorQueue();
+            }
+        }
+    });
 
     elevator.on("stopped_at_floor", function(floorNum) {
         obj.trigger("stopped_at_floor", floorNum);

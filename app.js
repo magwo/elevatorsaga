@@ -145,6 +145,7 @@ $(function() {
         }
         app.currentChallengeIndex = challengeIndex;
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
+        window.world = app.world;
 
         clearAll([$world, $stats, $feedback]);
         presentStats($stats, app.world, statsTempl);

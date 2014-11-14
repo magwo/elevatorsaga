@@ -130,7 +130,7 @@ var createWorldCreator = function() {
                 registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
             }
 
-            _.each(world.elevators, function(e) { e.update(dt); });
+            _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt) });
             _.each(world.users, function(u) {
                 if(u.done && typeof u.cleanupFunction === "function") {
                     // Be careful using "off" riot function from event handlers - it alters 
@@ -163,7 +163,8 @@ var createWorldCreator = function() {
         }
 
         world.init = function() {
-            _.each(world.elevatorInterfaces, function(ei) { ei.pumpTaskQueue(); });
+            // Checking the floor queue of the elevators triggers the idle event here
+            _.each(world.elevatorInterfaces, function(ei) { ei.checkFloorQueue(); });
         };
 
         return world;
