@@ -85,8 +85,12 @@
                 <thead><th width="150">Property</th><th width="90">Type</th><th width="190">Explanation</th><th width="*">Example</th></thead>
                 <tbody>
                     <tr><td>goToFloor</td><td>function</td><td><small>Queue the elevator to go to specified floor number. It is possible to specify a non-integer, for example 1.5, to make the elevator stop between floors. Only integers will cause passengers to get off and on though.</small></td><td><pre><code>elevator.goToFloor(3);</code></pre></td></tr>
+                    <tr><td>stop</td><td>function</td><td><small>Clear the destination queue and stop the elevator if it is moving. Note that you normally don't need to stop elevators - it is intended for advanced solutions with in-transit rescheduling logic.</small></td><td><pre><code>elevator.stop();</code></pre></td></tr>
                     <tr><td>currentFloor</td><td>function</td><td><small>Gets the floor number that the elevator currently is on.</small></td><td><pre><code>if(elevator.currentFloor() === 0) {
     // Do something special?
+}</code></pre></td></tr>
+                    <tr><td>loadFactor</td><td>function</td><td><small>Gets the load factor of the elevator. 0 means empty, 1 means full. Varies with passenger weights, which vary - not an exact measure.</small></td><td><pre><code>if(elevator.loadFactor() < 0.4) {
+    // Maybe use this elevator, since it's not full yet?
 }</code></pre></td></tr>
                     <tr><td>destinationQueue</td><td>array</td><td><small>The current destination queue, meaning the floors the elevator is scheduled to go to. Can be modified and emptied if desired. Note that you need to call checkDestinationQueue() for the change to take effect immediately.</small></td><td><pre><code>elevator.destinationQueue = [];
 elevator.checkDestinationQueue();</code></pre></td></tr>

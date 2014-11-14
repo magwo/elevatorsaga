@@ -1,6 +1,7 @@
 
 
-var asUser = function(user, floorCount, floorHeight) {
+var asUser = function(user, weight, floorCount, floorHeight) {
+    user.weight = weight;
     user.currentFloor = 0;
     user.destinationFloor = 0;
     user.done = false;

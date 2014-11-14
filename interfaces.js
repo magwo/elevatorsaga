@@ -15,7 +15,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
                 obj.trigger("idle");
             }
         }
-    }
+    };
 
     obj.goToFloor = function(floorNum) {
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
@@ -25,15 +25,20 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         }
         obj.destinationQueue.push(floorNum);
         obj.checkDestinationQueue();
+    };
+
+    obj.stop = function() {
+        obj.destinationQueue = [];
+        obj.goToFloor(elevator.getExactFutureFloorIfStopped());
     }
 
-    obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }
-
-    obj.currentFloor = function() { return elevator.currentFloor; }
+    obj.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); };
+    obj.currentFloor = function() { return elevator.currentFloor; };
+    obj.loadFactor = function() { return elevator.getLoadFactor(); };
 
     elevator.on("stopped", function(position) {
         if(obj.destinationQueue.length && epsilonEquals(_.first(obj.destinationQueue), position)) {
-            // Pop front of queue
+            // Reached the destination, so remove element at front of queue
             obj.destinationQueue = _.rest(obj.destinationQueue);
             if(elevator.isOnAFloor()) {
                 elevator.wait(1, function() {

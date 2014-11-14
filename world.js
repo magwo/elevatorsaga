@@ -26,7 +26,8 @@ var createWorldCreator = function() {
 
     creator.createRandomUser = function(floorCount, floorHeight) {
         var user = asMovable({});
-        user = asUser(user, floorCount, floorHeight);
+        var weight = _.random(55, 100);
+        user = asUser(user, weight, floorCount, floorHeight);
         if(_.random(40) === 0) {
             user.displayType = "child";
         } else if(_.random(1) === 0) {
@@ -39,7 +40,6 @@ var createWorldCreator = function() {
 
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
-        user = asUser(user, floorCount, floorHeight);
         user.moveTo(100+_.random(40), 0);
         var currentFloor = _.random(1) == 0 ? 0 : _.random(floorCount - 1);
         var destinationFloor;

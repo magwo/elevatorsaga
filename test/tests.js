@@ -90,7 +90,7 @@ describe("World controller", function() {
 	}
 	beforeEach(function() {
 		controller = createWorldController(DT_MAX);
-		fakeWorld = { update: function(dt) { console.log("fake with dt", dt)}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
+		fakeWorld = { update: function(dt) {}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
 		fakeCodeObj = { init: function() {}, update: function() {} };
 		frameRequester = createFrameRequester(10.0);
 		spyOn(fakeWorld, "update").and.callThrough();
@@ -324,21 +324,22 @@ describe("API", function() {
 	});
 	
 	describe("Elevator interface", function() {
-		var elev = null;
+		var e = null;
 		var elevInterface = null;
 		beforeEach(function() {
-			elev = asElevator(asMovable({}), 1.5, 4, 40);
-			elevInterface = asElevatorInterface({}, elev, 4);
+			e = asElevator(asMovable({}), 1.5, 4, 40);
+			e.setFloorPosition(0);
+			elevInterface = asElevatorInterface({}, e, 4);
 		});
 		it("propagates stopped_at_floor event", function() {
 			elevInterface.on("stopped_at_floor", handlers.someHandler);
-			elev.trigger("stopped_at_floor", 3);
+			e.trigger("stopped_at_floor", 3);
 			expect(handlers.someHandler).toHaveBeenCalledWith(3);
 		});
 
 		it("does not propagate stopped event", function() {
 			elevInterface.on("stopped", handlers.someHandler);
-			elev.trigger("stopped", 3.1);
+			e.trigger("stopped", 3.1);
 			expect(handlers.someHandler).not.toHaveBeenCalled();
 		});
 
@@ -351,12 +352,28 @@ describe("API", function() {
 		it("triggers idle event when queue empties", function() {
 			elevInterface.on("idle", handlers.someHandler);
 			elevInterface.destinationQueue = [11, 21];
-			elev.y = 11;
-			elev.trigger("stopped", elev.y);
+			e.y = 11;
+			e.trigger("stopped", e.y);
 			expect(handlers.someHandler).not.toHaveBeenCalled();
-			elev.y = 21;
-			elev.trigger("stopped", elev.y);
+			e.y = 21;
+			e.trigger("stopped", e.y);
 			expect(handlers.someHandler).toHaveBeenCalled();
+		});
+
+		it("stops when told told to stop", function() {
+			var originalY = e.y;
+			elevInterface.goToFloor(2);
+			timeForwarder(10, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(e.y).not.toBe(originalY);
+
+			elevInterface.goToFloor(0);
+			timeForwarder(0.2, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			var whenMovingY = e.y;
+
+			elevInterface.stop();
+			timeForwarder(10, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(e.y).not.toBe(whenMovingY);
+			expect(e.y).not.toBe(originalY)
 		});
 	});
 });

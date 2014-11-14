@@ -12,7 +12,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.isMoving = false;
 
     movable.currentFloor = 0;
-    movable.destinationFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
     movable.moveCount = 0;
     movable.removed = false;
@@ -26,7 +25,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.setFloorPosition = function(floor) {
         var destination = (floorCount - 1) * floorHeight - floor * floorHeight;
         movable.currentFloor = floor;
-        movable.destinationFloor = floor;
         movable.moveTo(null, destination);
     }
 
@@ -66,7 +64,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         movable.velocityY = limitNumber(movable.velocityY, -MAXSPEED, MAXSPEED);
 
         // Move elevator
-        movable.y += movable.velocityY * dt;
+        movable.moveTo(null, movable.y + movable.velocityY * dt);
 
         var destinationDiff = movable.destinationY - movable.y;
         var directionSign = Math.sign(destinationDiff);
@@ -101,7 +99,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         }
 
         if(movable.isMoving && Math.abs(destinationDiff) < 0.5 && Math.abs(movable.velocityY) < 3) {
-            movable.y = movable.destinationY;
+            movable.moveTo(null, movable.destinationY);
             movable.velocityY = 0.0;
             movable.isMoving = false;
             movable.handleDestinationArrival();
@@ -109,11 +107,10 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     }
 
     movable.handleDestinationArrival = function() {
-        movable.currentFloor = movable.destinationFloor;
-        movable.buttonStates[movable.currentFloor] = false;
         movable.trigger("stopped", movable.getExactCurrentFloor());
 
         if(movable.isOnAFloor()) {
+            movable.buttonStates[movable.currentFloor] = false;
             movable.trigger("floor_buttons_changed", movable.buttonStates);
             movable.trigger("stopped_at_floor", movable.currentFloor);
             // Need to allow users to get off first, so that new ones
@@ -126,7 +123,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.goToFloor = function(floor) {
         movable.makeSureNotBusy();
         movable.isMoving = true;
-        movable.destinationFloor = floor;
         movable.destinationY = movable.getDestinationY(floor);
     }
 
@@ -150,18 +146,33 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return (floorCount - 1) * floorHeight - floorNum * floorHeight;
     }
 
+    movable.getExactFloorOfDestinationY = function(y) {
+        return ((floorCount - 1) * floorHeight - y) / floorHeight;
+    }
+
     movable.getExactCurrentFloor = function() {
-        var currentFloor = ((floorCount - 1) * floorHeight - movable.y) / floorHeight;
-        return currentFloor;
+        return movable.getExactFloorOfDestinationY(movable.y);
     }
 
     movable.getRoundedCurrentFloor = function() {
-        var currentFloor = Math.round(((floorCount - 1) * floorHeight - movable.y) / floorHeight);
-        return currentFloor;
+        var foo = Math.round(movable.getExactCurrentFloor());
+        if(foo == NaN) throw "FOO";
+        return foo;
+    }
+
+    movable.getExactFutureFloorIfStopped = function() {
+        var distanceNeededToStop = distanceNeededToAchieveSpeed(movable.velocityY, 0.0, DECELERATION);
+        return movable.getExactFloorOfDestinationY(movable.y - Math.sign(movable.velocityY) * distanceNeededToStop);
     }
 
     movable.isOnAFloor = function() {
         return epsilonEquals(movable.getExactCurrentFloor(), movable.getRoundedCurrentFloor());
+    }
+
+    movable.getLoadFactor = function() {
+        var load = _.reduce(movable.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
+        console.log(load);
+        return load / 400.0;
     }
 
 
