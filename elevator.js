@@ -167,7 +167,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     movable.on("new_state", function() {
         // Recalculate the floor number etc
-        var currentFloor = Math.round(((floorCount - 1) * floorHeight - movable.y) / floorHeight);
+        var currentFloor = movable.getRoundedCurrentFloor();
         if(currentFloor != movable.currentFloor) {
             movable.moveCount++;
             movable.currentFloor = currentFloor;
