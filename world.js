@@ -164,7 +164,7 @@ var createWorldCreator = function() {
 
         world.init = function() {
             // Checking the floor queue of the elevators triggers the idle event here
-            _.each(world.elevatorInterfaces, function(ei) { ei.checkFloorQueue(); });
+            _.each(world.elevatorInterfaces, function(ei) { ei.checkDestinationQueue(); });
         };
 
         return world;
