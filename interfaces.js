@@ -19,7 +19,6 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
 
     // TODO: Write tests for this queueing logic
     obj.goToFloor = function(floorNum, forceNow) {
-        console.log("GOING TO FLOO", floorNum, forceNow);
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
         if(obj.destinationQueue.length) {
@@ -56,7 +55,6 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     });
 
     elevator.on("passing_floor", function(floorNum, direction) {
-        console.log("PASSING FLOOR", floorNum);
         obj.trigger("passing_floor", floorNum, direction);
     });
 

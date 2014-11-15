@@ -147,12 +147,16 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return (floorCount - 1) * floorHeight - floorNum * floorHeight;
     }
 
-    movable.getExactFloorOfDestinationY = function(y) {
+    movable.getExactFloorOfYPos = function(y) {
         return ((floorCount - 1) * floorHeight - y) / floorHeight;
     }
 
     movable.getExactCurrentFloor = function() {
-        return movable.getExactFloorOfDestinationY(movable.y);
+        return movable.getExactFloorOfYPos(movable.y);
+    }
+
+    movable.getDestinationFloor = function() {
+        return movable.getExactFloorOfYPos(movable.destinationY);
     }
 
     movable.getRoundedCurrentFloor = function() {
@@ -163,7 +167,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     movable.getExactFutureFloorIfStopped = function() {
         var distanceNeededToStop = distanceNeededToAchieveSpeed(movable.velocityY, 0.0, DECELERATION);
-        return movable.getExactFloorOfDestinationY(movable.y - Math.sign(movable.velocityY) * distanceNeededToStop);
+        return movable.getExactFloorOfYPos(movable.y - Math.sign(movable.velocityY) * distanceNeededToStop);
     }
 
     movable.isOnAFloor = function() {
@@ -194,14 +198,17 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             nextCleanlyStoppableFloor = (movable.velocityY > 0.0 ? Math.floor : Math.ceil)(nextCleanlyStoppableFloor);
 
             if(movable.nextCleanlyStoppableFloor !== nextCleanlyStoppableFloor) {
-                var destinationFloor = movable.getExactFloorOfDestinationY(movable.destinationY);
+                var destinationFloor = movable.getDestinationFloor();
                 if(destinationFloor !== movable.nextCleanlyStoppableFloor) {
                     var isApproachingPreviousFloor = Math.sign(movable.velocityY) === Math.sign(movable.getYPosOfFloor(movable.nextCleanlyStoppableFloor) - movable.y);
                     if(isApproachingPreviousFloor) {
                         var direction = movable.velocityY > 0.0 ? "down" : "up";
                         movable.trigger("passing_floor", movable.nextCleanlyStoppableFloor, direction);
                     }
-                    movable.nextCleanlyStoppableFloor = nextCleanlyStoppableFloor;
+                    // Destination floor might have changed during the event triggering...
+                    if(movable.getDestinationFloor() !== movable.nextCleanlyStoppableFloor) {
+                        movable.nextCleanlyStoppableFloor = nextCleanlyStoppableFloor;
+                    }
                 }
             }
         }
