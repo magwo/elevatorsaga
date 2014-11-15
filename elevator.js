@@ -12,6 +12,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.isMoving = false;
 
     movable.currentFloor = 0;
+    movable.nextCleanlyStoppableFloor = 0;
     movable.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
     movable.moveCount = 0;
     movable.removed = false;
@@ -123,7 +124,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     movable.goToFloor = function(floor) {
         movable.makeSureNotBusy();
         movable.isMoving = true;
-        movable.destinationY = movable.getDestinationY(floor);
+        movable.destinationY = movable.getYPosOfFloor(floor);
     }
 
     movable.getFirstPressedFloor = function() {
@@ -142,7 +143,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return true; // TODO: Make usercode returnable
     }
 
-    movable.getDestinationY = function(floorNum) {
+    movable.getYPosOfFloor = function(floorNum) {
         return (floorCount - 1) * floorHeight - floorNum * floorHeight;
     }
 
@@ -184,9 +185,29 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             movable.currentFloor = currentFloor;
             movable.trigger("new_current_floor", movable.currentFloor);
         }
+
+        // Check if we are about to pass a floor
+        // TODO: Try to make this code simpler
+        // TODO: Write tests for this code, covering any edge cases
+        if(movable.velocityY !== 0.0) {
+            var nextCleanlyStoppableFloor = movable.getExactFutureFloorIfStopped();
+            nextCleanlyStoppableFloor = (movable.velocityY > 0.0 ? Math.floor : Math.ceil)(nextCleanlyStoppableFloor);
+
+            if(movable.nextCleanlyStoppableFloor !== nextCleanlyStoppableFloor) {
+                var destinationFloor = movable.getExactFloorOfDestinationY(movable.destinationY);
+                if(destinationFloor !== movable.nextCleanlyStoppableFloor) {
+                    var isApproachingPreviousFloor = Math.sign(movable.velocityY) === Math.sign(movable.getYPosOfFloor(movable.nextCleanlyStoppableFloor) - movable.y);
+                    if(isApproachingPreviousFloor) {
+                        var direction = movable.velocityY > 0.0 ? "down" : "up";
+                        movable.trigger("passing_floor", movable.nextCleanlyStoppableFloor, direction);
+                    }
+                    movable.nextCleanlyStoppableFloor = nextCleanlyStoppableFloor;
+                }
+            }
+        }
     });
 
-    movable.destinationY = movable.getDestinationY(movable.currentFloor);
+    movable.destinationY = movable.getYPosOfFloor(movable.currentFloor);
 
     return movable;
 }

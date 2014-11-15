@@ -50,6 +50,10 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         }
     });
 
+    elevator.on("passing_floor", function(floorNum, direction) {
+        obj.trigger("passing_floor", floorNum, direction);
+    });
+
     elevator.on("stopped_at_floor", function(floorNum) {
         obj.trigger("stopped_at_floor", floorNum);
     });

@@ -104,6 +104,7 @@ elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>floor_button_pressed</td><td><small>Triggered when a passenger has pressed a button inside the elevator.</small></td><td><pre><code>elevator.on("floor_button_pressed", function(floorNum) {
     // Maybe tell the elevator to go to that floor?
 })</code></pre></td></tr>
+                    <tr><td>passing_floor</td><td><small>Triggered slightly before the elevator will pass a floor. A good time to decide whether to stop at that floor. Note that this event is not triggered for the destination floor. Direction is either "up" or "down".</small></td><td><pre><code>elevator.on("passing_floor", function(floorNum, direction) { ... });</code></pre></td></tr>
                     <tr><td>stopped_at_floor</td><td><small>Triggered when the elevator has arrived at a floor.</small></td><td><pre><code>elevator.on("stopped_at_floor", function(floorNum) {
     // Maybe decide where to go next?
 })</code></pre></td></tr>
