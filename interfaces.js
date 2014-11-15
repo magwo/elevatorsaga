@@ -17,13 +17,18 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         }
     };
 
-    obj.goToFloor = function(floorNum) {
+    // TODO: Write tests for this queueing logic
+    obj.goToFloor = function(floorNum, forceNow) {
+        console.log("GOING TO FLOO", floorNum, forceNow);
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
-        if(obj.destinationQueue.length && epsilonEquals(_.first(obj.destinationQueue), floorNum)) {
-            return;
+        if(obj.destinationQueue.length) {
+            var adjacentElement = forceNow ? _.first(obj.destinationQueue) : _.last(obj.destinationQueue);
+            if(epsilonEquals(floorNum, adjacentElement)) {
+                return;
+            }
         }
-        obj.destinationQueue.push(floorNum);
+        obj.destinationQueue[(forceNow ? "unshift" : "push")](floorNum);
         obj.checkDestinationQueue();
     };
 
@@ -51,6 +56,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     });
 
     elevator.on("passing_floor", function(floorNum, direction) {
+        console.log("PASSING FLOOR", floorNum);
         obj.trigger("passing_floor", floorNum, direction);
     });
 
