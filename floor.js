@@ -1,39 +1,39 @@
 
 var asFloor = function(obj, floorLevel, yPosition) {
-    riot.observable(obj);
+    var floor = riot.observable(obj);
 
-    obj.level = floorLevel;
-    obj.yPosition = yPosition;
-    obj.buttonStates = {up: "", down: ""}
+    floor.level = floorLevel;
+    floor.yPosition = yPosition;
+    floor.buttonStates = {up: "", down: ""}
 
-    obj.pressUpButton = function() {
-        var prev = obj.buttonStates.up;
-        obj.buttonStates.up = "activated";
-        obj.trigger("buttonstate_change", obj.buttonStates);
-        if(prev !== obj.buttonStates.up) { obj.trigger("up_button_pressed"); }
+    floor.pressUpButton = function() {
+        var prev = floor.buttonStates.up;
+        floor.buttonStates.up = "activated";
+        floor.trigger("buttonstate_change", floor.buttonStates);
+        if(prev !== floor.buttonStates.up) { floor.trigger("up_button_pressed"); }
     }
 
-    obj.pressDownButton = function() {
-        var prev = obj.buttonStates.down;
-        obj.buttonStates.down = "activated";
-        obj.trigger("buttonstate_change", obj.buttonStates);
-        if(prev !== obj.buttonStates.down) { obj.trigger("down_button_pressed"); }
+    floor.pressDownButton = function() {
+        var prev = floor.buttonStates.down;
+        floor.buttonStates.down = "activated";
+        floor.trigger("buttonstate_change", floor.buttonStates);
+        if(prev !== floor.buttonStates.down) { floor.trigger("down_button_pressed"); }
     }
 
-    obj.elevatorAvailable = function(elevator) {
+    floor.elevatorAvailable = function(elevator) {
         if(elevator.goingUp()) {
-            obj.buttonStates.up = "";
-            obj.trigger("buttonstate_change", obj.buttonStates);
+            floor.buttonStates.up = "";
+            floor.trigger("buttonstate_change", floor.buttonStates);
         }
         if(elevator.goingDown()) {
-            obj.buttonStates.down = "";
-            obj.trigger("buttonstate_change", obj.buttonStates);
+            floor.buttonStates.down = "";
+            floor.trigger("buttonstate_change", floor.buttonStates);
         }
     }
 
-    obj.floorNum = function() {
-        return obj.level;
+    floor.floorNum = function() {
+        return floor.level;
     }
 
-    return obj;
+    return floor;
 };

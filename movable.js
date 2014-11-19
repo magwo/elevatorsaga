@@ -13,94 +13,96 @@ var coolInterpolate = function(value0, value1, x) {
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
 var asMovable = function(obj) {
+    var movable = obj;
+
     riot.observable(obj);
 
-    obj.x = 0.0;
-    obj.y = 0.0;
-    obj.parent = null;
-    obj.worldX = 0.0;
-    obj.worldY = 0.0;
-    obj.currentTask = null;
+    movable.x = 0.0;
+    movable.y = 0.0;
+    movable.parent = null;
+    movable.worldX = 0.0;
+    movable.worldY = 0.0;
+    movable.currentTask = null;
 
-    obj.updateDisplayPosition = function() {
-        var worldPos = obj.getWorldPosition();
-        obj.worldX = worldPos[0];
-        obj.worldY = worldPos[1];
-        obj.trigger('new_state', obj);
+    movable.updateDisplayPosition = function() {
+        var worldPos = movable.getWorldPosition();
+        movable.worldX = worldPos[0];
+        movable.worldY = worldPos[1];
+        movable.trigger('new_state', obj);
     };
 
-    obj.setPosition = function(position) {
-        obj.x = position[0];
-        obj.y = position[1];
-        obj.trigger('new_state');
+    movable.setPosition = function(position) {
+        movable.x = position[0];
+        movable.y = position[1];
+        movable.trigger('new_state');
     }
 
-    obj.moveTo = function(newX, newY) {
-        if(newX === null) { newX = obj.x; }
-        if(newY === null) { newY = obj.y; }
-        obj.trigger('new_state');
-        obj.setPosition([newX, newY]);
+    movable.moveTo = function(newX, newY) {
+        if(newX === null) { newX = movable.x; }
+        if(newY === null) { newY = movable.y; }
+        movable.trigger('new_state');
+        movable.setPosition([newX, newY]);
     };
 
-    obj.isBusy = function() {
-        return obj.currentTask !== null;
+    movable.isBusy = function() {
+        return movable.currentTask !== null;
     }
 
-    obj.makeSureNotBusy = function() {
-        if(obj.isBusy()) {
+    movable.makeSureNotBusy = function() {
+        if(movable.isBusy()) {
             console.error("Attempt to use movable while it was busy", obj);
             throw({message: "Object is busy - you should use callback", obj: obj});
         }
     }
 
-    obj.wait = function(millis, cb) {
-        obj.makeSureNotBusy();
+    movable.wait = function(millis, cb) {
+        movable.makeSureNotBusy();
         var timeSpent = 0.0;
-        obj.currentTask = function(dt) {
+        movable.currentTask = function(dt) {
             timeSpent += dt;
             if(timeSpent > millis) {
-                obj.currentTask = null;
+                movable.currentTask = null;
                 if(cb) { cb(); }
             }
         };
     };
 
-    obj.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
-        obj.makeSureNotBusy();
-        obj.currentTask = true;
-        if(newX === null) { newX = obj.x; }
-        if(newY === null) { newY = obj.y; }
+    movable.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
+        movable.makeSureNotBusy();
+        movable.currentTask = true;
+        if(newX === null) { newX = movable.x; }
+        if(newY === null) { newY = movable.y; }
         if(typeof interpolator === "undefined") { interpolator = DEFAULT_INTERPOLATOR; }
-        var origX = obj.x;
-        var origY = obj.y;
+        var origX = movable.x;
+        var origY = movable.y;
         var timeSpent = 0.0;
 
-        obj.currentTask = function (dt) {
+        movable.currentTask = function (dt) {
             timeSpent = Math.min(timeToSpend, timeSpent + dt);
             if(timeSpent === timeToSpend) { // Epsilon issues possibly?
-                obj.setPosition([newX, newY]);
-                obj.currentTask = null;
+                movable.setPosition([newX, newY]);
+                movable.currentTask = null;
                 if(cb) { cb(); }
             } else {
                 var factor = timeSpent / timeToSpend;
-                obj.setPosition([interpolator(origX, newX, factor), interpolator(origY, newY, factor)]);
+                movable.setPosition([interpolator(origX, newX, factor), interpolator(origY, newY, factor)]);
             }
         };
     };
 
-    obj.movePhysically = function(newX, newY, constantAcceleration, constantDeceleration, maxSpeed, cb) {
-        obj.makeSureNotBusy();
-        if(newX === null) { newX = obj.x; }
-        if(newY === null) { newY = obj.y; }
-        var origX = obj.x;
-        var origY = obj.y;
+    movable.movePhysically = function(newX, newY, constantAcceleration, constantDeceleration, maxSpeed, cb) {
+        movable.makeSureNotBusy();
+        if(newX === null) { newX = movable.x; }
+        if(newY === null) { newY = movable.y; }
+        var origX = movable.x;
+        var origY = movable.y;
         var speed = 0.0;
         var isStopping = false;
-        var distanceToTravel = Math.sqrt(Math.pow(newX - obj.x, 2) + Math.pow(newY - obj.y, 2));
+        var distanceToTravel = Math.sqrt(Math.pow(newX - movable.x, 2) + Math.pow(newY - movable.y, 2));
         var position = 0.0;
-        obj.currentTask = function(dt) {
+        movable.currentTask = function(dt) {
             if(position === distanceToTravel) {
-                obj.currentTask = null;
+                movable.currentTask = null;
                 if(cb) { cb(); }
                 return;
             }
@@ -120,20 +122,20 @@ var asMovable = function(obj) {
             
             position += speed * dt;
             var posFactor = position / distanceToTravel;
-            obj.setPosition([linearInterpolate(origX, newX, posFactor), linearInterpolate(origY, newY, posFactor)]);
+            movable.setPosition([linearInterpolate(origX, newX, posFactor), linearInterpolate(origY, newY, posFactor)]);
         }
     };
 
-    obj.update = function(dt) {
-        if(obj.currentTask !== null) {
-            obj.currentTask(dt);
+    movable.update = function(dt) {
+        if(movable.currentTask !== null) {
+            movable.currentTask(dt);
         }
     }
 
-    obj.getWorldPosition = function() {
-        var resultX = obj.x;
-        var resultY = obj.y;
-        var currentParent = obj.parent;
+    movable.getWorldPosition = function() {
+        var resultX = movable.x;
+        var resultY = movable.y;
+        var currentParent = movable.parent;
         while(currentParent !== null) {
             resultX += currentParent.x;
             resultY += currentParent.y;
@@ -142,22 +144,22 @@ var asMovable = function(obj) {
         return [resultX, resultY];
     };
 
-    obj.setParent = function(movableParent) {
+    movable.setParent = function(movableParent) {
         if(movableParent === null) {
-            if(obj.parent !== null) {
-                var objWorld = obj.getWorldPosition();
-                obj.parent = null;
-                obj.setPosition(objWorld);
+            if(movable.parent !== null) {
+                var objWorld = movable.getWorldPosition();
+                movable.parent = null;
+                movable.setPosition(objWorld);
             }
         } else {
             // Parent is being set a non-null movable
-            var objWorld = obj.getWorldPosition();
+            var objWorld = movable.getWorldPosition();
             var parentWorld = movableParent.getWorldPosition();
-            obj.parent = movableParent;
-            obj.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
+            movable.parent = movableParent;
+            movable.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
         }
     };
 
-    obj.trigger('new_state', obj);
-    return obj;
+    movable.trigger('new_state', obj);
+    return movable;
 };
