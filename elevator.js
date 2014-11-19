@@ -24,7 +24,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
 
     movable.setFloorPosition = function(floor) {
-        var destination = (floorCount - 1) * floorHeight - floor * floorHeight;
+        var destination = movable.getYPosOfFloor(floor);
         movable.currentFloor = floor;
         movable.moveTo(null, destination);
     }
