@@ -40,6 +40,24 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
 
+    // TODO: De-duplicate these functions
+    elevatorInterface.goingUpIndicator = function(goingUp) {
+        if(typeof goingUp !== "boolean") {
+            elevator.goingUpIndicator = goingUp;
+            return elevatorInterface;
+        } else {
+            return elevator.goingUpIndicator;
+        }
+    }
+    elevatorInterface.goingDownIndicator = function(goingDown) {
+        if(typeof goingDown !== "boolean") {
+            elevator.goingDownIndicator = goingDown;
+            return elevatorInterface;
+        } else {
+            return elevator.goingDownIndicator;
+        }
+    }
+
     elevator.on("stopped", function(position) {
         if(elevatorInterface.destinationQueue.length && epsilonEquals(_.first(elevatorInterface.destinationQueue), position)) {
             // Reached the destination, so remove element at front of queue

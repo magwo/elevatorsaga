@@ -12,6 +12,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     // isMoving flag is needed when going to same floor again - need to re-raise events
     elevator.isMoving = false;
 
+    elevator.goingDownIndicator = true;
+    elevator.goingUpIndicator = true;
+
     elevator.currentFloor = 0;
     elevator.nextCleanlyStoppableFloor = 0;
     elevator.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
@@ -135,13 +138,8 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return 0;
     }
 
-
-    elevator.goingUp = function() {
-        return true; // TODO: Make usercode returnable
-    }
-
-    elevator.goingDown = function() {
-        return true; // TODO: Make usercode returnable
+    elevator.isSuitableForTravelBetween = function(fromFloorNum, toFloorNum) {
+        if(fromFloorNum > toFloorNum) { return elevator.goingDownIndicator; }
     }
 
     elevator.getYPosOfFloor = function(floorNum) {

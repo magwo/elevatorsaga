@@ -27,6 +27,11 @@ var asUser = function(user, weight, floorCount, floorHeight) {
         if(user.done || user.parent !== null || user.isBusy()) {
             return;
         }
+
+        if(!elevator.isSuitableForTravelBetween(user.currentFloor, user.destinationFloor)) {
+            // Not suitable for travel - don't use this elevator
+            return;
+        }
         
         var pos = elevator.userEntering(user);
         if(pos) {
@@ -34,7 +39,6 @@ var asUser = function(user, weight, floorCount, floorHeight) {
             user.setParent(elevator);
             user.trigger("entered_elevator", elevator);
 
-            // TODO: Consider what happens if user is busy at this moment
             user.moveToOverTime(pos[0], pos[1], 1, undefined, function() {
                 elevator.pressFloorButton(user.destinationFloor);
             });
