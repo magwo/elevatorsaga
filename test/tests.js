@@ -375,6 +375,21 @@ describe("API", function() {
 			expect(e.y).not.toBe(whenMovingY);
 			expect(e.y).not.toBe(originalY)
 		});
+
+		it("stores going up and going down properties", function() {
+			expect(e.goingUpIndicator).toBe(true);
+			expect(e.goingDownIndicator).toBe(true);
+			expect(elevInterface.goingUpIndicator()).toBe(true);
+			expect(elevInterface.goingDownIndicator()).toBe(true);
+
+			elevInterface.goingUpIndicator(false);
+			expect(elevInterface.goingUpIndicator()).toBe(false);
+			expect(elevInterface.goingDownIndicator()).toBe(true);
+
+			elevInterface.goingDownIndicator(false);
+			expect(elevInterface.goingDownIndicator()).toBe(false);
+			expect(elevInterface.goingUpIndicator()).toBe(false);
+		});
 	});
 });
 
