@@ -28,11 +28,11 @@ if(typeof Math.sign === "undefined") {
 }
 
 
-var createBoolPassthroughFunction = function(obj, objPropertyName) {
+var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     return function(val) {
         if(typeof val !== "undefined") {
             obj[objPropertyName] = val ? true : false;
-            return obj;
+            return owner;
         } else {
             return obj[objPropertyName];
         }

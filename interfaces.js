@@ -39,8 +39,8 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     elevatorInterface.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); };
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
-    elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevator, "goingUpIndicator");
-    elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevator, "goingDownIndicator");
+    elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
+    elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
 
     elevator.on("stopped", function(position) {
         if(elevatorInterface.destinationQueue.length && epsilonEquals(_.first(elevatorInterface.destinationQueue), position)) {

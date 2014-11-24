@@ -390,6 +390,12 @@ describe("API", function() {
 			expect(elevInterface.goingDownIndicator()).toBe(false);
 			expect(elevInterface.goingUpIndicator()).toBe(false);
 		});
+
+		it("can chain calls to going up and down indicator functions", function() {
+			elevInterface.goingUpIndicator(false).goingDownIndicator(false);
+			expect(elevInterface.goingUpIndicator()).toBe(false);
+			expect(elevInterface.goingDownIndicator()).toBe(false);
+		});
 	});
 });
 
