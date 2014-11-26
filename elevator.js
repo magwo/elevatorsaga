@@ -161,9 +161,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     }
 
     elevator.getRoundedCurrentFloor = function() {
-        var foo = Math.round(elevator.getExactCurrentFloor());
-        if(foo == NaN) throw "FOO";
-        return foo;
+        return Math.round(elevator.getExactCurrentFloor());
     }
 
     elevator.getExactFutureFloorIfStopped = function() {
