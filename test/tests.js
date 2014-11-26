@@ -308,6 +308,19 @@ describe("Elevator object", function() {
 		e.y = e.y + 0.0001;
 		expect(e.isOnAFloor()).toBe(false);
 	});
+
+	it("correctly reports travel suitability", function() {
+		e.goingUpIndicator = true;
+		e.goingDownIndicator = true;
+		expect(e.isSuitableForTravelBetween(0, 1)).toBe(true);
+		expect(e.isSuitableForTravelBetween(2, 4)).toBe(true);
+		expect(e.isSuitableForTravelBetween(5, 3)).toBe(true);
+		expect(e.isSuitableForTravelBetween(2, 0)).toBe(true);
+		e.goingUpIndicator = false;
+		expect(e.isSuitableForTravelBetween(1, 10)).toBe(false);
+		e.goingDownIndicator = false;
+		expect(e.isSuitableForTravelBetween(20, 0)).toBe(false);
+	});
 });
 
 

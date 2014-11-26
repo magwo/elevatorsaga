@@ -140,6 +140,8 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     elevator.isSuitableForTravelBetween = function(fromFloorNum, toFloorNum) {
         if(fromFloorNum > toFloorNum) { return elevator.goingDownIndicator; }
+        if(fromFloorNum < toFloorNum) { return elevator.goingUpIndicator; }
+        return true;
     }
 
     elevator.getYPosOfFloor = function(floorNum) {
