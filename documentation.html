@@ -91,6 +91,12 @@ elevator.goToFloor(2, true); // Do it before anything else</code></pre></td></tr
                     <tr><td>currentFloor</td><td>function</td><td><small>Gets the floor number that the elevator currently is on.</small></td><td><pre><code>if(elevator.currentFloor() === 0) {
     // Do something special?
 }</code></pre></td></tr>
+                    <tr><td>goingUpIndicator</td><td>function</td><td><small>Gets or sets the going up indicator, which will affect passenger behaviour when stopping at floors.</small></td><td><pre><code>if(elevator.goingUpIndicator()) {
+    elevator.goingDownIndicator(false);
+}</code></pre></td></tr>
+                    <tr><td>goingDownIndicator</td><td>function</td><td><small>Gets or sets the going down indicator, which will affect passenger behaviour when stopping at floors.</small></td><td><pre><code>if(elevator.goingDownIndicator()) {
+    elevator.goingUpIndicator(false);
+}</code></pre></td></tr>
                     <tr><td>loadFactor</td><td>function</td><td><small>Gets the load factor of the elevator. 0 means empty, 1 means full. Varies with passenger weights, which vary - not an exact measure.</small></td><td><pre><code>if(elevator.loadFactor() < 0.4) {
     // Maybe use this elevator, since it's not full yet?
 }</code></pre></td></tr>
