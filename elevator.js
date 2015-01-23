@@ -175,7 +175,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     elevator.getLoadFactor = function() {
         var load = _.reduce(elevator.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
-        console.log(load);
         return load / 400.0;
     }
 
