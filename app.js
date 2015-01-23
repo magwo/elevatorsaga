@@ -190,15 +190,16 @@ $(function() {
             var match = p.match(/(\w+)=(\w+$)/);
             if(match) { result[match[1]] = match[2]; } return result;
         }, {});
-        var requestedChallenge = -1;
+        var requestedChallenge = 0;
         var autoStart = false;
         var timeScale = 2.0;
         _.each(params, function(val, key) {
             if(key === "challenge") {
                 requestedChallenge = _.parseInt(val) - 1;
                 if(requestedChallenge < 0 || requestedChallenge >= challenges.length) {
-                    requestedChallenge = -1;
                     console.log("Invalid challenge index", requestedChallenge);
+                    console.log("Defaulting to first challenge");
+                    requestedChallenge = 0;
                 }
             } else if(key === "autostart") {
                 autoStart = val === "false" ? false : true;
@@ -211,14 +212,6 @@ $(function() {
             }
         });
         app.worldController.setTimeScale(timeScale);
-
-        if(requestedChallenge >= 0) {
-            app.startChallenge(requestedChallenge, autoStart);
-        } else {
-            console.log("Defaulting challenge to 1", requestedChallenge);
-            setTimeout(function() {
-                riot.route(createParamsUrl(params, { challenge: 1 }));
-            }, 1);
-        }
+        app.startChallenge(requestedChallenge, autoStart);
     });
 });
