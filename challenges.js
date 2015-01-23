@@ -14,7 +14,7 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
 
 var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
     return {
-        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people and let noone wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(0) + "</span> seconds",
+        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people and let no one wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(0) + "</span> seconds",
         evaluate: function(world) {
             if(world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
