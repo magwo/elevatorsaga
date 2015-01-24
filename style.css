@@ -251,6 +251,28 @@ button.right {
     z-index: 1;
 }
 
+.elevator .directionindicator {
+    position: absolute;
+    font-size: 10px;
+    top: 3px;
+}
+
+.elevator .directionindicator.directionindicatorup {
+    left: 2px;
+}
+
+.elevator .directionindicator.directionindicatordown {
+    right: 2px;
+}
+
+.elevator .directionindicator .fa{
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.elevator .directionindicator .fa.activated{
+    color: #33ff44;
+}
+
 .elevator .floorindicator {
     display: inline-block;
     position: absolute;

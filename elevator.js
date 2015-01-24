@@ -212,6 +212,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         }
     });
 
+    elevator.on("change:goingUpIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
+    });
+
+    elevator.on("change:goingDownIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
+    });
+
     elevator.destinationY = elevator.getYPosOfFloor(elevator.currentFloor);
 
     return elevator;
