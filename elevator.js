@@ -115,6 +115,10 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             elevator.isMoving = false;
             elevator.handleDestinationArrival();
         }
+
+        if(elevator.isOnAFloor() && !elevator.full()){
+            elevator.trigger('entrance_available', movable);
+        }
     }
 
     elevator.handleDestinationArrival = function() {
