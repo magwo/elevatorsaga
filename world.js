@@ -130,6 +130,9 @@ var createWorldCreator = function() {
                 registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
             }
 
+            _.each(world.floors, function(f){
+                f.maxWaitTime = 0;
+            });
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt) });
             _.each(world.users, function(u) {
                 if(u.done && typeof u.cleanupFunction === "function") {
@@ -139,6 +142,7 @@ var createWorldCreator = function() {
                     u.cleanupFunction = null;
                 }
                 u.update(dt);
+                world.floors[u.currentFloor].maxWaitTime = Math.max(world.floors[u.currentFloor].maxWaitTime, world.elapsedTime - u.spawnTimestamp);
                 world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
             });
 
