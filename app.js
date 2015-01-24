@@ -10,7 +10,9 @@ var createEditor = function() {
         indentWithTabs: false,
         theme: "solarized light",
         mode: "javascript",
+        autoCloseBrackets: true,
         extraKeys: {
+            // the following Tab key mapping is from http://codemirror.net/doc/manual.html#keymaps
             Tab: function(cm) {
                 var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
                 cm.replaceSelection(spaces);
