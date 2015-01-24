@@ -38,6 +38,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             var slot = elevator.userSlots[i];
             if(slot.user === null) {
                 slot.user = user;
+                if(elevator.full()){
+                    elevator.trigger('full');
+                }
                 return slot.pos;
             }
         }
@@ -57,6 +60,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                 slot.user = null;
             }
         });
+        if(elevator.empty()){
+            elevator.trigger('empty');
+        }
     }
 
     elevator.updateElevatorMovement = function(dt) {
@@ -177,6 +183,26 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         var load = _.reduce(elevator.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
         console.log(load);
         return load / 400.0;
+    }
+
+    elevator.full = function(){
+        for(var i=0; i<elevator.userSlots.length; i++) {
+            var slot = elevator.userSlots[i];
+            if(slot.user === null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    elevator.empty = function(){
+        for(var i=0; i<elevator.userSlots.length; i++) {
+            var slot = elevator.userSlots[i];
+            if(slot.user !== null) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
