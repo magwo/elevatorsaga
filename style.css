@@ -149,17 +149,11 @@ button.right {
     padding-top: 10px;
 }
 
-.code {
+.CodeMirror {
+    font: 14px Consolas, Monaco, monospace;
     width: 1220px;
     margin: 10px auto;
-}
-
-.code textarea {
-    font: 13px Consolas, Monaco, monospace;
-    resize: vertical;
-    height: 900px;
-    min-height: 150px;
-    max-height: 1000px;
+    height: 320px;
 }
 
 .world {
