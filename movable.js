@@ -40,7 +40,6 @@ var asMovable = function(obj) {
     movable.moveTo = function(newX, newY) {
         if(newX === null) { newX = movable.x; }
         if(newY === null) { newY = movable.y; }
-        movable.trigger('new_state');
         movable.setPosition([newX, newY]);
     };
 
