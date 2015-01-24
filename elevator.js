@@ -14,17 +14,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     elevator.goingDownIndicator = true;
     elevator.goingUpIndicator = true;
-    elevator.indicatorStates = {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator}
-
-    elevator.on("change:goingUpIndicator", function(value){
-        elevator.indicatorStates.up = value;
-        elevator.trigger("indicatorstate_change", elevator.indicatorStates)
-    })
-
-    elevator.on("change:goingDownIndicator", function(value){
-        elevator.indicatorStates.down = value;
-        elevator.trigger("indicatorstate_change", elevator.indicatorStates)
-    })
 
     elevator.currentFloor = 0;
     elevator.nextCleanlyStoppableFloor = 0;
@@ -221,6 +210,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                 }
             }
         }
+    });
+
+    elevator.on("change:goingUpIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
+    });
+
+    elevator.on("change:goingDownIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
     });
 
     elevator.destinationY = elevator.getYPosOfFloor(elevator.currentFloor);
