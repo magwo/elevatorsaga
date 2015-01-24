@@ -15,6 +15,7 @@ var createWorldCreator = function() {
     creator.createElevators = function(elevatorCount, floorCount, floorHeight) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
+            // Move to right x position
             elevator.moveTo(200+60*i, null);
             elevator = asElevator(elevator, 2.6, floorCount, floorHeight);
             elevator.setFloorPosition(0);
