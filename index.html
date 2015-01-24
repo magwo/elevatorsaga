@@ -44,7 +44,9 @@
 
     <script type="text/template" id="elevator-template">
         <div class="elevator movable" style="left: {e.worldX}px; top: {e.worldY}px">
+            <span class="directionindicator directionindicatorup"><i class="fa fa-arrow-circle-up up activated"></i></span>
             <span class="floorindicator">{e.currentFloor}</span>
+            <span class="directionindicator directionindicatordown"><i class="fa fa-arrow-circle-down down activated"></i></span>
             <span class="buttonindicator">
                 {buttons}
             </span>
