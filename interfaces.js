@@ -49,6 +49,10 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         return elevator.empty();
     }
 
+    elevatorInterface.getDestinationFloors = function(){
+        return elevator.getDestinationFloors();
+    }
+
     elevator.on("stopped", function(position) {
         if(elevatorInterface.destinationQueue.length && epsilonEquals(_.first(elevatorInterface.destinationQueue), position)) {
             // Reached the destination, so remove element at front of queue
