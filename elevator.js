@@ -38,9 +38,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             var slot = elevator.userSlots[i];
             if(slot.user === null) {
                 slot.user = user;
-                if(elevator.full()){
-                    elevator.trigger('full');
-                }
                 return slot.pos;
             }
         }
@@ -60,9 +57,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                 slot.user = null;
             }
         });
-        if(elevator.empty()){
-            elevator.trigger('empty');
-        }
     }
 
     elevator.updateElevatorMovement = function(dt) {
@@ -240,6 +234,18 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                     }
                 }
             }
+        }
+    });
+
+    elevator.on('user_entered', function(){
+        if(elevator.full()){
+            elevator.trigger('full');
+        }
+    });
+
+    elevator.on('user_exited', function(){
+        if(elevator.empty()){
+            elevator.trigger('empty');
         }
     });
 
