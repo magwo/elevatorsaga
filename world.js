@@ -182,13 +182,19 @@ var createWorldController = function(dtMax) {
     controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
         controller.isPaused = true;
         controller.challengeEnded = false;
-        try {
-            codeObj.init(world.elevatorInterfaces, world.floors);
-        } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
-        world.init();
         var lastT = null;
+        var firstUpdate = true;
         var updater = function(t) {
             if(!controller.isPaused && !world.challengeEnded && lastT !== null) {
+                if(firstUpdate) {
+                    firstUpdate = false;
+                    // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
+                    try {
+                        codeObj.init(world.elevatorInterfaces, world.floors);
+                        world.init();
+                    } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
+                }
+
                 var dt = (t - lastT);
                 var scaledDt = dt * 0.001 * controller.timeScale;
                 scaledDt = Math.min(scaledDt, dtMax * 40); // Prevent unhealthy looping
