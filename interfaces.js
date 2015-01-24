@@ -49,8 +49,8 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         return elevator.empty();
     }
 
-    elevatorInterface.getDestinationFloors = function(){
-        return elevator.getDestinationFloors();
+    elevatorInterface.getDestinationFloors = function(sorter){
+        return elevator.getDestinationFloors(sorter);
     }
 
     elevator.on("stopped", function(position) {

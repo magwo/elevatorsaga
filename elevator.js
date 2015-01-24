@@ -203,11 +203,15 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         return true;
     }
 
-    elevator.getDestinationFloors = function(){
+    elevator.getDestinationFloors = function(sorter){
         var
             floorCounts = {},
             floors = []
         ;
+
+        sorter = sorter || function(a, b){
+            return floorCounts[b] - floorCounts[a];
+        };
 
         for(var i=0; i<elevator.userSlots.length; i++) {
             var slot = elevator.userSlots[i];
@@ -222,9 +226,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             }
         }
 
-        floors.sort(function(a, b){
-            return floorCounts[b] - floorCounts[a];
-        });
+        floors.sort(sorter);
 
         return floors;
     }
