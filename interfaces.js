@@ -43,11 +43,9 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
 
     elevatorInterface.full = function(){
-        console.log('full:', elevator.full());
         return elevator.full();
     }
     elevatorInterface.empty = function(){
-        console.log('empty:', elevator.empty());
         return elevator.empty();
     }
 
@@ -74,6 +72,12 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     });
     elevator.on("floor_button_pressed", function(floorNum) {
         elevatorInterface.trigger("floor_button_pressed", floorNum);
+    });
+    elevator.on("user_entered", function(user) {
+        elevatorInterface.trigger("user_entered", user);
+    });
+    elevator.on("user_exited", function(user) {
+        elevatorInterface.trigger("user_exited", user);
     });
     elevator.on("full", function(user) {
         elevatorInterface.trigger("full", user);

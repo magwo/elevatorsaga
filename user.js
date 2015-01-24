@@ -72,5 +72,12 @@ var asUser = function(user, weight, floorCount, floorHeight) {
         }
     };
 
+    user.on('entered_elevator', function(elevator){
+        elevator.trigger('user_entered', user);
+    });
+    user.on('exited_elevator', function(elevator){
+        elevator.trigger('user_exited', user);
+    });
+
     return user;
 }
