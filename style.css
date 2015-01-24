@@ -53,9 +53,9 @@ dl dd {
 
 
 .container {
-    width: 1280px;
+    width: 1220px;
     margin: 0 auto;
-    padding: 20px 40px 40px 40px;
+    padding: 20px 0 40px 0;
     background-color: #BFBD9F;
 }
 
@@ -150,7 +150,7 @@ button.right {
 }
 
 .code {
-    width: 1280px;
+    width: 1220px;
     margin: 10px auto;
 }
 
@@ -164,7 +164,7 @@ button.right {
 
 .world {
     position: relative;
-    width: 1280px;
+    width: 1220px;
     background-color: #333;
     padding: 0;
     overflow: hidden;
@@ -173,7 +173,7 @@ button.right {
 .innerworld {
     position: relative;
     height: 100%;
-    width: 998px;
+    width: 938px;
     border-right: 1px solid black;
     border-left: 1px solid black;
     font-family: Arial, Helvetica, sans-serif;
