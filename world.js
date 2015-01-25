@@ -133,12 +133,6 @@ var createWorldCreator = function() {
 
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt) });
             _.each(world.users, function(u) {
-                if(u.done && typeof u.cleanupFunction === "function") {
-                    // Be careful using "off" riot function from event handlers - it alters 
-                    // riot's callback list resulting in uncalled event handlers.
-                    u.cleanupFunction();
-                    u.cleanupFunction = null;
-                }
                 u.update(dt);
                 world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
             });
