@@ -213,11 +213,11 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     });
 
     elevator.on("change:goingUpIndicator", function(value){
-        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
+        elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
 
     elevator.on("change:goingDownIndicator", function(value){
-        elevator.trigger("indicatorstate_change", {up: elevator.goingDownIndicator, down: elevator.goingUpIndicator})
+        elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
 
     elevator.destinationY = elevator.getYPosOfFloor(elevator.currentFloor);
