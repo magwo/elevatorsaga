@@ -59,11 +59,7 @@ var asUser = function(user, weight, floorCount, floorHeight) {
                         user.off("*");
                     });
 
-                    // Remove self as event listener - must be done after this,
-                    // or riot's event calling loops bugs out (we're currently in it)
-                    user.cleanupFunction = function() {
-                        elevator.off("exit_available", exitAvailableHandler);
-                    }
+                    elevator.off("exit_available", exitAvailableHandler);
                 }
             };
             elevator.on("exit_available", exitAvailableHandler);
