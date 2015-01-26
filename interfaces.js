@@ -36,7 +36,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
         elevatorInterface.goToFloor(elevator.getExactFutureFloorIfStopped());
     }
 
-    elevatorInterface.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); };
+    elevatorInterface.getPressedFloors = function() { return elevator.getPressedFloors(); };
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
