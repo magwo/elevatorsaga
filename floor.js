@@ -5,6 +5,7 @@ var asFloor = function(obj, floorLevel, yPosition) {
     floor.level = floorLevel;
     floor.yPosition = yPosition;
     floor.buttonStates = {up: "", down: ""}
+    floor.users = [];
 
     floor.pressUpButton = function() {
         var prev = floor.buttonStates.up;
