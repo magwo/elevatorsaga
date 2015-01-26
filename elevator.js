@@ -131,11 +131,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         elevator.destinationY = elevator.getYPosOfFloor(floor);
     }
 
-    elevator.getFirstPressedFloor = function() {
+    elevator.getPressedFloors = function() {
+        var arr = [];
         for(var i=0; i<elevator.buttonStates.length; i++) {
-            if(elevator.buttonStates[i]) { return i; }
+            if(elevator.buttonStates[i]) {
+                arr.push(i);
+            }
         }
-        return 0;
+        return arr;
     }
 
     elevator.isSuitableForTravelBetween = function(fromFloorNum, toFloorNum) {

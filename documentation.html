@@ -103,6 +103,9 @@ elevator.goToFloor(2, true); // Do it before anything else</code></pre></td></tr
                     <tr><td>destinationQueue</td><td>array</td><td><small>The current destination queue, meaning the floor numbers the elevator is scheduled to go to. Can be modified and emptied if desired. Note that you need to call checkDestinationQueue() for the change to take effect immediately.</small></td><td><pre><code>elevator.destinationQueue = [];
 elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>checkDestinationQueue</td><td>function</td><td><small>Checks the destination queue for any new destinations to go to. Note that you only need to call this if you modify the destination queue explicitly.</small></td><td><pre><code>elevator.checkDestinationQueue();</code></pre></td></tr>
+                    <tr><td>getPressedFloors</td><td>function</td><td><small>Gets the currently pressed floor numbers as an array.</small></td><td><pre><code>if(elevator.getPressedFloors().length > 0) {
+    // Maybe go to some chosen floor first?
+}</code></pre></td></tr>
                 </tbody>
             </table>
             <table class="doctable">
