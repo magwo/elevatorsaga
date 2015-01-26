@@ -12,12 +12,13 @@ var createWorldCreator = function() {
         });
         return floors;
     };
-    creator.createElevators = function(elevatorCount, floorCount, floorHeight) {
+    creator.createElevators = function(elevatorCount, floorCount, floorHeight, maxUsers) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
+            elevator = asElevator(elevator, 2.6, floorCount, floorHeight, maxUsers);
+
             // Move to right x position
-            elevator.moveTo(200+60*i, null);
-            elevator = asElevator(elevator, 2.6, floorCount, floorHeight);
+            elevator.moveTo((20 + elevator.width) * i + 200, null);
             elevator.setFloorPosition(0);
             elevator.updateDisplayPosition();
             return elevator;
@@ -69,7 +70,7 @@ var createWorldCreator = function() {
         
         
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
-        world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight);
+        world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.maxUsers);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
         world.transportedCounter = 0;

@@ -1,12 +1,13 @@
 
 
-var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
+var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, maxUsers) {
     var elevator = movable;
 
     var ACCELERATION = floorHeight * 2.1;
     var DECELERATION = floorHeight * 2.6;
     var MAXSPEED = floorHeight * speedFloorsPerSec;
 
+    elevator.maxUsers = maxUsers || 4;
     elevator.destinationY = 0.0;
     elevator.velocityY = 0.0;
     // isMoving flag is needed when going to same floor again - need to re-raise events
@@ -20,12 +21,10 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     elevator.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
     elevator.moveCount = 0;
     elevator.removed = false;
-    elevator.userSlots = [
-        {pos: [2, 30], user: null},
-        {pos: [12, 30], user: null},
-        {pos: [22, 30], user: null},
-        {pos: [32, 30], user: null}];
-
+    elevator.userSlots = _.map(_.range(elevator.maxUsers), function(user, i) {
+        return { pos: [2 + (i * 10), 30], user: null};
+    });
+    elevator.width = elevator.maxUsers * 10;
 
     elevator.setFloorPosition = function(floor) {
         var destination = elevator.getYPosOfFloor(floor);
@@ -175,7 +174,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     elevator.getLoadFactor = function() {
         var load = _.reduce(elevator.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
-        return load / 400.0;
+        return load / elevator.maxUsers * 100;
     }
 
 
