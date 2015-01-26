@@ -31,7 +31,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         var destination = elevator.getYPosOfFloor(floor);
         elevator.currentFloor = floor;
         elevator.moveTo(null, destination);
-    }
+    };
 
     elevator.userEntering = function(user) {
         for(var i=0; i<elevator.userSlots.length; i++) {
@@ -42,14 +42,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             }
         }
         return false;
-    }
+    };
 
     elevator.pressFloorButton = function(floorNumber) {
         floorNumber = limitNumber(floorNumber, 0, floorCount - 1);
         elevator.buttonStates[floorNumber] = true;
         elevator.trigger("floor_button_pressed", floorNumber);
         elevator.trigger("floor_buttons_changed", elevator.buttonStates);
-    }
+    };
 
     elevator.userExiting = function(user) {
         _.each(elevator.userSlots, function(slot) {
@@ -57,7 +57,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                 slot.user = null;
             }
         });
-    }
+    };
 
     elevator.updateElevatorMovement = function(dt) {
         if(elevator.isBusy()) {
@@ -74,6 +74,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         var destinationDiff = elevator.destinationY - elevator.y;
         var directionSign = Math.sign(destinationDiff);
         var velocitySign = Math.sign(elevator.velocityY);
+        var acceleration = +0;
         if(destinationDiff !== 0.0) {
             if(directionSign === velocitySign) {
                 // Moving in correct direction
@@ -86,12 +87,12 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
                     elevator.velocityY -= directionSign * deceleration * dt;
                 } else {
                     // Speed up (or keep max speed...)
-                    var acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
+                    acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
                     elevator.velocityY += directionSign * acceleration * dt;
                 }
             } else if(velocitySign === 0) {
                 // Standing still - should accelerate
-                var acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
+                acceleration = Math.min(Math.abs(destinationDiff*5), ACCELERATION);
                 elevator.velocityY += directionSign * acceleration * dt;
             } else {
                 // Moving in wrong direction - decelerate as much as possible
@@ -109,7 +110,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             elevator.isMoving = false;
             elevator.handleDestinationArrival();
         }
-    }
+    };
 
     elevator.handleDestinationArrival = function() {
         elevator.trigger("stopped", elevator.getExactCurrentFloor());
@@ -123,66 +124,66 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
             elevator.trigger("exit_available", elevator.currentFloor);
             elevator.trigger("entrance_available", movable);
         }
-    }
+    };
 
     elevator.goToFloor = function(floor) {
         elevator.makeSureNotBusy();
         elevator.isMoving = true;
         elevator.destinationY = elevator.getYPosOfFloor(floor);
-    }
+    };
 
     elevator.getFirstPressedFloor = function() {
         for(var i=0; i<elevator.buttonStates.length; i++) {
             if(elevator.buttonStates[i]) { return i; }
         }
         return 0;
-    }
+    };
 
     elevator.isSuitableForTravelBetween = function(fromFloorNum, toFloorNum) {
         if(fromFloorNum > toFloorNum) { return elevator.goingDownIndicator; }
         if(fromFloorNum < toFloorNum) { return elevator.goingUpIndicator; }
         return true;
-    }
+    };
 
     elevator.getYPosOfFloor = function(floorNum) {
         return (floorCount - 1) * floorHeight - floorNum * floorHeight;
-    }
+    };
 
     elevator.getExactFloorOfYPos = function(y) {
         return ((floorCount - 1) * floorHeight - y) / floorHeight;
-    }
+    };
 
     elevator.getExactCurrentFloor = function() {
         return elevator.getExactFloorOfYPos(elevator.y);
-    }
+    };
 
     elevator.getDestinationFloor = function() {
         return elevator.getExactFloorOfYPos(elevator.destinationY);
-    }
+    };
 
     elevator.getRoundedCurrentFloor = function() {
         return Math.round(elevator.getExactCurrentFloor());
-    }
+    };
 
     elevator.getExactFutureFloorIfStopped = function() {
         var distanceNeededToStop = distanceNeededToAchieveSpeed(elevator.velocityY, 0.0, DECELERATION);
         return elevator.getExactFloorOfYPos(elevator.y - Math.sign(elevator.velocityY) * distanceNeededToStop);
-    }
+    };
 
     elevator.isOnAFloor = function() {
         return epsilonEquals(elevator.getExactCurrentFloor(), elevator.getRoundedCurrentFloor());
-    }
+    };
 
     elevator.getLoadFactor = function() {
         var load = _.reduce(elevator.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
         return load / 400.0;
-    }
+    };
 
 
     elevator.on("new_state", function() {
         // Recalculate the floor number etc
         var currentFloor = elevator.getRoundedCurrentFloor();
-        if(currentFloor != elevator.currentFloor) {
+        if(currentFloor !== elevator.currentFloor) {
             elevator.moveCount++;
             elevator.currentFloor = currentFloor;
             elevator.trigger("new_current_floor", elevator.currentFloor);
@@ -223,4 +224,4 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
     elevator.destinationY = elevator.getYPosOfFloor(elevator.currentFloor);
 
     return elevator;
-}
+};

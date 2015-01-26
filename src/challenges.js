@@ -9,7 +9,7 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
@@ -22,7 +22,7 @@ var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireUserCountWithinMoves = function(userCount, moveLimit) {
@@ -35,15 +35,15 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireDemo = function() {
     return {
         description: "Perpetual demo",
         evaluate: function() { return null; }
-    }
-}
+    };
+};
 
 var createWeightedSelector = function(weights) {
     var sum = _.reduce(weights, function(sum, w) { return sum+w; }, 0.0);
@@ -54,28 +54,28 @@ var createWeightedSelector = function(weights) {
         var selectedIndex = 0;
         _.each(weights, function(w, i) { summed += w; if(num < summed) { selectedIndex = i; return false; } });
         return selectedIndex;
-    }
-}
+    };
+};
 
 
 var challenges = [
-     {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
-    ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}
-    ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.5}, condition: requireUserCountWithinTime(25, 60)}
-    ,{options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountWithinTime(28, 60)}
-    ,{options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.7}, condition: requireUserCountWithinTime(100, 68)}
-    ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.8}, condition: requireUserCountWithinMoves(40, 60)}
-    ,{options: {floorCount: 3, elevatorCount: 3, spawnRate: 3.0}, condition: requireUserCountWithinMoves(100, 63)}
-    ,{options: {floorCount: 6, elevatorCount: 2, spawnRate: 0.4}, condition: requireUserCountWithMaxWaitTime(50, 21)}
-    ,{options: {floorCount: 7, elevatorCount: 3, spawnRate: 0.6}, condition: requireUserCountWithMaxWaitTime(50, 20)}
+    {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)},
+    {options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)},
+    {options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.5}, condition: requireUserCountWithinTime(25, 60)},
+    {options: {floorCount: 8, elevatorCount: 2, spawnRate: 0.6}, condition: requireUserCountWithinTime(28, 60)},
+    {options: {floorCount: 6, elevatorCount: 4, spawnRate: 1.7}, condition: requireUserCountWithinTime(100, 68)},
+    {options: {floorCount: 4, elevatorCount: 2, spawnRate: 0.8}, condition: requireUserCountWithinMoves(40, 60)},
+    {options: {floorCount: 3, elevatorCount: 3, spawnRate: 3.0}, condition: requireUserCountWithinMoves(100, 63)},
+    {options: {floorCount: 6, elevatorCount: 2, spawnRate: 0.4}, condition: requireUserCountWithMaxWaitTime(50, 21)},
+    {options: {floorCount: 7, elevatorCount: 3, spawnRate: 0.6}, condition: requireUserCountWithMaxWaitTime(50, 20)},
 
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(60, 19)}
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(70, 18)}
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(80, 17)}
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(90, 16)}
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(100, 15)}
-    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.0}, condition: requireUserCountWithMaxWaitTime(110, 15)}
-    ,{options: {floorCount: 8, elevatorCount: 6, spawnRate: 0.9}, condition: requireUserCountWithMaxWaitTime(120, 14)}
+    ,{options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(60, 19)},
+    {options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(70, 18)},
+    {options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(80, 17)},
+    {options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(90, 16)},
+    {options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.1}, condition: requireUserCountWithMaxWaitTime(100, 15)},
+    {options: {floorCount: 9, elevatorCount: 5, spawnRate: 1.0}, condition: requireUserCountWithMaxWaitTime(110, 15)},
+    {options: {floorCount: 8, elevatorCount: 6, spawnRate: 0.9}, condition: requireUserCountWithMaxWaitTime(120, 14)},
 
-    ,{options: {floorCount: 10, elevatorCount: 10, spawnRate: 2.0}, condition: requireDemo()}
+    {options: {floorCount: 10, elevatorCount: 10, spawnRate: 2.0}, condition: requireDemo()}
 ];

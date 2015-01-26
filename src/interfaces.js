@@ -34,7 +34,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     elevatorInterface.stop = function() {
         elevatorInterface.destinationQueue = [];
         elevatorInterface.goToFloor(elevator.getExactFutureFloorIfStopped());
-    }
+    };
 
     elevatorInterface.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); };
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
@@ -68,4 +68,4 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     });
 
     return elevatorInterface;
-}
+};
