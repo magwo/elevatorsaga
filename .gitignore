@@ -1,1 +1,7 @@
 .DS_Store
+node_modules
+bower_components
+src/libs/jquery.min.js
+src/libs/jquery.min.map
+src/libs/lodash.min.js
+src/libs/riot.js
