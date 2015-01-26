@@ -97,6 +97,13 @@ var createWorldCreator = function() {
                 world.avgWaitTime = (world.avgWaitTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
+
+            // Check if there is an elevator already available on floor
+            _.each(world.elevators, function(elevator) {
+                if(user.currentFloor === elevator.currentFloor) {
+                    user.elevatorAvailable(elevator, world.floors[elevator.currentFloor]);
+                }
+            });
         };
 
         // Bind them all together
