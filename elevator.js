@@ -140,8 +140,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
     }
 
     elevator.getPressedFloors = function() {
-        var arr = [];
-        for(var i=0; i<elevator.buttonStates.length; i++) {
+        for(var i=0, arr=[]; i<elevator.buttonStates.length; i++) {
             if(elevator.buttonStates[i]) {
                 arr.push(i);
             }
