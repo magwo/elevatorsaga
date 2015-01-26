@@ -1,0 +1,58 @@
+{
+  "name": "elevatorsaga",
+  "author": "Magnus Wolffelt <magnus.wolffelt@gmail.com>",
+  "contributors": [
+    {
+      "name": "Bill Ruddock",
+      "email": "<bill.ruddock@gmail.com>"
+    },
+    {
+      "name": "Christian Genco",
+      "email": "<christian@gen.co>"
+    },
+    {
+      "name": "Gustav Ernberg",
+      "email": "<github@minpunkt.se>"
+    },
+    {
+      "name": "Jeffrey Long",
+      "email": "<jlong@groupon.com>"
+    },
+    {
+      "name": "Magnus Wolffelt",
+      "email": "<magnus.wolffelt@gmail.com>"
+    },
+    {
+      "name": "Rory O’Kane",
+      "email": "<rory@roryokane.com>"
+    },
+    {
+      "name": "SignpostMarv",
+      "email": "<me@signpostmarv.name>"
+    },
+    {
+      "name": "bumbu",
+      "email": "<bmbalex@gmail.com>"
+    },
+    {
+      "name": "cyclobs",
+      "email": "<kyle.appleyard@yahoo.com.au>"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magwo/elevatorsaga.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magwo/elevatorsaga/issues"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-bowercopy": "^1.2.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "~0.6.1"
+  }
+}

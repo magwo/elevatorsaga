@@ -1,0 +1,28 @@
+{
+  "name": "elevatorsaga",
+  "version": "1.2.6",
+  "homepage": "http://play.elevatorsaga.com/",
+  "authors": [
+    "Magnus Wolffelt <magnus.wolffelt@gmail.com>"
+  ],
+  "description": "The elevator programming game",
+  "main": "src/index.html",
+  "keywords": [
+    "javascript",
+    "game",
+    "elevator",
+    "saga"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "fontawesome": "4.1.0",
+    "jquery": "2.1.1",
+    "lodash": "2.4.1",
+    "riot": "1.0.2"
+  }
+}
