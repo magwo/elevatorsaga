@@ -33,8 +33,9 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
     }
 
     elevator.userEntering = function(user) {
+        var randomOffset = _.random(elevator.userSlots.length - 1);
         for(var i=0; i<elevator.userSlots.length; i++) {
-            var slot = elevator.userSlots[i];
+            var slot = elevator.userSlots[(i + randomOffset) % elevator.userSlots.length];
             if(slot.user === null) {
                 slot.user = user;
                 return slot.pos;
