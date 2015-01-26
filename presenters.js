@@ -60,8 +60,8 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
     $world.append(_.map(world.floors, function(f) {
         var $floor = $(riot.render(floorTempl, f));
         f.on("buttonstate_change", function(buttonStates) {
-            $floor.find(".up").removeClass("activated").addClass(buttonStates.up ? "activated" : "");
-            $floor.find(".down").removeClass("activated").addClass(buttonStates.down ? "activated" : "");
+            $floor.find(".up").toggleClass("activated", buttonStates.up !== "");
+            $floor.find(".down").toggleClass("activated", buttonStates.down !== "");
         });
         $floor.find(".up").on("click", function() {
             f.pressUpButton();
@@ -92,6 +92,10 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         });
         e.on("floor_buttons_changed", function(states) {
             $elevator.find(".buttonindicator").html(renderButtons(states));
+        });
+        e.on("indicatorstate_change", function(indicatorStates) {
+            $elevator.find(".up").toggleClass("activated", indicatorStates.up);
+            $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
         return $elevator;
     }));

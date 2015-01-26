@@ -15,6 +15,7 @@ var createWorldCreator = function() {
     creator.createElevators = function(elevatorCount, floorCount, floorHeight) {
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
+            // Move to right x position
             elevator.moveTo(200+60*i, null);
             elevator = asElevator(elevator, 2.6, floorCount, floorHeight);
             elevator.setFloorPosition(0);
@@ -135,12 +136,6 @@ var createWorldCreator = function() {
             });
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt) });
             _.each(world.users, function(u) {
-                if(u.done && typeof u.cleanupFunction === "function") {
-                    // Be careful using "off" riot function from event handlers - it alters 
-                    // riot's callback list resulting in uncalled event handlers.
-                    u.cleanupFunction();
-                    u.cleanupFunction = null;
-                }
                 u.update(dt);
                 world.floors[u.currentFloor].maxWaitTime = Math.max(world.floors[u.currentFloor].maxWaitTime, world.elapsedTime - u.spawnTimestamp);
                 world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
@@ -185,13 +180,19 @@ var createWorldController = function(dtMax) {
     controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
         controller.isPaused = true;
         controller.challengeEnded = false;
-        try {
-            codeObj.init(world.elevatorInterfaces, world.floors);
-        } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
-        world.init();
         var lastT = null;
+        var firstUpdate = true;
         var updater = function(t) {
             if(!controller.isPaused && !world.challengeEnded && lastT !== null) {
+                if(firstUpdate) {
+                    firstUpdate = false;
+                    // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
+                    try {
+                        codeObj.init(world.elevatorInterfaces, world.floors);
+                        world.init();
+                    } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
+                }
+
                 var dt = (t - lastT);
                 var scaledDt = dt * 0.001 * controller.timeScale;
                 scaledDt = Math.min(scaledDt, dtMax * 40); // Prevent unhealthy looping

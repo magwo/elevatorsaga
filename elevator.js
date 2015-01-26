@@ -179,7 +179,6 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
 
     elevator.getLoadFactor = function() {
         var load = _.reduce(elevator.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
-        console.log(load);
         return load / 400.0;
     }
 
@@ -275,6 +274,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight) {
         if(elevator.empty()){
             elevator.trigger('empty');
         }
+    });
+
+    elevator.on("change:goingUpIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
+    });
+
+    elevator.on("change:goingDownIndicator", function(value){
+        elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
 
     elevator.destinationY = elevator.getYPosOfFloor(elevator.currentFloor);

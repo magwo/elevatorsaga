@@ -53,9 +53,9 @@ dl dd {
 
 
 .container {
-    width: 1280px;
+    width: 1220px;
     margin: 0 auto;
-    padding: 20px 40px 40px 40px;
+    padding: 20px 0 40px 0;
     background-color: #BFBD9F;
 }
 
@@ -149,22 +149,16 @@ button.right {
     padding-top: 10px;
 }
 
-.code {
-    width: 1280px;
+.CodeMirror {
+    font: 14px Consolas, Monaco, monospace;
+    width: 1220px;
     margin: 10px auto;
-}
-
-.code textarea {
-    font: 13px Consolas, Monaco, monospace;
-    resize: vertical;
-    height: 900px;
-    min-height: 150px;
-    max-height: 1000px;
+    height: 320px;
 }
 
 .world {
     position: relative;
-    width: 1280px;
+    width: 1220px;
     background-color: #333;
     padding: 0;
     overflow: hidden;
@@ -173,7 +167,7 @@ button.right {
 .innerworld {
     position: relative;
     height: 100%;
-    width: 998px;
+    width: 938px;
     border-right: 1px solid black;
     border-left: 1px solid black;
     font-family: Arial, Helvetica, sans-serif;
@@ -255,6 +249,28 @@ button.right {
     width: 40px;
     height: 46px;
     z-index: 1;
+}
+
+.elevator .directionindicator {
+    position: absolute;
+    font-size: 10px;
+    top: 3px;
+}
+
+.elevator .directionindicator.directionindicatorup {
+    left: 2px;
+}
+
+.elevator .directionindicator.directionindicatordown {
+    right: 2px;
+}
+
+.elevator .directionindicator .fa{
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.elevator .directionindicator .fa.activated{
+    color: #33ff44;
 }
 
 .elevator .floorindicator {
