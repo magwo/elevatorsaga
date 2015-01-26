@@ -246,7 +246,6 @@ button.right {
 .elevator {
     background-color: #4F8686;
     border: 2px solid white;
-    width: 40px;
     height: 46px;
     z-index: 1;
 }
