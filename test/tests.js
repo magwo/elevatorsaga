@@ -321,6 +321,12 @@ describe("Elevator object", function() {
 		e.goingDownIndicator = false;
 		expect(e.isSuitableForTravelBetween(20, 0)).toBe(false);
 	});
+
+	it("reports pressed floor buttons", function() {
+		e.pressFloorButton(2);
+		e.pressFloorButton(3);
+		expect(e.getPressedFloors()).toEqual([2,3]);
+	});
 });
 
 
