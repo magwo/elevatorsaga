@@ -131,6 +131,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
         elevator.destinationY = elevator.getYPosOfFloor(floor);
     }
 
+    elevator.getFirstPressedFloor = function() {
+        deprecationWarning("getFirstPressedFloor");
+        for(var i=0; i<elevator.buttonStates.length; i++) {
+            if(elevator.buttonStates[i]) { return i; }
+        }
+        return 0;
+    }
+
     elevator.getPressedFloors = function() {
         var arr = [];
         for(var i=0; i<elevator.buttonStates.length; i++) {

@@ -27,6 +27,10 @@ if(typeof Math.sign === "undefined") {
     Math.sign = sign;
 }
 
+var deprecationWarning = function(name) {
+    console.warn("You are using a deprecated feature scheduled for removal: " + name);
+}
+
 
 var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     return function(val) {
