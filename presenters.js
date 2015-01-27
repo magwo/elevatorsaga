@@ -22,8 +22,8 @@ var presentStats = function($parent, world, statsTempl) {
 
 var presentChallenge = function($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
     var $challenge = $(riot.render(challengeTempl, {
-        challenge: challenge, 
-        num: challengeNum, 
+        challenge: challenge,
+        num: challengeNum,
         timeScale: worldController.timeScale.toFixed(0) + "x",
         startButtonText: world.challengeEnded ? "<i class='fa fa-repeat'></i> Restart" : (worldController.isPaused ? "Start" : "Pause")
     }));
@@ -102,7 +102,7 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
 
     world.on("new_user", function(user) {
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
-        
+
         user.on("new_state", function() {
             $user.css({left: user.worldX, top: user.worldY});
             if(user.done) { $user.addClass("leaving"); }

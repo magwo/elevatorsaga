@@ -128,7 +128,7 @@ $(function() {
         console.log("World raised code error", e);
         editor.trigger("code_error", e);
     });
-    
+
     console.log(app.worldController);
     app.worldCreator = createWorldCreator();
     app.world = undefined;
@@ -168,7 +168,7 @@ $(function() {
                 app.worldController.setPaused(true);
                 if(challengeStatus) {
                     presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
-                    
+
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
                 }

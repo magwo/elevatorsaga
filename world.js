@@ -70,8 +70,8 @@ var createWorldCreator = function() {
         console.log("Options after default are", options);
         var world = {floorHeight: options.floorHeight, transportedCounter: 0};
         riot.observable(world);
-        
-        
+
+
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
@@ -251,4 +251,3 @@ var createWorldController = function(dtMax) {
 
     return controller;
 };
-

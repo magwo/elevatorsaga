@@ -11,7 +11,7 @@ var timeForwarder = function(dt, stepSize, fn) {
 describe("Movable object", function() {
 	var m = null;
 	var movableHandlers = null;
-	
+
 	beforeEach(function() {
 		m = asMovable({});
 		movableHandlers = {
@@ -341,7 +341,7 @@ describe("API", function() {
 			spyOn(handlers, key).and.callThrough();
 		});
 	});
-	
+
 	describe("Elevator interface", function() {
 		var e = null;
 		var elevInterface = null;
@@ -426,5 +426,3 @@ describe("API", function() {
 		});
 	});
 });
-
-

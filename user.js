@@ -32,7 +32,7 @@ var asUser = function(user, weight, floorCount, floorHeight) {
             // Not suitable for travel - don't use this elevator
             return;
         }
-        
+
         var pos = elevator.userEntering(user);
         if(pos) {
             // Success
