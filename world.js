@@ -131,7 +131,7 @@ var createWorldCreator = function() {
                         eventName === "down_button_pressed" && elevator.goingDownIndicator) {
 
                         // Elevator is heading in correct direction, check for suitability
-                        if(elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
+                        if(elevator.currentFloor === floor.level && elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
                             // Potentially suitable to get into
                             // Use the interface queue functionality to queue up this action
                             world.elevatorInterfaces[elevIndex].goToFloor(floor.level, true);
