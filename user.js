@@ -13,6 +13,7 @@ var asUser = function(user, weight, floorCount, floorHeight) {
         user.destinationFloor = destinationFloorNum;
         user.moveTo(null, floorPosY);
         user.pressFloorButton(floor);
+        floor.users.push(user);
     };
 
     user.pressFloorButton = function(floor) {
@@ -32,11 +33,14 @@ var asUser = function(user, weight, floorCount, floorHeight) {
             // Not suitable for travel - don't use this elevator
             return;
         }
-        
+
         var pos = elevator.userEntering(user);
         if(pos) {
             // Success
             user.setParent(elevator);
+            if(floor.users.indexOf(user) > -1){
+                floor.users.splice(floor.users.indexOf(user), 1);
+            }
             user.trigger("entered_elevator", elevator);
 
             user.moveToOverTime(pos[0], pos[1], 1, undefined, function() {
@@ -67,6 +71,13 @@ var asUser = function(user, weight, floorCount, floorHeight) {
             user.pressFloorButton(floor);
         }
     };
+
+    user.on('entered_elevator', function(elevator){
+        elevator.trigger('user_entered', user);
+    });
+    user.on('exited_elevator', function(elevator){
+        elevator.trigger('user_exited', user);
+    });
 
     return user;
 }

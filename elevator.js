@@ -109,6 +109,10 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
             elevator.isMoving = false;
             elevator.handleDestinationArrival();
         }
+
+        if(elevator.isOnAFloor() && !elevator.full()){
+            elevator.trigger('entrance_available', movable);
+        }
     }
 
     elevator.handleDestinationArrival = function() {
@@ -197,6 +201,54 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
         return true;
     }
 
+    elevator.full = function(){
+        for(var i=0; i<elevator.userSlots.length; i++) {
+            var slot = elevator.userSlots[i];
+            if(slot.user === null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    elevator.empty = function(){
+        for(var i=0; i<elevator.userSlots.length; i++) {
+            var slot = elevator.userSlots[i];
+            if(slot.user !== null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    elevator.getDestinationFloors = function(sorter){
+        var
+            floorCounts = {},
+            floors = []
+        ;
+
+        sorter = sorter || function(a, b){
+            return floorCounts[b] - floorCounts[a];
+        };
+
+        for(var i=0; i<elevator.userSlots.length; i++) {
+            var slot = elevator.userSlots[i];
+            if(slot.user !== null) {
+                if(!(slot.user.destinationFloor in floorCounts)){
+                    floorCounts[slot.user.destinationFloor] = 0;
+                }
+                ++floorCounts[slot.user.destinationFloor];
+                if(floors.indexOf(slot.user.destinationFloor) == -1){
+                    floors.push(slot.user.destinationFloor);
+                }
+            }
+        }
+
+        floors.sort(sorter);
+
+        return floors;
+    }
+
 
     elevator.on("new_state", function() {
         // Recalculate the floor number etc
@@ -228,6 +280,18 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
                     }
                 }
             }
+        }
+    });
+
+    elevator.on('user_entered', function(){
+        if(elevator.full()){
+            elevator.trigger('full');
+        }
+    });
+
+    elevator.on('user_exited', function(){
+        if(elevator.empty()){
+            elevator.trigger('empty');
         }
     });
 
