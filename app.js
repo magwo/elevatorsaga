@@ -2,7 +2,7 @@
 window.testingImpl = '{\n    init: function(elevators, floors) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.goToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.goToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.goToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}';
 
 var createEditor = function() {
-    var lsKey = "elevatorCrushCode_v5"
+    var lsKey = "elevatorCrushCode_v5";
 
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
@@ -14,7 +14,7 @@ var createEditor = function() {
         extraKeys: {
             // the following Tab key mapping is from http://codemirror.net/doc/manual.html#keymaps
             Tab: function(cm) {
-                var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+                var spaces = new Array(cm.getOption("indentUnit") + 1).join(" ");
                 cm.replaceSelection(spaces);
             }
         }
@@ -60,12 +60,15 @@ var createEditor = function() {
         autoSaver();
     });
 
-    returnObj = riot.observable({});
+    var returnObj = riot.observable({});
     returnObj.getCodeObj = function() {
         console.log("Getting code...");
         var code = cm.getValue();
+        var obj;
         try {
+            /* jslint evil:true */
             obj = eval("(" + code + ")");
+            /* jshint evil:false */
             console.log("Code is", obj);
             if(typeof obj.init !== "function") {
                 throw "Code must contain an init function";
@@ -88,7 +91,7 @@ var createEditor = function() {
         returnObj.trigger("apply_code");
     });
     return returnObj;
-}
+};
 
 
 var createParamsUrl = function(current, overrides) {
@@ -141,7 +144,7 @@ $(function() {
     };
 
     app.startChallenge = function(challengeIndex, autoStart) {
-        if(typeof app.world != "undefined") {
+        if(typeof app.world !== "undefined") {
             app.world.unWind();
             // TODO: Investigate if memory leaks happen here
         }
@@ -208,7 +211,7 @@ $(function() {
             } else if(key === "timescale") {
                 timeScale = parseFloat(val);
             } else if(key === "devtest") {
-                editor.setCode(testingImpl);
+                editor.setCode(window.testingImpl);
             } else if(key === "fullscreen") {
                 makeDemoFullscreen();
             }
