@@ -208,11 +208,12 @@ button.right {
 .feedback {
     position: absolute;
     width: 1280px;
-    height: 800px;
+    height: 2000px;
     padding-top: 20px;
     text-align: center;
     background-color: rgba(44,44,44, 0.6);
     z-index: 5;
+    overflow: hidden;
 }
 
 .movable {
@@ -285,14 +286,15 @@ button.right {
     display: inline-block;
     position: absolute;
     top: 15px;
-    width: 100%;
+    width: 95%;
     text-align: center;
     font-size: 8px;
+    line-height: 8px;
     color: rgba(255, 255, 255, 0.3);
 }
 .elevator .buttonpress {
     cursor: pointer;
-    width: 4px;
+    margin: 0;
     display: inline-block;
 }
 .elevator .buttonpress.activated {
@@ -311,7 +313,7 @@ button.right {
 .floor .buttonindicator {
     cursor: pointer;
     line-height: 50px;
-    padding-left: 36px;
+    padding-left: 50px;
     color: rgba(255, 255, 255, 0.2);
 }
 .floor .buttonindicator .activated {
