@@ -3,7 +3,7 @@ var clearAll = function($elems) {
     _.each($elems, function($elem) {
         $elem.empty();
     });
-}
+};
 
 
 var presentStats = function($parent, world, statsTempl) {
@@ -44,14 +44,14 @@ var presentChallenge = function($parent, challenge, app, world, worldController,
         var timeScale = Math.round(worldController.timeScale / 1.618);
         worldController.setTimeScale(timeScale);
     });
-}
+};
 
 var presentFeedback = function($parent, feedbackTempl, world, title, message, url) {
     $parent.html(riot.render(feedbackTempl, {title: title, message: message, url: url, paddingTop: world.floors.length * world.floorHeight * 0.2}));
     if(!url) {
         $parent.find("a").remove();
     }
-}
+};
 
 var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
 
@@ -75,7 +75,7 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
     $world.append(_.map(world.elevators, function(e) {
         var renderButtons = function(states) {
             return _.map(states, function(b, i) {
-                return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""})
+                return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
             }).join("");
         };
         var buttonsHtml = renderButtons(e.buttonStates);
@@ -112,7 +112,7 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         });
         $world.append($user);
     });
-}
+};
 
 
 var presentCodeStatus = function($parent, templ, error) {
@@ -126,9 +126,9 @@ var presentCodeStatus = function($parent, templ, error) {
     }
     var status = riot.render(templ, {errorMessage: errorMessage, errorDisplay: errorDisplay, successDisplay: successDisplay});
     $parent.html(status);
-}
+};
 
 var makeDemoFullscreen = function() {
     $("body .container > *").not(".world").css("visibility", "hidden");
     $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
-}
+};
