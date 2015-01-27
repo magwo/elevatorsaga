@@ -21,11 +21,11 @@ var asFloor = function(obj, floorLevel, yPosition) {
     }
 
     floor.elevatorAvailable = function(elevator) {
-        if(elevator.goingUpIndicator) {
+        if(elevator.goingUpIndicator && floor.buttonStates.up) {
             floor.buttonStates.up = "";
             floor.trigger("buttonstate_change", floor.buttonStates);
         }
-        if(elevator.goingDownIndicator) {
+        if(elevator.goingDownIndicator && floor.buttonStates.down) {
             floor.buttonStates.down = "";
             floor.trigger("buttonstate_change", floor.buttonStates);
         }

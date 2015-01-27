@@ -119,6 +119,29 @@ var createWorldCreator = function() {
             });
         });
 
+        // This will cause elevators to "re-arrive" at floors if someone presses an
+        // appropriate button on the floor before the elevator has left.
+        _.each(world.floors, function(floor) {
+            floor.on("up_button_pressed down_button_pressed", function(eventName) {
+                // Need randomize iteration order or we'll tend to fill upp first elevator
+                _.each(_.sample(_.range(world.elevators.length), world.elevators.length), function(elevIndex) {
+                    var elevator = world.elevators[elevIndex];
+                    if(
+                        eventName === "up_button_pressed" && elevator.goingUpIndicator ||
+                        eventName === "down_button_pressed" && elevator.goingDownIndicator) {
+
+                        // Elevator is heading in correct direction, check for suitability
+                        if(elevator.currentFloor === floor.level && elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
+                            // Potentially suitable to get into
+                            // Use the interface queue functionality to queue up this action
+                            world.elevatorInterfaces[elevIndex].goToFloor(floor.level, true);
+                            return false;
+                        }
+                    }
+                });
+            });
+        });
+
         var elapsedSinceSpawn = 1.001/options.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
 

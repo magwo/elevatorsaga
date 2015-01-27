@@ -188,6 +188,15 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
         return load / (elevator.maxUsers * 100);
     }
 
+    elevator.isFull = function() {
+        for(var i=0; i<elevator.userSlots.length; i++) { if(elevator.userSlots[i].user === null) { return false; } }
+        return true;
+    }
+    elevator.isEmpty = function() {
+        for(var i=0; i<elevator.userSlots.length; i++) { if(elevator.userSlots[i].user !== null) { return false; } }
+        return true;
+    }
+
 
     elevator.on("new_state", function() {
         // Recalculate the floor number etc
