@@ -327,6 +327,7 @@ describe("Elevator object", function() {
 		e.pressFloorButton(3);
 		expect(e.getPressedFloors()).toEqual([2,3]);
 	});
+
 });
 
 
@@ -415,6 +416,16 @@ describe("API", function() {
 			expect(elevInterface.goingUpIndicator()).toBe(false);
 			expect(elevInterface.goingDownIndicator()).toBe(false);
 		});
+        
+        it("normalizes load factor", function() {
+            var fnNewUser = function(){ return {weight:_.random(55, 100)}; },
+                fnEnterElevator = function(user){ e.userEntering(user); };
+                
+            _.chain(_.range(20)).map(fnNewUser).forEach(fnEnterElevator);
+            var load = elevInterface.loadFactor();
+            expect(load >= 0 && load <= 1).toBeTruthy();
+            console.log(load);
+        });
 	});
 });
 
