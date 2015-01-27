@@ -3,13 +3,13 @@ var EPSILON = 0.00001;
 
 var linearInterpolate = function(value0, value1, x) {
     return value0 + (value1 - value0) * x;
-}
+};
 var powInterpolate = function(value0, value1, x, a) {
     return value0 + (value1 - value0) * Math.pow(x, a) / (Math.pow(x, a) + Math.pow(1-x, a));
-}
+};
 var coolInterpolate = function(value0, value1, x) {
     return powInterpolate(value0, value1, x, 1.3);
-}
+};
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
 var asMovable = function(obj) {
@@ -35,7 +35,7 @@ var asMovable = function(obj) {
         movable.x = position[0];
         movable.y = position[1];
         movable.trigger('new_state');
-    }
+    };
 
     movable.moveTo = function(newX, newY) {
         if(newX === null) { newX = movable.x; }
@@ -45,14 +45,14 @@ var asMovable = function(obj) {
 
     movable.isBusy = function() {
         return movable.currentTask !== null;
-    }
+    };
 
     movable.makeSureNotBusy = function() {
         if(movable.isBusy()) {
             console.error("Attempt to use movable while it was busy", obj);
             throw({message: "Object is busy - you should use callback", obj: obj});
         }
-    }
+    };
 
     movable.wait = function(millis, cb) {
         movable.makeSureNotBusy();
@@ -118,18 +118,18 @@ var asMovable = function(obj) {
             } else if(speed < maxSpeed) {
                 speed = Math.min(maxSpeed, speed + constantAcceleration * dt);
             }
-            
+
             position += speed * dt;
             var posFactor = position / distanceToTravel;
             movable.setPosition([linearInterpolate(origX, newX, posFactor), linearInterpolate(origY, newY, posFactor)]);
-        }
+        };
     };
 
     movable.update = function(dt) {
         if(movable.currentTask !== null) {
             movable.currentTask(dt);
         }
-    }
+    };
 
     movable.getWorldPosition = function() {
         var resultX = movable.x;
@@ -144,15 +144,16 @@ var asMovable = function(obj) {
     };
 
     movable.setParent = function(movableParent) {
+        var objWorld;
         if(movableParent === null) {
             if(movable.parent !== null) {
-                var objWorld = movable.getWorldPosition();
+                objWorld = movable.getWorldPosition();
                 movable.parent = null;
                 movable.setPosition(objWorld);
             }
         } else {
             // Parent is being set a non-null movable
-            var objWorld = movable.getWorldPosition();
+            objWorld = movable.getWorldPosition();
             var parentWorld = movableParent.getWorldPosition();
             movable.parent = movableParent;
             movable.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
