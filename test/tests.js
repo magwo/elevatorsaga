@@ -327,7 +327,6 @@ describe("Elevator object", function() {
 		e.pressFloorButton(3);
 		expect(e.getPressedFloors()).toEqual([2,3]);
 	});
-
 });
 
 
