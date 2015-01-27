@@ -21,7 +21,7 @@ var asUser = function(user, weight, floorCount, floorHeight) {
         } else {
             floor.pressUpButton();
         }
-    }
+    };
 
     user.elevatorAvailable = function(elevator, floor) {
         if(user.done || user.parent !== null || user.isBusy()) {
@@ -69,4 +69,4 @@ var asUser = function(user, weight, floorCount, floorHeight) {
     };
 
     return user;
-}
+};
