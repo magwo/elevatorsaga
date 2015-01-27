@@ -16,7 +16,7 @@ describe("Movable object", function() {
 		m = asMovable({});
 		movableHandlers = {
 			someHandler: function() {},
-		}
+		};
 		spyOn(movableHandlers, "someHandler").and.callThrough();
 	});
 
@@ -87,7 +87,7 @@ describe("World controller", function() {
 			register: function(cb) { currentCb = cb; },
 			trigger: function() { currentT += timeStep; if(currentCb !== null) { currentCb(currentT); } }
 		};
-	}
+	};
 	beforeEach(function() {
 		controller = createWorldController(DT_MAX);
 		fakeWorld = { update: function(dt) {}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
@@ -177,7 +177,7 @@ describe("Promise object", function() {
 			someHandler: function() {},
 			otherHandler: function() {},
 			thirdHandler: function() {}
-		}
+		};
 		$.each(handlers, function(key, value) {
 			spyOn(handlers, key).and.callThrough();
 		});
@@ -278,7 +278,7 @@ describe("Elevator object", function() {
 	it("moves to floors specified", function() {
 		_.each(_.range(0, floorCount-1), function(floor) {
 			e.goToFloor(floor);
-			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			var expectedY = (floorHeight * (floorCount-1)) - floorHeight*floor;
 			expect(e.y).toBe(expectedY);
 			expect(e.currentFloor).toBe(floor);
@@ -291,10 +291,10 @@ describe("Elevator object", function() {
 		expect(e.currentFloor).toBe(0);
 		var originalY = e.y;
 		e.goToFloor(1);
-		timeForwarder(0.2, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+		timeForwarder(0.2, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 		expect(e.y).not.toBe(originalY);
 		e.goToFloor(0);
-		timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);})
+		timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 		expect(e.y).toBe(originalY);
 		expect(e.currentFloor).toBe(0);
 	});
@@ -392,7 +392,7 @@ describe("API", function() {
 			elevInterface.stop();
 			timeForwarder(10, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			expect(e.y).not.toBe(whenMovingY);
-			expect(e.y).not.toBe(originalY)
+			expect(e.y).not.toBe(originalY);
 		});
 
 		it("stores going up and going down properties", function() {
