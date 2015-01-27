@@ -41,19 +41,19 @@ var createWorldCreator = function() {
             user.displayType = "male";
         }
         return user;
-    }
+    };
 
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
         user.moveTo(105+_.random(40), 0);
-        var currentFloor = _.random(1) == 0 ? 0 : _.random(floorCount - 1);
+        var currentFloor = _.random(1) === 0 ? 0 : _.random(floorCount - 1);
         var destinationFloor;
         if(currentFloor === 0) {
             // Definitely going up
             destinationFloor = _.random(1, floorCount - 1);
         } else {
             // Usually going down, but sometimes not
-            if(_.random(10) == 0) {
+            if(_.random(10) === 0) {
                 destinationFloor = (currentFloor + _.random(1, floorCount - 1)) % floorCount;
             } else {
                 destinationFloor = 0;
@@ -61,7 +61,7 @@ var createWorldCreator = function() {
         }
         user.appearOnFloor(floors[currentFloor], destinationFloor);
         return user;
-    }
+    };
 
     creator.createWorld = function(options) {
         console.log("Creating world with options", options);
@@ -109,7 +109,7 @@ var createWorldCreator = function() {
                 // Notify floors first because overflowing users
                 // will press buttons again
                 _.each(world.floors, function(floor, i) {
-                    if(elevator.currentFloor == i) {
+                    if(elevator.currentFloor === i) {
                         floor.elevatorAvailable(elevator);
                     }
                 });
@@ -158,7 +158,7 @@ var createWorldCreator = function() {
                 registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
             }
 
-            _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt) });
+            _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt); });
             _.each(world.users, function(u) {
                 u.update(dt);
                 world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
@@ -171,18 +171,17 @@ var createWorldCreator = function() {
         world.updateDisplayPositions = function() {
             _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
             _.each(world.users, function(u) { u.updateDisplayPosition(); });
-        }
+        };
 
 
         world.unWind = function() {
             console.log("Unwinding", world);
             _.each(world.elevators.concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), function(obj) {
                 obj.off("*");
-                delete obj; // (Wat)
             });
             world.challengeEnded = true;
             world.elevators = world.elevatorInterfaces = world.users = world.floors = [];
-        }
+        };
 
         world.init = function() {
             // Checking the floor queue of the elevators triggers the idle event here
@@ -248,7 +247,7 @@ var createWorldController = function(dtMax) {
     controller.setTimeScale = function(timeScale) {
         controller.timeScale = timeScale;
         controller.trigger("timescale_changed");
-    }
+    };
 
     return controller;
 };
