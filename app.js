@@ -2,7 +2,7 @@
 window.testingImpl = '{\n    init: function(elevators, floors) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.goToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.goToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.goToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}';
 
 var createEditor = function() {
-    var lsKey = "elevatorCrushCode_v5"
+    var lsKey = "elevatorCrushCode_v5";
 
     var cm = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
@@ -100,6 +100,7 @@ var createParamsUrl = function(current, overrides) {
 
 
 $(function() {
+    var tsKey = "elevatorTimeScale";
     var editor = createEditor();
 
     var params = {};
@@ -155,6 +156,7 @@ $(function() {
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
         app.worldController.on("timescale_changed", function() {
+            localStorage.setItem(tsKey, app.worldController.timeScale);
             presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         });
 
@@ -194,7 +196,7 @@ $(function() {
         }, {});
         var requestedChallenge = 0;
         var autoStart = false;
-        var timeScale = 2.0;
+        var timeScale = parseFloat(localStorage.getItem(tsKey)) || 2.0;
         _.each(params, function(val, key) {
             if(key === "challenge") {
                 requestedChallenge = _.parseInt(val) - 1;
