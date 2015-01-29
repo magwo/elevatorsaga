@@ -9,7 +9,7 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
@@ -22,7 +22,7 @@ var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireUserCountWithinMoves = function(userCount, moveLimit) {
@@ -35,15 +35,15 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
                 return null;
             }
         }
-    }
+    };
 };
 
 var requireDemo = function() {
     return {
         description: "Perpetual demo",
         evaluate: function() { return null; }
-    }
-}
+    };
+};
 
 var createWeightedSelector = function(weights) {
     var sum = _.reduce(weights, function(sum, w) { return sum+w; }, 0.0);
@@ -54,10 +54,10 @@ var createWeightedSelector = function(weights) {
         var selectedIndex = 0;
         _.each(weights, function(w, i) { summed += w; if(num < summed) { selectedIndex = i; return false; } });
         return selectedIndex;
-    }
-}
+    };
+};
 
-
+/* jshint laxcomma:true */
 var challenges = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}
@@ -80,5 +80,6 @@ var challenges = [
     ,{options: {floorCount: 12, elevatorCount: 4, spawnRate: 1.4, elevatorCapacities: [5,10]}, condition: requireUserCountWithinTime(70, 80)}
     ,{options: {floorCount: 21, elevatorCount: 5, spawnRate: 1.9, elevatorCapacities: [10]}, condition: requireUserCountWithinTime(110, 80)}
 
-    ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 2.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
+    ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
 ];
+/* jshint laxcomma:false */
