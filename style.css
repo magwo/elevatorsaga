@@ -99,6 +99,10 @@ button.right {
   to { visibility: hidden; }
 }
 
+.invisible {
+    visibility: hidden;
+}
+
 #save_message {
     color: #555;
     font-size: 12px;

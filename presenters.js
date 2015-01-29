@@ -71,6 +71,8 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
         });
         return $floor;
     }));
+    $world.find(".floor").first().find(".down").addClass("invisible");
+    $world.find(".floor").last().find(".up").addClass("invisible");
 
     $world.append(_.map(world.elevators, function(e) {
         var renderButtons = function(states) {
