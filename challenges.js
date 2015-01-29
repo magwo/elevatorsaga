@@ -80,6 +80,6 @@ var challenges = [
     ,{options: {floorCount: 12, elevatorCount: 4, spawnRate: 1.4, elevatorCapacities: [5,10]}, condition: requireUserCountWithinTime(70, 80)}
     ,{options: {floorCount: 21, elevatorCount: 5, spawnRate: 1.9, elevatorCapacities: [10]}, condition: requireUserCountWithinTime(110, 80)}
 
-    ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 2.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
+    ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
 ];
 /* jshint laxcomma:false */
