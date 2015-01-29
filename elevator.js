@@ -5,6 +5,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
 
     var ACCELERATION = floorHeight * 2.1;
     var DECELERATION = floorHeight * 2.6;
+    var BONUS_DECELERATION_FACTOR = 1.1;
     var MAXSPEED = floorHeight * speedFloorsPerSec;
 
     elevator.maxUsers = maxUsers || 4;
@@ -83,7 +84,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
                     // Slow down
                     // Allow a certain factor of extra breaking, to enable a smooth breaking movement after detecting overshoot
                     var requiredDeceleration = accelerationNeededToAchieveChangeDistance(elevator.velocityY, 0.0, destinationDiff);
-                    var deceleration = Math.min(DECELERATION*1.1, Math.abs(requiredDeceleration));
+                    var deceleration = Math.min(DECELERATION*BONUS_DECELERATION_FACTOR, Math.abs(requiredDeceleration));
                     elevator.velocityY -= directionSign * deceleration * dt;
                 } else {
                     // Speed up (or keep max speed...)
@@ -225,6 +226,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
                     }
                     // Destination floor might have changed during the event triggering...
                     if(elevator.getDestinationFloor() !== elevator.nextCleanlyStoppableFloor) {
+                        console.log("Next cleanly", elevator.nextCleanlyStoppableFloor,nextCleanlyStoppableFloor);
                         elevator.nextCleanlyStoppableFloor = nextCleanlyStoppableFloor;
                     }
                 }
