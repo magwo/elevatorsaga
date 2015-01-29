@@ -103,6 +103,7 @@ var createParamsUrl = function(current, overrides) {
 
 
 $(function() {
+    var tsKey = "elevatorTimeScale";
     var editor = createEditor();
 
     var params = {};
@@ -158,6 +159,7 @@ $(function() {
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
         app.worldController.on("timescale_changed", function() {
+            localStorage.setItem(tsKey, app.worldController.timeScale);
             presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         });
 
@@ -197,7 +199,7 @@ $(function() {
         }, {});
         var requestedChallenge = 0;
         var autoStart = false;
-        var timeScale = 2.0;
+        var timeScale = parseFloat(localStorage.getItem(tsKey)) || 2.0;
         _.each(params, function(val, key) {
             if(key === "challenge") {
                 requestedChallenge = _.parseInt(val) - 1;
