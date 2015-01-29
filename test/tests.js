@@ -304,7 +304,7 @@ describe("Elevator object", function() {
 		e.setFloorPosition(0);
 		var passingFloorEventCount = 0;
 		e.on("passing_floor", function(floorNum, direction) {
-			expect(floorNum).toBe(1);
+			expect(floorNum).toBe(1, "floor being passed");
 			expect(direction).toBe("up");
 			passingFloorEventCount++;
 			e.goToFloor(e.getExactFutureFloorIfStopped());
@@ -312,8 +312,7 @@ describe("Elevator object", function() {
 		e.goToFloor(2);
 		timeForwarder(3.0, 0.01401, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 		expect(passingFloorEventCount).toBe(1, "event count");
-
-		expect(e.getExactCurrentFloor()).toBe(1, "current floor");
+		expect(e.getExactCurrentFloor()).toBeLessThan(1.15, "current floor");
 	});
 
 	it("is correctly aware of it being on a floor", function() {
