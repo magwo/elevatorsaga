@@ -75,9 +75,9 @@
                 <dt><pre><code>elevator.on("idle", function() { elevator.goToFloor(0); });</code></pre></dt>
                     <dd>Listen for the "idle" event issued by the elevator, when the task queue has been emptied and the elevator is doing nothing. In this example we tell it to move to floor 0.</dd>
                 <dt><pre><code>elevator.on("floor_button_pressed", function(floorNum) { ... } );</code></pre></dt>
-                    <dd>Listen for the "floor_button_pressed" event, issued when a user pressed a button inside the elevator. This indicates that the user wants to go to that floor.</dd>
+                    <dd>Listen for the "floor_button_pressed" event, issued when a passenger pressed a button inside the elevator. This indicates that the passenger wants to go to that floor.</dd>
                 <dt><pre><code>floor.on("up_button_pressed", function() { ... } );</code></pre></dt>
-                    <dd>Listen for the "up_button_pressed" event, issued when a user pressed the up button on the floor they are waiting on. This indicates that the user wants to go to another floor.</dd>
+                    <dd>Listen for the "up_button_pressed" event, issued when a passenger pressed the up button on the floor they are waiting on. This indicates that the passenger wants to go to another floor.</dd>
             </dl>
 
             <h2 id="docs">API documentation</h2>
