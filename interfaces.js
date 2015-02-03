@@ -40,6 +40,7 @@ var asElevatorInterface = function(obj, elevator, floorCount) {
     elevatorInterface.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }; // Undocumented and deprecated, will be removed
     elevatorInterface.getPressedFloors = function() { return elevator.getPressedFloors(); };
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
+    elevatorInterface.maxPassengerCount = function() { return elevator.maxUsers; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
