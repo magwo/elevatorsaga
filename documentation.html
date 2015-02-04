@@ -87,7 +87,7 @@
                 <tbody>
                     <tr><td>goToFloor</td><td>function</td><td><small>Queue the elevator to go to specified floor number. If you specify true as second argument, the elevator will go to that floor directly, and then go to any other queued floors.</small></td><td><pre><code>elevator.goToFloor(3); // Do it after anything else
 elevator.goToFloor(2, true); // Do it before anything else</code></pre></td></tr>
-                    <tr><td>stop</td><td>function</td><td><small>Clear the destination queue and stop the elevator if it is moving. Note that you normally don't need to stop elevators - it is intended for advanced solutions with in-transit rescheduling logic. Also, not that the elevator will probably not stop at a floor, so passengers will not get out.</small></td><td><pre><code>elevator.stop();</code></pre></td></tr>
+                    <tr><td>stop</td><td>function</td><td><small>Clear the destination queue and stop the elevator if it is moving. Note that you normally don't need to stop elevators - it is intended for advanced solutions with in-transit rescheduling logic. Also, note that the elevator will probably not stop at a floor, so passengers will not get out.</small></td><td><pre><code>elevator.stop();</code></pre></td></tr>
                     <tr><td>currentFloor</td><td>function</td><td><small>Gets the floor number that the elevator currently is on.</small></td><td><pre><code>if(elevator.currentFloor() === 0) {
     // Do something special?
 }</code></pre></td></tr>
