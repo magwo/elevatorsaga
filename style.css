@@ -286,7 +286,7 @@ button.right {
     width: 100%;
     font-size: 15px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .elevator .buttonindicator {
