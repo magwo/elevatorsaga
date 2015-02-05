@@ -338,6 +338,7 @@ button.right {
 .floor .floornumber {
     color: rgba(255, 255, 255, 0.15);
     font-size: 22px;
+    font-weight: bold;
 }
 
 .footer {
