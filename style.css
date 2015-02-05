@@ -317,10 +317,18 @@ button.right {
     border-bottom: 1px solid #333;
 }
 
+.floor-info {
+    position: absolute;
+    background-color: #3F3F3F;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 35px;
+    padding: 5px 5px 0 60px;
+    height: 43px;
+    text-align: right;
+}
+
 .floor .buttonindicator {
     cursor: pointer;
-    line-height: 50px;
-    padding-left: 50px;
     color: rgba(255, 255, 255, 0.2);
 }
 .floor .buttonindicator .activated {
@@ -328,13 +336,9 @@ button.right {
 }
 
 .floor .floornumber {
-    position: absolute;
     color: rgba(255, 255, 255, 0.15);
-    font-size: 32px;
-    line-height: 50px;
-    padding-left: 10px;
+    font-size: 22px;
 }
-
 
 .footer {
     margin-top: 20px;
