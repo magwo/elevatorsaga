@@ -19,6 +19,26 @@ var createEditor = function() {
             }
         }
     });
+    
+    // reindent on paste (adapted from https://github.com/ahuth/brackets-paste-and-indent/blob/master/main.js)
+    cm.on("change", function(codeMirror, change) {
+        if(change.origin !== "paste") {
+            return;
+        }
+        
+        var lineFrom = change.from.line;
+        var lineTo = change.from.line + change.text.length;
+        
+        function reindentLines(codeMirror, lineFrom, lineTo) {
+            codeMirror.operation(function() {
+                codeMirror.eachLine(lineFrom, lineTo, function(lineHandle) {
+                    codeMirror.indentLine(lineHandle.lineNo(), "smart");
+                });
+            });
+        }
+        
+        reindentLines(codeMirror, lineFrom, lineTo);
+    });
 
     var reset = function() {
         cm.setValue($("#default-elev-implementation").text().trim());
