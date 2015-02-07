@@ -66,8 +66,11 @@ var createEditor = function() {
         var code = cm.getValue();
         var obj;
         try {
+            if (code.substr(0,1) == "{" && code.substr(-1,1) == "}") {
+                code = "(" + code + ")";
+            }
             /* jslint evil:true */
-            obj = eval("(" + code + ")");
+            obj = eval(code);
             /* jshint evil:false */
             console.log("Code is", obj);
             if(typeof obj.init !== "function") {
