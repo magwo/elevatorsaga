@@ -95,8 +95,10 @@
 {
     init: function(elevators, floors) {
         var elevator = elevators[0]; // Let's use the first elevator
+        
+        // Whenever the elevator is idle (has no more queued destinations) ...
         elevator.on("idle", function() {
-            // The elevator is idle, so let's go to all the floors (or did we forget one?)
+            // let's go to all the floors (or did we forget one?)
             elevator.goToFloor(0);
             elevator.goToFloor(1);
         });
