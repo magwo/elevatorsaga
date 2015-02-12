@@ -120,6 +120,12 @@ var createWorldCreator = function() {
                     }
                 });
             });
+            elevator.on("indicatorstate_change", function() {
+                var elevator = this;
+                if(elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
+                    world.elevatorInterfaces[world.elevators.indexOf(elevator)].goToFloor(elevator.currentFloor, true);
+                }
+            });
         });
 
         // This will cause elevators to "re-arrive" at floors if someone presses an

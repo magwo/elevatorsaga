@@ -232,11 +232,7 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
         }
     });
 
-    elevator.on("change:goingUpIndicator", function(value){
-        elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
-    });
-
-    elevator.on("change:goingDownIndicator", function(value){
+    elevator.on("change:goingUpIndicator change:goingDownIndicator", function(){
         elevator.trigger("indicatorstate_change", {up: elevator.goingUpIndicator, down: elevator.goingDownIndicator});
     });
 
