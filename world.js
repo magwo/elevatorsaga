@@ -123,7 +123,7 @@ var createWorldCreator = function() {
             elevator.on("indicatorstate_change", function() {
                 var elevator = this;
                 if(elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
-                    elevator.trigger("entrance_available");
+                    world.elevatorInterfaces[world.elevators.indexOf(elevator)].goToFloor(elevator.currentFloor, true);
                 }
             });
         });
