@@ -45,10 +45,14 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
     };
 
     elevator.pressFloorButton = function(floorNumber) {
+        var prev;
         floorNumber = limitNumber(floorNumber, 0, floorCount - 1);
+        prev = elevator.buttonStates[floorNumber];
         elevator.buttonStates[floorNumber] = true;
-        elevator.trigger("floor_button_pressed", floorNumber);
-        elevator.trigger("floor_buttons_changed", elevator.buttonStates);
+        if(!prev) {
+            elevator.trigger("floor_button_pressed", floorNumber);
+            elevator.trigger("floor_buttons_changed", elevator.buttonStates);
+        }
     };
 
     elevator.userExiting = function(user) {
