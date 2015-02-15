@@ -45,18 +45,6 @@ var requireDemo = function() {
     };
 };
 
-var createWeightedSelector = function(weights) {
-    var sum = _.reduce(weights, function(sum, w) { return sum+w; }, 0.0);
-    console.log("Sum is", sum);
-    return function() {
-        var num = _.random(sum, true);
-        var summed = 0;
-        var selectedIndex = 0;
-        _.each(weights, function(w, i) { summed += w; if(num < summed) { selectedIndex = i; return false; } });
-        return selectedIndex;
-    };
-};
-
 /* jshint laxcomma:true */
 var challenges = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
