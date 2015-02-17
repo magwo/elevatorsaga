@@ -168,12 +168,18 @@ $(function() {
     };
 
     app.startChallenge = function(challengeIndex, autoStart) {
+        var replayUsers = [];
+
         if(typeof app.world !== "undefined") {
             app.world.unWind();
             // TODO: Investigate if memory leaks happen here
+            if (app.currentChallengeIndex == challengeIndex) {
+                replayUsers = app.world.replayUsers;
+            }
         }
         app.currentChallengeIndex = challengeIndex;
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
+        app.world.replayUsers = replayUsers;
         window.world = app.world;
 
         clearAll([$world, $stats, $feedback]);
@@ -190,10 +196,11 @@ $(function() {
             var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
             if(challengeStatus !== null) {
                 app.world.challengeEnded = true;
+                app.world.nextReplayUser = 0;
                 app.worldController.setPaused(true);
                 if(challengeStatus) {
                     presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
-
+                    app.world.replayUsers = [];
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
                 }

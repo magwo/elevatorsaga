@@ -6,6 +6,7 @@ var asUser = function(user, weight, floorCount, floorHeight) {
     user.destinationFloor = 0;
     user.done = false;
     user.removeMe = false;
+    //user.spawnTimestamp = undefined;
 
     user.appearOnFloor = function(floor, destinationFloorNum) {
         var floorPosY = (floorCount - 1) * floorHeight - floor.level * floorHeight + 30;
@@ -21,6 +22,25 @@ var asUser = function(user, weight, floorCount, floorHeight) {
         } else {
             floor.pressUpButton();
         }
+    };
+
+    user.save = function() {
+        return {
+                 spawnTimestamp: user.spawnTimestamp,
+                 weight: user.weight,
+                 spawnFloor: user.currentFloor,
+                 destinationFloor: user.destinationFloor,
+                 displayType: user.displayType,
+                };
+    };
+
+    user.restore = function(savedUser) {
+        user.weight = savedUser.weight;
+        user.currentFloor = savedUser.spawnFloor;
+        user.destinationFloor = savedUser.destinationFloor;
+        user.displayType = savedUser.displayType;
+        user.done = false;
+        user.removeMe = false;
     };
 
     user.elevatorAvailable = function(elevator, floor) {
