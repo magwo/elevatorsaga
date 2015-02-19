@@ -126,7 +126,7 @@ describe("World controller", function() {
 describe("Challenge requirements", function() {
 	var fakeWorld = null;
 	beforeEach(function() {
-		fakeWorld = { elapsedTime: 0.0, transportedCounter: 0, maxWaitTime: 0.0, moveCount: 0 };
+		fakeWorld = { elapsedTime: 0.0, transportedCounter: 0, maxCommuteTime: 0.0, moveCount: 0 };
 	});
 
 	describe("requireUserCountWithinTime", function (){
@@ -141,15 +141,15 @@ describe("Challenge requirements", function() {
 			expect(challengeReq.evaluate(fakeWorld)).toBe(true);
 		});
 	});
-	describe("requireUserCountWithMaxWaitTime", function (){
+	describe("requireUserCountWithMaxCommuteTime", function (){
 		it("evaluates correctly", function() {
-			var challengeReq = requireUserCountWithMaxWaitTime(10, 4.0);
+			var challengeReq = requireUserCountWithMaxCommuteTime(10, 4.0);
 			expect(challengeReq.evaluate(fakeWorld)).toBe(null);
-			fakeWorld.maxWaitTime = 4.5;
+			fakeWorld.maxCommuteTime = 4.5;
 			expect(challengeReq.evaluate(fakeWorld)).toBe(false);
 			fakeWorld.transportedCounter = 11;
 			expect(challengeReq.evaluate(fakeWorld)).toBe(false);
-			fakeWorld.maxWaitTime = 3.9;
+			fakeWorld.maxCommuteTime = 3.9;
 			expect(challengeReq.evaluate(fakeWorld)).toBe(true);
 		});
 	});
@@ -165,9 +165,9 @@ describe("Challenge requirements", function() {
 			expect(challengeReq.evaluate(fakeWorld)).toBe(true);
 		});
 	});
-        describe("requireUserCountWithinTimeWithMaxWaitTime", function(){
+        describe("requireUserCountWithinTimeWithMaxCommuteTime", function(){
                 it("evaluates correctly", function() {
-                        var challengeReq = requireUserCountWithinTimeWithMaxWaitTime(10, 5.0, 4.0);
+                        var challengeReq = requireUserCountWithinTimeWithMaxCommuteTime(10, 5.0, 4.0);
                         expect(challengeReq.evaluate(fakeWorld)).toBe(null);
                         fakeWorld.elapsedTime = 5.1;
                         expect(challengeReq.evaluate(fakeWorld)).toBe(false);
@@ -175,7 +175,7 @@ describe("Challenge requirements", function() {
                         expect(challengeReq.evaluate(fakeWorld)).toBe(false);
                         fakeWorld.elapsedTime = 4.9;
                         expect(challengeReq.evaluate(fakeWorld)).toBe(true);
-                        fakeWorld.maxWaitTime = 4.1;
+                        fakeWorld.maxCommuteTime = 4.1;
                         expect(challengeReq.evaluate(fakeWorld)).toBe(false);
                 });
         });
