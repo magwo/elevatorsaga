@@ -128,6 +128,7 @@ var createParamsUrl = function(current, overrides) {
 $(function() {
     var tsKey = "elevatorTimeScale";
     var editor = createEditor();
+    window.editor = editor;
 
     var params = {};
 
@@ -147,6 +148,7 @@ $(function() {
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
 
     var app = riot.observable({});
+    window.app = app;
     app.worldController = createWorldController(1.0 / 60.0);
     app.worldController.on("code_error", function(e) {
         console.log("World raised code error", e);

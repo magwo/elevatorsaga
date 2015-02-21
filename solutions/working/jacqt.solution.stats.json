@@ -1,0 +1,1809 @@
+{
+  "name": "Jacqt and Dvdhsu; for level 17. Basic solution that works surprisignly well on problem 17. Elevators go from 0 to 20 to 0 to 20 repeatedly",
+  "url": "https://github.com/jacqt/elevatorbot",
+  "solution": "jacqt.solution.js",
+  "challenges": [
+    {
+      "challengeId": 1,
+      "stats": [
+        {
+          "avgWaitTime": "6.9",
+          "challengeStatus": true,
+          "elapsedTime": "57",
+          "feedbackText": "Success!",
+          "maxWaitTime": "12.9",
+          "moveCount": 29,
+          "transportedCounter": 16,
+          "transportedPerSec": "0.282"
+        },
+        {
+          "avgWaitTime": "6.1",
+          "challengeStatus": true,
+          "elapsedTime": "50",
+          "feedbackText": "Success!",
+          "maxWaitTime": "11.4",
+          "moveCount": 26,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.302"
+        },
+        {
+          "avgWaitTime": "5.7",
+          "challengeStatus": true,
+          "elapsedTime": "52",
+          "feedbackText": "Success!",
+          "maxWaitTime": "10.7",
+          "moveCount": 29,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.289"
+        },
+        {
+          "avgWaitTime": "5.3",
+          "challengeStatus": true,
+          "elapsedTime": "52",
+          "feedbackText": "Success!",
+          "maxWaitTime": "10.9",
+          "moveCount": 29,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.287"
+        },
+        {
+          "avgWaitTime": "6.9",
+          "challengeStatus": true,
+          "elapsedTime": "50",
+          "feedbackText": "Success!",
+          "maxWaitTime": "12.4",
+          "moveCount": 26,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.299"
+        },
+        {
+          "avgWaitTime": "5.7",
+          "challengeStatus": true,
+          "elapsedTime": "53",
+          "feedbackText": "Success!",
+          "maxWaitTime": "10.6",
+          "moveCount": 27,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.284"
+        },
+        {
+          "avgWaitTime": "6.9",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "11.8",
+          "moveCount": 29,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.274"
+        },
+        {
+          "avgWaitTime": "7.3",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "12.7",
+          "moveCount": 27,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.267"
+        },
+        {
+          "avgWaitTime": "5.8",
+          "challengeStatus": true,
+          "elapsedTime": "53",
+          "feedbackText": "Success!",
+          "maxWaitTime": "10.9",
+          "moveCount": 29,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.282"
+        },
+        {
+          "avgWaitTime": "6.6",
+          "challengeStatus": true,
+          "elapsedTime": "49",
+          "feedbackText": "Success!",
+          "maxWaitTime": "13.5",
+          "moveCount": 21,
+          "transportedCounter": 15,
+          "transportedPerSec": "0.306"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 2,
+      "stats": [
+        {
+          "avgWaitTime": "11.9",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.9",
+          "moveCount": 36,
+          "transportedCounter": 19,
+          "transportedPerSec": "0.317"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "24.3",
+          "moveCount": 37,
+          "transportedCounter": 19,
+          "transportedPerSec": "0.317"
+        },
+        {
+          "avgWaitTime": "9.9",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.6",
+          "moveCount": 41,
+          "transportedCounter": 19,
+          "transportedPerSec": "0.317"
+        },
+        {
+          "avgWaitTime": "9.9",
+          "challengeStatus": true,
+          "elapsedTime": "58",
+          "feedbackText": "Success!",
+          "maxWaitTime": "20.5",
+          "moveCount": 37,
+          "transportedCounter": 20,
+          "transportedPerSec": "0.345"
+        },
+        {
+          "avgWaitTime": "10.3",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.2",
+          "moveCount": 33,
+          "transportedCounter": 20,
+          "transportedPerSec": "0.359"
+        },
+        {
+          "avgWaitTime": "8.5",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.1",
+          "moveCount": 38,
+          "transportedCounter": 19,
+          "transportedPerSec": "0.317"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": true,
+          "elapsedTime": "57",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.7",
+          "moveCount": 36,
+          "transportedCounter": 20,
+          "transportedPerSec": "0.349"
+        },
+        {
+          "avgWaitTime": "9.2",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "23.4",
+          "moveCount": 37,
+          "transportedCounter": 19,
+          "transportedPerSec": "0.317"
+        },
+        {
+          "avgWaitTime": "9.1",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.0",
+          "moveCount": 35,
+          "transportedCounter": 20,
+          "transportedPerSec": "0.363"
+        },
+        {
+          "avgWaitTime": "10.4",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "18.3",
+          "moveCount": 41,
+          "transportedCounter": 18,
+          "transportedPerSec": "0.300"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 3,
+      "stats": [
+        {
+          "avgWaitTime": "10.4",
+          "challengeStatus": true,
+          "elapsedTime": "49",
+          "feedbackText": "Success!",
+          "maxWaitTime": "24.3",
+          "moveCount": 28,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.468"
+        },
+        {
+          "avgWaitTime": "10.2",
+          "challengeStatus": true,
+          "elapsedTime": "53",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.8",
+          "moveCount": 35,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.432"
+        },
+        {
+          "avgWaitTime": "10.5",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "20.7",
+          "moveCount": 35,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.418"
+        },
+        {
+          "avgWaitTime": "12.1",
+          "challengeStatus": true,
+          "elapsedTime": "58",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.8",
+          "moveCount": 33,
+          "transportedCounter": 24,
+          "transportedPerSec": "0.410"
+        },
+        {
+          "avgWaitTime": "12.0",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "28.4",
+          "moveCount": 33,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.411"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": true,
+          "elapsedTime": "54",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.1",
+          "moveCount": 33,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.427"
+        },
+        {
+          "avgWaitTime": "11.3",
+          "challengeStatus": true,
+          "elapsedTime": "57",
+          "feedbackText": "Success!",
+          "maxWaitTime": "21.1",
+          "moveCount": 36,
+          "transportedCounter": 25,
+          "transportedPerSec": "0.437"
+        },
+        {
+          "avgWaitTime": "13.1",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "22.8",
+          "moveCount": 29,
+          "transportedCounter": 24,
+          "transportedPerSec": "0.433"
+        },
+        {
+          "avgWaitTime": "11.4",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "21.9",
+          "moveCount": 34,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.411"
+        },
+        {
+          "avgWaitTime": "11.2",
+          "challengeStatus": true,
+          "elapsedTime": "57",
+          "feedbackText": "Success!",
+          "maxWaitTime": "24.2",
+          "moveCount": 34,
+          "transportedCounter": 23,
+          "transportedPerSec": "0.403"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 4,
+      "stats": [
+        {
+          "avgWaitTime": "12.6",
+          "challengeStatus": true,
+          "elapsedTime": "59",
+          "feedbackText": "Success!",
+          "maxWaitTime": "24.7",
+          "moveCount": 97,
+          "transportedCounter": 30,
+          "transportedPerSec": "0.504"
+        },
+        {
+          "avgWaitTime": "10.8",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "20.8",
+          "moveCount": 107,
+          "transportedCounter": 30,
+          "transportedPerSec": "0.533"
+        },
+        {
+          "avgWaitTime": "10.7",
+          "challengeStatus": true,
+          "elapsedTime": "57",
+          "feedbackText": "Success!",
+          "maxWaitTime": "21.4",
+          "moveCount": 105,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.488"
+        },
+        {
+          "avgWaitTime": "10.5",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "25.0",
+          "moveCount": 95,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.506"
+        },
+        {
+          "avgWaitTime": "12.5",
+          "challengeStatus": true,
+          "elapsedTime": "59",
+          "feedbackText": "Success!",
+          "maxWaitTime": "24.3",
+          "moveCount": 100,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.472"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.5",
+          "moveCount": 109,
+          "transportedCounter": 27,
+          "transportedPerSec": "0.450"
+        },
+        {
+          "avgWaitTime": "10.5",
+          "challengeStatus": true,
+          "elapsedTime": "58",
+          "feedbackText": "Success!",
+          "maxWaitTime": "26.5",
+          "moveCount": 97,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.481"
+        },
+        {
+          "avgWaitTime": "10.5",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "20.3",
+          "moveCount": 95,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.511"
+        },
+        {
+          "avgWaitTime": "10.6",
+          "challengeStatus": true,
+          "elapsedTime": "58",
+          "feedbackText": "Success!",
+          "maxWaitTime": "24.4",
+          "moveCount": 96,
+          "transportedCounter": 28,
+          "transportedPerSec": "0.485"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.6",
+          "moveCount": 105,
+          "transportedCounter": 26,
+          "transportedPerSec": "0.433"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 5,
+      "stats": [
+        {
+          "avgWaitTime": "10.0",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "21.6",
+          "moveCount": 173,
+          "transportedCounter": 96,
+          "transportedPerSec": "1.41"
+        },
+        {
+          "avgWaitTime": "8.4",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.3",
+          "moveCount": 178,
+          "transportedCounter": 101,
+          "transportedPerSec": "1.50"
+        },
+        {
+          "avgWaitTime": "8.9",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "18.9",
+          "moveCount": 188,
+          "transportedCounter": 97,
+          "transportedPerSec": "1.43"
+        },
+        {
+          "avgWaitTime": "11.5",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "22.7",
+          "moveCount": 172,
+          "transportedCounter": 94,
+          "transportedPerSec": "1.38"
+        },
+        {
+          "avgWaitTime": "11.2",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "23.9",
+          "moveCount": 177,
+          "transportedCounter": 93,
+          "transportedPerSec": "1.37"
+        },
+        {
+          "avgWaitTime": "9.4",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.4",
+          "moveCount": 174,
+          "transportedCounter": 97,
+          "transportedPerSec": "1.43"
+        },
+        {
+          "avgWaitTime": "8.1",
+          "challengeStatus": true,
+          "elapsedTime": "64",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.6",
+          "moveCount": 168,
+          "transportedCounter": 100,
+          "transportedPerSec": "1.55"
+        },
+        {
+          "avgWaitTime": "9.1",
+          "challengeStatus": true,
+          "elapsedTime": "66",
+          "feedbackText": "Success!",
+          "maxWaitTime": "22.1",
+          "moveCount": 176,
+          "transportedCounter": 100,
+          "transportedPerSec": "1.51"
+        },
+        {
+          "avgWaitTime": "8.5",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.7",
+          "moveCount": 183,
+          "transportedCounter": 101,
+          "transportedPerSec": "1.51"
+        },
+        {
+          "avgWaitTime": "9.0",
+          "challengeStatus": false,
+          "elapsedTime": "68",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.2",
+          "moveCount": 168,
+          "transportedCounter": 99,
+          "transportedPerSec": "1.46"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 6,
+      "stats": [
+        {
+          "avgWaitTime": "7.4",
+          "challengeStatus": false,
+          "elapsedTime": "51",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "16.0",
+          "moveCount": 60,
+          "transportedCounter": 33,
+          "transportedPerSec": "0.648"
+        },
+        {
+          "avgWaitTime": "6.9",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "13.7",
+          "moveCount": 55,
+          "transportedCounter": 41,
+          "transportedPerSec": "0.751"
+        },
+        {
+          "avgWaitTime": "6.9",
+          "challengeStatus": true,
+          "elapsedTime": "54",
+          "feedbackText": "Success!",
+          "maxWaitTime": "15.8",
+          "moveCount": 59,
+          "transportedCounter": 40,
+          "transportedPerSec": "0.742"
+        },
+        {
+          "avgWaitTime": "7.0",
+          "challengeStatus": false,
+          "elapsedTime": "50",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.1",
+          "moveCount": 60,
+          "transportedCounter": 34,
+          "transportedPerSec": "0.674"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": false,
+          "elapsedTime": "60",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.1",
+          "moveCount": 60,
+          "transportedCounter": 39,
+          "transportedPerSec": "0.651"
+        },
+        {
+          "avgWaitTime": "8.2",
+          "challengeStatus": true,
+          "elapsedTime": "55",
+          "feedbackText": "Success!",
+          "maxWaitTime": "19.3",
+          "moveCount": 56,
+          "transportedCounter": 40,
+          "transportedPerSec": "0.730"
+        },
+        {
+          "avgWaitTime": "7.1",
+          "challengeStatus": false,
+          "elapsedTime": "57",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.5",
+          "moveCount": 60,
+          "transportedCounter": 39,
+          "transportedPerSec": "0.689"
+        },
+        {
+          "avgWaitTime": "7.6",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "16.8",
+          "moveCount": 56,
+          "transportedCounter": 40,
+          "transportedPerSec": "0.719"
+        },
+        {
+          "avgWaitTime": "7.6",
+          "challengeStatus": true,
+          "elapsedTime": "56",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.5",
+          "moveCount": 55,
+          "transportedCounter": 40,
+          "transportedPerSec": "0.719"
+        },
+        {
+          "avgWaitTime": "6.2",
+          "challengeStatus": false,
+          "elapsedTime": "53",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "12.3",
+          "moveCount": 60,
+          "transportedCounter": 35,
+          "transportedPerSec": "0.660"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 7,
+      "stats": [
+        {
+          "avgWaitTime": "10.6",
+          "challengeStatus": false,
+          "elapsedTime": "48",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "23.3",
+          "moveCount": 63,
+          "transportedCounter": 95,
+          "transportedPerSec": "1.99"
+        },
+        {
+          "avgWaitTime": "11.7",
+          "challengeStatus": false,
+          "elapsedTime": "49",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "25.3",
+          "moveCount": 63,
+          "transportedCounter": 89,
+          "transportedPerSec": "1.83"
+        },
+        {
+          "avgWaitTime": "9.4",
+          "challengeStatus": false,
+          "elapsedTime": "44",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.6",
+          "moveCount": 63,
+          "transportedCounter": 83,
+          "transportedPerSec": "1.90"
+        },
+        {
+          "avgWaitTime": "10.6",
+          "challengeStatus": false,
+          "elapsedTime": "50",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "26.6",
+          "moveCount": 63,
+          "transportedCounter": 89,
+          "transportedPerSec": "1.79"
+        },
+        {
+          "avgWaitTime": "11.1",
+          "challengeStatus": false,
+          "elapsedTime": "44",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "22.2",
+          "moveCount": 63,
+          "transportedCounter": 78,
+          "transportedPerSec": "1.76"
+        },
+        {
+          "avgWaitTime": "9.6",
+          "challengeStatus": false,
+          "elapsedTime": "49",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "24.6",
+          "moveCount": 63,
+          "transportedCounter": 94,
+          "transportedPerSec": "1.91"
+        },
+        {
+          "avgWaitTime": "9.9",
+          "challengeStatus": false,
+          "elapsedTime": "46",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "22.2",
+          "moveCount": 63,
+          "transportedCounter": 83,
+          "transportedPerSec": "1.80"
+        },
+        {
+          "avgWaitTime": "9.1",
+          "challengeStatus": false,
+          "elapsedTime": "45",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "22.6",
+          "moveCount": 63,
+          "transportedCounter": 91,
+          "transportedPerSec": "2.02"
+        },
+        {
+          "avgWaitTime": "10.5",
+          "challengeStatus": false,
+          "elapsedTime": "48",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "25.6",
+          "moveCount": 63,
+          "transportedCounter": 94,
+          "transportedPerSec": "1.97"
+        },
+        {
+          "avgWaitTime": "11.6",
+          "challengeStatus": false,
+          "elapsedTime": "47",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "26.7",
+          "moveCount": 63,
+          "transportedCounter": 81,
+          "transportedPerSec": "1.73"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 8,
+      "stats": [
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": true,
+          "elapsedTime": "129",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.2",
+          "moveCount": 205,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.388"
+        },
+        {
+          "avgWaitTime": "8.4",
+          "challengeStatus": true,
+          "elapsedTime": "132",
+          "feedbackText": "Success!",
+          "maxWaitTime": "17.7",
+          "moveCount": 222,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.379"
+        },
+        {
+          "avgWaitTime": "8.2",
+          "challengeStatus": true,
+          "elapsedTime": "131",
+          "feedbackText": "Success!",
+          "maxWaitTime": "17.8",
+          "moveCount": 212,
+          "transportedCounter": 51,
+          "transportedPerSec": "0.390"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": true,
+          "elapsedTime": "131",
+          "feedbackText": "Success!",
+          "maxWaitTime": "16.9",
+          "moveCount": 223,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.382"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": true,
+          "elapsedTime": "130",
+          "feedbackText": "Success!",
+          "maxWaitTime": "17.5",
+          "moveCount": 222,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.385"
+        },
+        {
+          "avgWaitTime": "9.4",
+          "challengeStatus": true,
+          "elapsedTime": "127",
+          "feedbackText": "Success!",
+          "maxWaitTime": "16.6",
+          "moveCount": 202,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.393"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": true,
+          "elapsedTime": "127",
+          "feedbackText": "Success!",
+          "maxWaitTime": "15.5",
+          "moveCount": 217,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.394"
+        },
+        {
+          "avgWaitTime": "8.2",
+          "challengeStatus": true,
+          "elapsedTime": "127",
+          "feedbackText": "Success!",
+          "maxWaitTime": "16.4",
+          "moveCount": 217,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.393"
+        },
+        {
+          "avgWaitTime": "8.2",
+          "challengeStatus": true,
+          "elapsedTime": "127",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.7",
+          "moveCount": 206,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.394"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": true,
+          "elapsedTime": "132",
+          "feedbackText": "Success!",
+          "maxWaitTime": "14.5",
+          "moveCount": 220,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.378"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 9,
+      "stats": [
+        {
+          "avgWaitTime": "8.5",
+          "challengeStatus": true,
+          "elapsedTime": "88",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.8",
+          "moveCount": 218,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.567"
+        },
+        {
+          "avgWaitTime": "8.4",
+          "challengeStatus": true,
+          "elapsedTime": "92",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.1",
+          "moveCount": 222,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.544"
+        },
+        {
+          "avgWaitTime": "8.5",
+          "challengeStatus": true,
+          "elapsedTime": "89",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.0",
+          "moveCount": 223,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.562"
+        },
+        {
+          "avgWaitTime": "7.6",
+          "challengeStatus": false,
+          "elapsedTime": "80",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.0",
+          "moveCount": 191,
+          "transportedCounter": 44,
+          "transportedPerSec": "0.550"
+        },
+        {
+          "avgWaitTime": "8.0",
+          "challengeStatus": true,
+          "elapsedTime": "88",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.3",
+          "moveCount": 232,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.566"
+        },
+        {
+          "avgWaitTime": "8.4",
+          "challengeStatus": true,
+          "elapsedTime": "90",
+          "feedbackText": "Success!",
+          "maxWaitTime": "15.9",
+          "moveCount": 227,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.554"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": true,
+          "elapsedTime": "94",
+          "feedbackText": "Success!",
+          "maxWaitTime": "16.2",
+          "moveCount": 255,
+          "transportedCounter": 52,
+          "transportedPerSec": "0.553"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": true,
+          "elapsedTime": "92",
+          "feedbackText": "Success!",
+          "maxWaitTime": "17.7",
+          "moveCount": 219,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.545"
+        },
+        {
+          "avgWaitTime": "9.5",
+          "challengeStatus": false,
+          "elapsedTime": "30",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "20.0",
+          "moveCount": 83,
+          "transportedCounter": 13,
+          "transportedPerSec": "0.433"
+        },
+        {
+          "avgWaitTime": "8.6",
+          "challengeStatus": true,
+          "elapsedTime": "88",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.2",
+          "moveCount": 228,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.571"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 10,
+      "stats": [
+        {
+          "avgWaitTime": "19.9",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "42.1",
+          "moveCount": 128,
+          "transportedCounter": 49,
+          "transportedPerSec": "0.700"
+        },
+        {
+          "avgWaitTime": "20.6",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "42.7",
+          "moveCount": 132,
+          "transportedCounter": 48,
+          "transportedPerSec": "0.686"
+        },
+        {
+          "avgWaitTime": "22.6",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "39.5",
+          "moveCount": 137,
+          "transportedCounter": 49,
+          "transportedPerSec": "0.700"
+        },
+        {
+          "avgWaitTime": "23.1",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "42.9",
+          "moveCount": 132,
+          "transportedCounter": 41,
+          "transportedPerSec": "0.586"
+        },
+        {
+          "avgWaitTime": "21.2",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "40.9",
+          "moveCount": 135,
+          "transportedCounter": 48,
+          "transportedPerSec": "0.686"
+        },
+        {
+          "avgWaitTime": "22.3",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "43.6",
+          "moveCount": 137,
+          "transportedCounter": 45,
+          "transportedPerSec": "0.643"
+        },
+        {
+          "avgWaitTime": "20.0",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "41.8",
+          "moveCount": 138,
+          "transportedCounter": 47,
+          "transportedPerSec": "0.671"
+        },
+        {
+          "avgWaitTime": "21.3",
+          "challengeStatus": true,
+          "elapsedTime": "70",
+          "feedbackText": "Success!",
+          "maxWaitTime": "41.9",
+          "moveCount": 128,
+          "transportedCounter": 50,
+          "transportedPerSec": "0.716"
+        },
+        {
+          "avgWaitTime": "19.8",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "46.4",
+          "moveCount": 118,
+          "transportedCounter": 46,
+          "transportedPerSec": "0.657"
+        },
+        {
+          "avgWaitTime": "22.1",
+          "challengeStatus": false,
+          "elapsedTime": "70",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "43.6",
+          "moveCount": 126,
+          "transportedCounter": 43,
+          "transportedPerSec": "0.614"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 11,
+      "stats": [
+        {
+          "avgWaitTime": "9.3",
+          "challengeStatus": false,
+          "elapsedTime": "27",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 106,
+          "transportedCounter": 18,
+          "transportedPerSec": "0.662"
+        },
+        {
+          "avgWaitTime": "9.8",
+          "challengeStatus": false,
+          "elapsedTime": "48",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 197,
+          "transportedCounter": 43,
+          "transportedPerSec": "0.894"
+        },
+        {
+          "avgWaitTime": "8.7",
+          "challengeStatus": false,
+          "elapsedTime": "53",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 206,
+          "transportedCounter": 51,
+          "transportedPerSec": "0.969"
+        },
+        {
+          "avgWaitTime": "7.6",
+          "challengeStatus": false,
+          "elapsedTime": "24",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 118,
+          "transportedCounter": 17,
+          "transportedPerSec": "0.722"
+        },
+        {
+          "avgWaitTime": "8.8",
+          "challengeStatus": false,
+          "elapsedTime": "48",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 203,
+          "transportedCounter": 44,
+          "transportedPerSec": "0.914"
+        },
+        {
+          "avgWaitTime": "10.4",
+          "challengeStatus": false,
+          "elapsedTime": "29",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 87,
+          "transportedCounter": 17,
+          "transportedPerSec": "0.586"
+        },
+        {
+          "avgWaitTime": "7.7",
+          "challengeStatus": false,
+          "elapsedTime": "19",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 72,
+          "transportedCounter": 8,
+          "transportedPerSec": "0.421"
+        },
+        {
+          "avgWaitTime": "9.3",
+          "challengeStatus": false,
+          "elapsedTime": "29",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 116,
+          "transportedCounter": 22,
+          "transportedPerSec": "0.758"
+        },
+        {
+          "avgWaitTime": "7.1",
+          "challengeStatus": false,
+          "elapsedTime": "19",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "19.0",
+          "moveCount": 80,
+          "transportedCounter": 11,
+          "transportedPerSec": "0.578"
+        },
+        {
+          "avgWaitTime": "9.5",
+          "challengeStatus": true,
+          "elapsedTime": "66",
+          "feedbackText": "Success!",
+          "maxWaitTime": "18.0",
+          "moveCount": 251,
+          "transportedCounter": 60,
+          "transportedPerSec": "0.911"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 12,
+      "stats": [
+        {
+          "avgWaitTime": "9.1",
+          "challengeStatus": false,
+          "elapsedTime": "30",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 116,
+          "transportedCounter": 17,
+          "transportedPerSec": "0.572"
+        },
+        {
+          "avgWaitTime": "7.3",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 74,
+          "transportedCounter": 8,
+          "transportedPerSec": "0.470"
+        },
+        {
+          "avgWaitTime": "9.2",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 67,
+          "transportedCounter": 11,
+          "transportedPerSec": "0.646"
+        },
+        {
+          "avgWaitTime": "8.0",
+          "challengeStatus": false,
+          "elapsedTime": "20",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 88,
+          "transportedCounter": 11,
+          "transportedPerSec": "0.557"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": false,
+          "elapsedTime": "18",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 64,
+          "transportedCounter": 12,
+          "transportedPerSec": "0.669"
+        },
+        {
+          "avgWaitTime": "7.3",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 69,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.352"
+        },
+        {
+          "avgWaitTime": "7.5",
+          "challengeStatus": false,
+          "elapsedTime": "23",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 105,
+          "transportedCounter": 13,
+          "transportedPerSec": "0.556"
+        },
+        {
+          "avgWaitTime": "7.1",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 59,
+          "transportedCounter": 4,
+          "transportedPerSec": "0.235"
+        },
+        {
+          "avgWaitTime": "8.7",
+          "challengeStatus": false,
+          "elapsedTime": "42",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 186,
+          "transportedCounter": 37,
+          "transportedPerSec": "0.871"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "17.0",
+          "moveCount": 72,
+          "transportedCounter": 10,
+          "transportedPerSec": "0.587"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 13,
+      "stats": [
+        {
+          "avgWaitTime": "9.1",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 59,
+          "transportedCounter": 3,
+          "transportedPerSec": "0.200"
+        },
+        {
+          "avgWaitTime": "9.0",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 62,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.377"
+        },
+        {
+          "avgWaitTime": "8.6",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 58,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.333"
+        },
+        {
+          "avgWaitTime": "8.0",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 63,
+          "transportedCounter": 7,
+          "transportedPerSec": "0.416"
+        },
+        {
+          "avgWaitTime": "8.1",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 59,
+          "transportedCounter": 4,
+          "transportedPerSec": "0.266"
+        },
+        {
+          "avgWaitTime": "7.7",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 57,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.399"
+        },
+        {
+          "avgWaitTime": "6.8",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 74,
+          "transportedCounter": 8,
+          "transportedPerSec": "0.502"
+        },
+        {
+          "avgWaitTime": "9.5",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 56,
+          "transportedCounter": 8,
+          "transportedPerSec": "0.533"
+        },
+        {
+          "avgWaitTime": "7.0",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 54,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.314"
+        },
+        {
+          "avgWaitTime": "7.4",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 63,
+          "transportedCounter": 7,
+          "transportedPerSec": "0.466"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 14,
+      "stats": [
+        {
+          "avgWaitTime": "7.4",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 71,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.333"
+        },
+        {
+          "avgWaitTime": "7.9",
+          "challengeStatus": false,
+          "elapsedTime": "19",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 75,
+          "transportedCounter": 7,
+          "transportedPerSec": "0.368"
+        },
+        {
+          "avgWaitTime": "7.7",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 61,
+          "transportedCounter": 2,
+          "transportedPerSec": "0.133"
+        },
+        {
+          "avgWaitTime": "6.3",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 51,
+          "transportedCounter": 1,
+          "transportedPerSec": "0.0666"
+        },
+        {
+          "avgWaitTime": "9.7",
+          "challengeStatus": false,
+          "elapsedTime": "18",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 67,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.333"
+        },
+        {
+          "avgWaitTime": "7.5",
+          "challengeStatus": false,
+          "elapsedTime": "17",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 71,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.353"
+        },
+        {
+          "avgWaitTime": "4.5",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 67,
+          "transportedCounter": 3,
+          "transportedPerSec": "0.200"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 62,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.375"
+        },
+        {
+          "avgWaitTime": "6.4",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 62,
+          "transportedCounter": 3,
+          "transportedPerSec": "0.200"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": false,
+          "elapsedTime": "19",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "15.0",
+          "moveCount": 74,
+          "transportedCounter": 7,
+          "transportedPerSec": "0.368"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 15,
+      "stats": [
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 65,
+          "transportedCounter": 4,
+          "transportedPerSec": "0.246"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": false,
+          "elapsedTime": "14",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 61,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.356"
+        },
+        {
+          "avgWaitTime": "8.7",
+          "challengeStatus": false,
+          "elapsedTime": "14",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 48,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.357"
+        },
+        {
+          "avgWaitTime": "7.8",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 70,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.397"
+        },
+        {
+          "avgWaitTime": "8.0",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 55,
+          "transportedCounter": 3,
+          "transportedPerSec": "0.198"
+        },
+        {
+          "avgWaitTime": "7.7",
+          "challengeStatus": false,
+          "elapsedTime": "14",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 56,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.356"
+        },
+        {
+          "avgWaitTime": "7.3",
+          "challengeStatus": false,
+          "elapsedTime": "15",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 53,
+          "transportedCounter": 5,
+          "transportedPerSec": "0.331"
+        },
+        {
+          "avgWaitTime": "8.3",
+          "challengeStatus": false,
+          "elapsedTime": "14",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 62,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.428"
+        },
+        {
+          "avgWaitTime": "6.3",
+          "challengeStatus": false,
+          "elapsedTime": "14",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 55,
+          "transportedCounter": 6,
+          "transportedPerSec": "0.428"
+        },
+        {
+          "avgWaitTime": "7.5",
+          "challengeStatus": false,
+          "elapsedTime": "16",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "14.0",
+          "moveCount": 62,
+          "transportedCounter": 7,
+          "transportedPerSec": "0.431"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 16,
+      "stats": [
+        {
+          "avgWaitTime": "13.8",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "31.0",
+          "moveCount": 233,
+          "transportedCounter": 74,
+          "transportedPerSec": "1.10"
+        },
+        {
+          "avgWaitTime": "16.0",
+          "challengeStatus": true,
+          "elapsedTime": "72",
+          "feedbackText": "Success!",
+          "maxWaitTime": "35.1",
+          "moveCount": 240,
+          "transportedCounter": 78,
+          "transportedPerSec": "1.09"
+        },
+        {
+          "avgWaitTime": "14.4",
+          "challengeStatus": true,
+          "elapsedTime": "68",
+          "feedbackText": "Success!",
+          "maxWaitTime": "28.6",
+          "moveCount": 249,
+          "transportedCounter": 72,
+          "transportedPerSec": "1.05"
+        },
+        {
+          "avgWaitTime": "13.8",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "32.0",
+          "moveCount": 225,
+          "transportedCounter": 74,
+          "transportedPerSec": "1.10"
+        },
+        {
+          "avgWaitTime": "12.7",
+          "challengeStatus": true,
+          "elapsedTime": "61",
+          "feedbackText": "Success!",
+          "maxWaitTime": "31.1",
+          "moveCount": 206,
+          "transportedCounter": 71,
+          "transportedPerSec": "1.16"
+        },
+        {
+          "avgWaitTime": "13.8",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "30.8",
+          "moveCount": 231,
+          "transportedCounter": 71,
+          "transportedPerSec": "1.06"
+        },
+        {
+          "avgWaitTime": "15.2",
+          "challengeStatus": true,
+          "elapsedTime": "65",
+          "feedbackText": "Success!",
+          "maxWaitTime": "40.4",
+          "moveCount": 214,
+          "transportedCounter": 73,
+          "transportedPerSec": "1.12"
+        },
+        {
+          "avgWaitTime": "12.8",
+          "challengeStatus": true,
+          "elapsedTime": "64",
+          "feedbackText": "Success!",
+          "maxWaitTime": "30.5",
+          "moveCount": 226,
+          "transportedCounter": 72,
+          "transportedPerSec": "1.12"
+        },
+        {
+          "avgWaitTime": "14.7",
+          "challengeStatus": true,
+          "elapsedTime": "67",
+          "feedbackText": "Success!",
+          "maxWaitTime": "30.3",
+          "moveCount": 238,
+          "transportedCounter": 71,
+          "transportedPerSec": "1.06"
+        },
+        {
+          "avgWaitTime": "14.7",
+          "challengeStatus": true,
+          "elapsedTime": "66",
+          "feedbackText": "Success!",
+          "maxWaitTime": "35.9",
+          "moveCount": 232,
+          "transportedCounter": 70,
+          "transportedPerSec": "1.07"
+        }
+      ],
+      "testId": 10
+    },
+    {
+      "challengeId": 17,
+      "stats": [
+        {
+          "avgWaitTime": "20.0",
+          "challengeStatus": true,
+          "elapsedTime": "79",
+          "feedbackText": "Success!",
+          "maxWaitTime": "47.5",
+          "moveCount": 354,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.38"
+        },
+        {
+          "avgWaitTime": "19.9",
+          "challengeStatus": false,
+          "elapsedTime": "80",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "41.1",
+          "moveCount": 353,
+          "transportedCounter": 105,
+          "transportedPerSec": "1.31"
+        },
+        {
+          "avgWaitTime": "20.2",
+          "challengeStatus": true,
+          "elapsedTime": "79",
+          "feedbackText": "Success!",
+          "maxWaitTime": "46.6",
+          "moveCount": 334,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.39"
+        },
+        {
+          "avgWaitTime": "20.9",
+          "challengeStatus": true,
+          "elapsedTime": "78",
+          "feedbackText": "Success!",
+          "maxWaitTime": "52.2",
+          "moveCount": 336,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.41"
+        },
+        {
+          "avgWaitTime": "21.0",
+          "challengeStatus": false,
+          "elapsedTime": "80",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "46.9",
+          "moveCount": 326,
+          "transportedCounter": 107,
+          "transportedPerSec": "1.34"
+        },
+        {
+          "avgWaitTime": "21.2",
+          "challengeStatus": true,
+          "elapsedTime": "80",
+          "feedbackText": "Success!",
+          "maxWaitTime": "51.9",
+          "moveCount": 349,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.38"
+        },
+        {
+          "avgWaitTime": "21.0",
+          "challengeStatus": true,
+          "elapsedTime": "78",
+          "feedbackText": "Success!",
+          "maxWaitTime": "50.0",
+          "moveCount": 332,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.40"
+        },
+        {
+          "avgWaitTime": "24.3",
+          "challengeStatus": false,
+          "elapsedTime": "80",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "56.7",
+          "moveCount": 326,
+          "transportedCounter": 108,
+          "transportedPerSec": "1.35"
+        },
+        {
+          "avgWaitTime": "21.1",
+          "challengeStatus": true,
+          "elapsedTime": "80",
+          "feedbackText": "Success!",
+          "maxWaitTime": "42.3",
+          "moveCount": 325,
+          "transportedCounter": 110,
+          "transportedPerSec": "1.38"
+        },
+        {
+          "avgWaitTime": "20.4",
+          "challengeStatus": false,
+          "elapsedTime": "80",
+          "feedbackText": "Challenge failed",
+          "maxWaitTime": "48.5",
+          "moveCount": 331,
+          "transportedCounter": 105,
+          "transportedPerSec": "1.31"
+        }
+      ],
+      "testId": 10
+    }
+  ]
+}
