@@ -165,6 +165,20 @@ describe("Challenge requirements", function() {
 			expect(challengeReq.evaluate(fakeWorld)).toBe(true);
 		});
 	});
+        describe("requireUserCountWithinTimeWithMaxWaitTime", function(){
+                it("evaluates correctly", function() {
+                        var challengeReq = requireUserCountWithinTimeWithMaxWaitTime(10, 5.0, 4.0);
+                        expect(challengeReq.evaluate(fakeWorld)).toBe(null);
+                        fakeWorld.elapsedTime = 5.1;
+                        expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+                        fakeWorld.transportedCounter = 11;
+                        expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+                        fakeWorld.elapsedTime = 4.9;
+                        expect(challengeReq.evaluate(fakeWorld)).toBe(true);
+                        fakeWorld.maxWaitTime = 4.1;
+                        expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+                });
+        });
 });
 
 describe("Promise object", function() {
