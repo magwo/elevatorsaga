@@ -63,6 +63,14 @@ var createWorldCreator = function() {
         return user;
     };
 
+    creator.spawnReplayUser = function(replayUser, floorCount, floorHeight, floors) {
+        var user = asUser(asMovable({}), replayUser.weight, floorCount, floorHeight);
+        user.restore(replayUser);
+        user.moveTo(105+_.random(40), 0);
+        user.appearOnFloor(floors[user.currentFloor], user.destinationFloor);
+        return user;
+    };
+
     creator.createWorld = function(options) {
         console.log("Creating world with options", options);
         var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
@@ -76,6 +84,8 @@ var createWorldCreator = function() {
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
+        world.replayUsers = [];
+        world.nextReplayUser = 0;
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.moveCount = 0;
@@ -93,7 +103,6 @@ var createWorldCreator = function() {
         var registerUser = function(user) {
             world.users.push(user);
             user.updateDisplayPosition();
-            user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
@@ -150,12 +159,40 @@ var createWorldCreator = function() {
 
         // Main update function
         world.update = function(dt) {
+            var user;
+            var savedTime;
+
             world.elapsedTime += dt;
             elapsedSinceSpawn += dt;
             elapsedSinceStatsUpdate += dt;
-            while(elapsedSinceSpawn > 1.0/options.spawnRate) {
+
+            // Replay saved users with spawn time before or at elapsedTime
+            savedTime = world.elapsedTime;
+            while (world.nextReplayUser < world.replayUsers.length) {
+
+                var nextSpawnTime = world.replayUsers[world.nextReplayUser].spawnTimestamp;
+                if (nextSpawnTime <= world.elapsedTime) {
+                    world.elapsedTime = nextSpawnTime;
+                    user = creator.spawnReplayUser(world.replayUsers[world.nextReplayUser], options.floorCount, world.floorHeight, world.floors);
+                    world.nextReplayUser++;
+                    registerUser(user);
+
+                    // Inhibit spawning new users immediately after replaying
+                    elapsedSinceSpawn  = savedTime - nextSpawnTime;
+                    world.elapsedTime = savedTime;
+                } else {
+                    break;
+                }
+            }
+
+            // No more users to replay
+            while((world.nextReplayUser >= world.replayUsers.length) && (elapsedSinceSpawn > 1.0/options.spawnRate)) {
                 elapsedSinceSpawn -= 1.0/options.spawnRate;
-                registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+                user = creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors);
+                user.spawnTimestamp = world.elapsedTime;
+                world.replayUsers.push(user.save());
+                world.nextReplayUser++;
+                registerUser(user);
             }
 
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt); });
