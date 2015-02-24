@@ -14,7 +14,7 @@ var createWorldCreator = function() {
     };
     creator.createElevators = function(elevatorCount, floorCount, floorHeight, elevatorCapacities) {
         elevatorCapacities = elevatorCapacities || [4];
-        var currentX = 200.0;
+        var currentX = 100.0;
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
             var elevator = asMovable({});
             elevator = asElevator(elevator, 2.6, floorCount, floorHeight, elevatorCapacities[i%elevatorCapacities.length]);
@@ -45,7 +45,7 @@ var createWorldCreator = function() {
 
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
-        user.moveTo(105+_.random(40), 0);
+        user.moveTo(5+_.random(45), 0);
         var currentFloor = _.random(1) === 0 ? 0 : _.random(floorCount - 1);
         var destinationFloor;
         if(currentFloor === 0) {
