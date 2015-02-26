@@ -9,6 +9,7 @@ var clearAll = function($elems) {
 var presentStats = function($parent, world, statsTempl) {
     world.on("stats_display_changed", function() {
         $parent.html(riot.render(statsTempl, {
+            spawnedCounter: world.spawnedCounter,
             transportedCounter: world.transportedCounter,
             elapsedTime: (world.elapsedTime).toFixed(0),
             transportedPerSec: world.transportedPerSec.toPrecision(3),

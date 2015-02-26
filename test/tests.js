@@ -126,7 +126,7 @@ describe("World controller", function() {
 describe("Challenge requirements", function() {
 	var fakeWorld = null;
 	beforeEach(function() {
-		fakeWorld = { elapsedTime: 0.0, transportedCounter: 0, maxCommuteTime: 0.0, moveCount: 0 };
+		fakeWorld = { elapsedTime: 0.0, spawnedCounter: 0, transportedCounter: 0, maxCommuteTime: 0.0, moveCount: 0 };
 	});
 
 	describe("requireUserCountWithinTime", function (){

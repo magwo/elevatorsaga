@@ -76,6 +76,7 @@ var createWorldCreator = function() {
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
+        world.spawnedCounter = 0.0;
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.moveCount = 0;
@@ -92,6 +93,7 @@ var createWorldCreator = function() {
 
         var registerUser = function(user) {
             world.users.push(user);
+            world.spawnedCounter++;
             user.updateDisplayPosition();
             user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
