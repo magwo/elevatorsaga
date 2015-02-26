@@ -190,11 +190,14 @@ button.right {
     z-index: 1;
 }
 
-.statscontainer div {
-    width: 240px;
+.statscontainer div, tr, th, td {
     height: 10px;
     margin-bottom: 8px;
     border-bottom: 1px solid #444;
+}
+
+.statscontainer th {
+    text-align: right;
 }
 
 .statscontainer .key {
