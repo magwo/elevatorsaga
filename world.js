@@ -77,12 +77,15 @@ var createWorldCreator = function() {
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
         world.spawnedCounter = 0.0;
+        world.doneWaitingCounter = 0.0;
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.moveCount = 0;
         world.elapsedTime = 0.0;
         world.maxCommuteTime = 0.0;
         world.avgCommuteTime = 0.0;
+        world.maxWaitTime = 0.0;
+        world.avgWaitTime = 0.0;
         world.challengeEnded = false;
 
         var recalculateStats = function() {
@@ -97,6 +100,15 @@ var createWorldCreator = function() {
             user.updateDisplayPosition();
             user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
+            user.on("entered_elevator", function() {
+                var wait;
+                world.doneWaitingCounter++;
+                wait = world.elapsedTime - user.spawnTimestamp;
+                user.enterTimestamp = world.elapsedTime;
+                world.maxWaitTime = Math.max(world.maxWaitTime, wait);
+                world.avgWaitTime = (world.avgWaitTime * (world.doneWaitingCounter - 1) + wait) / world.doneWaitingCounter;
+                recalculateStats();
+            });
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
                 world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - user.spawnTimestamp);
@@ -164,6 +176,9 @@ var createWorldCreator = function() {
             _.each(world.users, function(u) {
                 u.update(dt);
                 world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - u.spawnTimestamp);
+                if (u.enterTimestamp === undefined) {
+                    world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+                }
             });
 
             _.remove(world.users, function(u) { return u.removeMe; });

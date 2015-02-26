@@ -15,6 +15,8 @@ var presentStats = function($parent, world, statsTempl) {
             transportedPerSec: world.transportedPerSec.toPrecision(3),
             avgCommuteTime: (world.avgCommuteTime).toFixed(1),
             maxCommuteTime: (world.maxCommuteTime).toFixed(1),
+            avgWaitTime: (world.avgWaitTime).toFixed(1),
+            maxWaitTime: (world.maxWaitTime).toFixed(1),
             moveCount: (world.moveCount)
         }));
     });
