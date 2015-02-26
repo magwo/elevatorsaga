@@ -6,22 +6,25 @@ var clearAll = function($elems) {
 };
 
 
-var presentStats = function($parent, world, statsTempl) {
-    world.on("stats_display_changed", function() {
-        $parent.html(riot.render(statsTempl, {
-            spawnedCounter: world.spawnedCounter,
-            transportedCounter: world.transportedCounter,
-            elapsedTime: (world.elapsedTime).toFixed(0),
-            transportedPerSec: world.transportedPerSec.toPrecision(3),
-            avgCommuteTime: (world.avgCommuteTime).toFixed(1),
-            maxCommuteTime: (world.maxCommuteTime).toFixed(1),
-            avgWaitTime: (world.avgWaitTime).toFixed(1),
-            maxWaitTime: (world.maxWaitTime).toFixed(1),
-            avgTravelTime: (world.avgTravelTime).toFixed(1),
-            maxTravelTime: (world.maxTravelTime).toFixed(1),
-            moveCount: (world.moveCount)
-        }));
-    });
+var presentStats = function($parent, world) {
+    var updateStats = function() {
+        var grandparent = $parent.parent();
+        $parent.detach();
+        $parent.find("#spawnedCounter").text(world.spawnedCounter.toFixed());
+        $parent.find("#transportedCounter").text(world.transportedCounter.toFixed());
+        $parent.find("#elapsedTime").text(world.elapsedTime.toFixed(0) + "s");
+        $parent.find("#transportedPerSec").text(world.transportedPerSec.toPrecision(3));
+        $parent.find("#moveCount").text(world.moveCount.toFixed());
+        $parent.find("#avgCommuteTime").text(world.avgCommuteTime.toFixed(1) + "s");
+        $parent.find("#maxCommuteTime").text(world.maxCommuteTime.toFixed(1) + "s");
+        $parent.find("#avgWaitTime").text(world.avgWaitTime.toFixed(1) + "s");
+        $parent.find("#maxWaitTime").text(world.maxWaitTime.toFixed(1) + "s");
+        $parent.find("#avgTravelTime").text(world.avgTravelTime.toFixed(1) + "s");
+        $parent.find("#maxTravelTime").text(world.maxTravelTime.toFixed(1) + "s");
+        grandparent.append($parent);
+    };
+
+    world.on("stats_display_changed", updateStats);
     world.trigger("stats_display_changed");
 };
 

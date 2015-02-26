@@ -141,7 +141,6 @@ $(function() {
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
     var elevatorButtonTempl = document.getElementById("elevatorbutton-template").innerHTML.trim();
     var userTempl = document.getElementById("user-template").innerHTML.trim();
-    var statsTempl = document.getElementById("stats-template").innerHTML.trim();
     var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
     var feedbackTempl = document.getElementById("feedback-template").innerHTML.trim();
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
@@ -176,8 +175,8 @@ $(function() {
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
         window.world = app.world;
 
-        clearAll([$world, $stats, $feedback]);
-        presentStats($stats, app.world, statsTempl);
+        clearAll([$world, $feedback]);
+        presentStats($stats, app.world);
         presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
