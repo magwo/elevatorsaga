@@ -86,6 +86,8 @@ var createWorldCreator = function() {
         world.avgCommuteTime = 0.0;
         world.maxWaitTime = 0.0;
         world.avgWaitTime = 0.0;
+        world.maxTravelTime = 0.0;
+        world.avgTravelTime = 0.0;
         world.challengeEnded = false;
 
         var recalculateStats = function() {
@@ -113,6 +115,8 @@ var createWorldCreator = function() {
                 world.transportedCounter++;
                 world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - user.spawnTimestamp);
                 world.avgCommuteTime = (world.avgCommuteTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
+                world.maxTravelTime = Math.max(world.maxTravelTime, world.elapsedTime - user.enterTimestamp);
+                world.avgTravelTime = (world.avgTravelTime * (world.transportedCounter - 1) + (world.elapsedTime - user.enterTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
         };
@@ -178,6 +182,8 @@ var createWorldCreator = function() {
                 world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - u.spawnTimestamp);
                 if (u.enterTimestamp === undefined) {
                     world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+                } else {
+                    world.maxTravelTime = Math.max(world.maxTravelTime, world.elapsedTime - u.enterTimestamp);
                 }
             });
 
