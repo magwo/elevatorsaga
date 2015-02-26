@@ -108,11 +108,12 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
     }));
 
     world.on("new_user", function(user) {
-        var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
+        var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : "", timer: "0"}));
 
         user.on("new_state", function() {
             $user.css({left: user.worldX, top: user.worldY});
             if(user.done) { $user.addClass("leaving"); }
+            $user.find(".timer").text(Math.round(world.elapsedTime - user.spawnTimestamp).toString());
         });
         user.on("removed", function() {
             $user.remove();

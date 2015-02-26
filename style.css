@@ -230,6 +230,24 @@ button.right {
     display: inline-block;
 }
 
+.stackable {
+    /* Must be inside a moveable class */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.timer {
+    top: 10%;
+    text-align: center;
+    vertical-align: middle;
+    font: 9px Consolas, Monaco, monospace;
+    color: black;
+    text-shadow: 1px 1px 2px white;
+}
+
 .user {
     color: white;
     text-shadow: 0 1px 3px black;
