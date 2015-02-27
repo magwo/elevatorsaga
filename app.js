@@ -127,6 +127,7 @@ var createParamsUrl = function(current, overrides) {
 
 $(function() {
     var tsKey = "elevatorTimeScale";
+    var tmKey = "showTimer";
     var editor = createEditor();
 
     var params = {};
@@ -146,6 +147,19 @@ $(function() {
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
 
     var app = riot.observable({});
+    var showTimer = (function() {
+        var __showTimer = localStorage.getItem(tmKey).toString() || "Commute";
+        var accessor = function() {
+		if (arguments.length > 0) {
+		    __showTimer = arguments[0].toString();
+                    localStorage.setItem(tmKey, __showTimer);
+		} else {
+                    return __showTimer;
+		}
+        };
+        return accessor;
+    })();
+
     app.worldController = createWorldController(1.0 / 60.0);
     app.worldController.on("code_error", function(e) {
         console.log("World raised code error", e);
@@ -174,6 +188,7 @@ $(function() {
         app.currentChallengeIndex = challengeIndex;
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
         window.world = app.world;
+        world.showTimer = showTimer;
 
         clearAll([$world, $feedback]);
         presentStats($stats, app.world);

@@ -131,16 +131,19 @@
                 <div><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value" id="moveCount"></span></div>
                 <table style="width:100%">
                     <thead>
-                        <th class="invisible">Time</th><th scope="col">Avg</th><th scope="col">Max</th>
+                    <th class="invisible">Time</th><th scope="col">Avg</th><th scope="col">Max</th>
                     </thead>
                     <tbody>
-                    <tr><td><span class="key">Commute time</span></td>
+                    <tr class="set-timer-shown" id="Commute">
+                        <td><span class="key"><i class="fa fa-clock-o"/></i>Commute time</span></td>
                         <td><span class="value" id="avgCommuteTime"></span></td>
                         <td><span class="value" id="maxCommuteTime"></span></td></tr>
-                     <tr><td><span class="key">Wait time</span></td>
+                    <tr class="set-timer-shown" id="Wait">
+                        <td><span class="key"><i class="fa fa-clock-o"></i>Wait time</span></td>
                         <td><span class="value" id="avgWaitTime"></span></td>
                         <td><span class="value" id="maxWaitTime"></span></td></tr>
-                     <tr><td><span class="key">Travel time</span></td>
+                    <tr class="set-timer-shown" id="Travel">
+                        <td><span class="key"><i class="fa fa-clock-o"></i>Travel time</span></td>
                         <td><span class="value" id="avgTravelTime"></span></td>
                         <td><span class="value" id="maxTravelTime"></span></td></tr>
                     </tbody>
