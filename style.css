@@ -175,19 +175,18 @@ button.right {
     border-right: 1px solid black;
     border-left: 1px solid black;
     font-family: Arial, Helvetica, sans-serif;
+    float: left;
 }
 
 .statscontainer {
     font: 12px Consolas, Monaco, monospace;
     line-height: 10px;
     color: #999;
-    position: absolute;
     top: 0;
-    right: 0px;
     width: 240px;
-    height: 200px;
     padding: 20px;
     z-index: 1;
+    float: right;
 }
 
 .statscontainer div, tr, th, td {
