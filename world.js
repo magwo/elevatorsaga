@@ -76,12 +76,18 @@ var createWorldCreator = function() {
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
         world.users = [];
+        world.spawnedCounter = 0.0;
+        world.doneWaitingCounter = 0.0;
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
         world.moveCount = 0;
         world.elapsedTime = 0.0;
+        world.maxCommuteTime = 0.0;
+        world.avgCommuteTime = 0.0;
         world.maxWaitTime = 0.0;
         world.avgWaitTime = 0.0;
+        world.maxTravelTime = 0.0;
+        world.avgTravelTime = 0.0;
         world.challengeEnded = false;
 
         var recalculateStats = function() {
@@ -92,13 +98,25 @@ var createWorldCreator = function() {
 
         var registerUser = function(user) {
             world.users.push(user);
+            world.spawnedCounter++;
             user.updateDisplayPosition();
             user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
+            user.on("entered_elevator", function() {
+                var wait;
+                world.doneWaitingCounter++;
+                wait = world.elapsedTime - user.spawnTimestamp;
+                user.enterTimestamp = world.elapsedTime;
+                world.maxWaitTime = Math.max(world.maxWaitTime, wait);
+                world.avgWaitTime = (world.avgWaitTime * (world.doneWaitingCounter - 1) + wait) / world.doneWaitingCounter;
+                recalculateStats();
+            });
             user.on("exited_elevator", function() {
                 world.transportedCounter++;
-                world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - user.spawnTimestamp);
-                world.avgWaitTime = (world.avgWaitTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
+                world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - user.spawnTimestamp);
+                world.avgCommuteTime = (world.avgCommuteTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
+                world.maxTravelTime = Math.max(world.maxTravelTime, world.elapsedTime - user.enterTimestamp);
+                world.avgTravelTime = (world.avgTravelTime * (world.transportedCounter - 1) + (world.elapsedTime - user.enterTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
         };
@@ -161,7 +179,12 @@ var createWorldCreator = function() {
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt); });
             _.each(world.users, function(u) {
                 u.update(dt);
-                world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+                world.maxCommuteTime = Math.max(world.maxCommuteTime, world.elapsedTime - u.spawnTimestamp);
+                if (u.enterTimestamp === undefined) {
+                    world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
+                } else {
+                    world.maxTravelTime = Math.max(world.maxTravelTime, world.elapsedTime - u.enterTimestamp);
+                }
             });
 
             _.remove(world.users, function(u) { return u.removeMe; });

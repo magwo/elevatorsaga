@@ -30,7 +30,9 @@
 
 
     <script type="text/template" id="user-template">
-        <i class="movable fa user fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px;"></i>
+        <i class="movable fa user fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px;">
+            <span class="stackable timer">{timer}</span>
+        </i>
     </script>
 
     <script type="text/template" id="floor-template">
@@ -64,15 +66,6 @@
             <p class="emphasis-color">{message}</p>
             <a href="{url}" class="emphasis-color">Next challenge <i class="fa fa-caret-right blink" style="text-decoration: blink"></i></a>
         </div>
-    </script>
-
-    <script type="text/template" id="stats-template">
-        <div><span class="key">Transported</span><span class="value">{transportedCounter}</span></div>
-        <div><span class="key">Elapsed time</span><span class="value">{elapsedTime}s</span></div>
-        <div><span class="key">Transported/s</span><span class="value">{transportedPerSec}</span></div>
-        <div><span class="key">Avg waiting time</span><span class="value">{avgWaitTime}s</span></div>
-        <div><span class="key">Max waiting time</span><span class="value">{maxWaitTime}s</span></div>
-        <div><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value">{moveCount}</span></div>
     </script>
 
     <script type="text/template" id="challenge-template">
@@ -130,7 +123,32 @@
             <div class="feedbackcontainer"></div>
             <div class="innerworld">
             </div>
-            <div class="statscontainer"></div>
+            <div class="statscontainer">
+                <div><span class="key">People</span><span class="value" id="spawnedCounter"></span></div>
+                <div><span class="key">Transported</span><span class="value" id="transportedCounter"></span></div>
+                <div><span class="key">Elapsed time</span><span class="value" id="elapsedTime"></span></div>
+                <div><span class="key">Transported/s</span><span class="value" id="transportedPerSec"></span></div>
+                <div><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value" id="moveCount"></span></div>
+                <table style="width:100%">
+                    <thead>
+                    <th class="invisible">Time</th><th scope="col">Avg</th><th scope="col">Max</th>
+                    </thead>
+                    <tbody>
+                    <tr class="set-timer-shown" id="Commute">
+                        <td><span class="key"><i class="fa fa-clock-o"/></i>Commute time</span></td>
+                        <td><span class="value" id="avgCommuteTime"></span></td>
+                        <td><span class="value" id="maxCommuteTime"></span></td></tr>
+                    <tr class="set-timer-shown" id="Wait">
+                        <td><span class="key"><i class="fa fa-clock-o"></i>Wait time</span></td>
+                        <td><span class="value" id="avgWaitTime"></span></td>
+                        <td><span class="value" id="maxWaitTime"></span></td></tr>
+                    <tr class="set-timer-shown" id="Travel">
+                        <td><span class="key"><i class="fa fa-clock-o"></i>Travel time</span></td>
+                        <td><span class="value" id="avgTravelTime"></span></td>
+                        <td><span class="value" id="maxTravelTime"></span></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="codestatus"></div>

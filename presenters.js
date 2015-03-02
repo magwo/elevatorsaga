@@ -6,18 +6,43 @@ var clearAll = function($elems) {
 };
 
 
-var presentStats = function($parent, world, statsTempl) {
-    world.on("stats_display_changed", function() {
-        $parent.html(riot.render(statsTempl, {
-            transportedCounter: world.transportedCounter,
-            elapsedTime: (world.elapsedTime).toFixed(0),
-            transportedPerSec: world.transportedPerSec.toPrecision(3),
-            avgWaitTime: (world.avgWaitTime).toFixed(1),
-            maxWaitTime: (world.maxWaitTime).toFixed(1),
-            moveCount: (world.moveCount)
-        }));
+var presentStats = function($parent, world) {
+    var updateShownTimer = function() {
+        var showTimer = world.showTimer();
+        $parent.find(".fa").addClass("invisible");
+        switch (showTimer) {
+        // Don't search for strange/empty IDs
+        case "Commute": case "Wait": case "Travel":
+            $parent.find("#" + world.showTimer()).find("i").removeClass("invisible"); break;
+        default: break;
+        }
+        _.each(world.users, function(u) { u.trigger("new_state"); });
+    };
+    var updateStats = function() {
+        $parent.find("#spawnedCounter").text(world.spawnedCounter.toFixed());
+        $parent.find("#transportedCounter").text(world.transportedCounter.toFixed());
+        $parent.find("#elapsedTime").text(world.elapsedTime.toFixed(0) + "s");
+        $parent.find("#transportedPerSec").text(world.transportedPerSec.toPrecision(3));
+        $parent.find("#moveCount").text(world.moveCount.toFixed());
+        $parent.find("#avgCommuteTime").text(world.avgCommuteTime.toFixed(1) + "s");
+        $parent.find("#maxCommuteTime").text(world.maxCommuteTime.toFixed(1) + "s");
+        $parent.find("#avgWaitTime").text(world.avgWaitTime.toFixed(1) + "s");
+        $parent.find("#maxWaitTime").text(world.maxWaitTime.toFixed(1) + "s");
+        $parent.find("#avgTravelTime").text(world.avgTravelTime.toFixed(1) + "s");
+        $parent.find("#maxTravelTime").text(world.maxTravelTime.toFixed(1) + "s");
+    };
+
+    $parent.find(".set-timer-shown").on("click", function () {
+        var newTimer = $(this).attr("id").toString();
+        if (world.showTimer() == newTimer) {
+            newTimer = ""; // Disables displaying user timers
+        }
+        world.showTimer(newTimer);
+        updateShownTimer();
     });
+    world.on("stats_display_changed", updateStats);
     world.trigger("stats_display_changed");
+    updateShownTimer();
 };
 
 var presentChallenge = function($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
@@ -103,11 +128,40 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
     }));
 
     world.on("new_user", function(user) {
-        var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
+        var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : "", timer: "0"}));
 
         user.on("new_state", function() {
+            var userTime;
+            var $elem = $user.find(".timer");
+            var oldTime = $elem.text();
             $user.css({left: user.worldX, top: user.worldY});
             if(user.done) { $user.addClass("leaving"); }
+            switch (world.showTimer()) {
+            case "Wait":
+                userTime = (user.enterTimestamp||world.elapsedTime) - user.spawnTimestamp;
+                break;
+            case "Travel":
+                if (user.enterTimestamp !== undefined) {
+                    userTime = (user.exitTimestamp||world.elapsedTime) - user.enterTimestamp;
+                }
+                break;
+            case "Commute":
+                userTime = (user.exitTimestamp||world.elapsedTime) - user.spawnTimestamp;
+                break;
+            default:
+                userTime = undefined;
+                break;
+            }
+            if (userTime !== undefined) {
+               userTime = Math.round(userTime).toFixed();
+               if (oldTime !== userTime) {
+                    $elem.text(userTime);
+                }
+            } else {
+                if (oldTime !== "") {
+                    $elem.text("");
+                }
+            }
         });
         user.on("removed", function() {
             $user.remove();

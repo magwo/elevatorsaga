@@ -127,6 +127,7 @@ var createParamsUrl = function(current, overrides) {
 
 $(function() {
     var tsKey = "elevatorTimeScale";
+    var tmKey = "showTimer";
     var editor = createEditor();
 
     var params = {};
@@ -141,12 +142,24 @@ $(function() {
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
     var elevatorButtonTempl = document.getElementById("elevatorbutton-template").innerHTML.trim();
     var userTempl = document.getElementById("user-template").innerHTML.trim();
-    var statsTempl = document.getElementById("stats-template").innerHTML.trim();
     var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
     var feedbackTempl = document.getElementById("feedback-template").innerHTML.trim();
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
 
     var app = riot.observable({});
+    var showTimer = (function() {
+        var __showTimer = localStorage.getItem(tmKey).toString() || "Commute";
+        var accessor = function() {
+		if (arguments.length > 0) {
+		    __showTimer = arguments[0].toString();
+                    localStorage.setItem(tmKey, __showTimer);
+		} else {
+                    return __showTimer;
+		}
+        };
+        return accessor;
+    })();
+
     app.worldController = createWorldController(1.0 / 60.0);
     app.worldController.on("code_error", function(e) {
         console.log("World raised code error", e);
@@ -175,9 +188,10 @@ $(function() {
         app.currentChallengeIndex = challengeIndex;
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
         window.world = app.world;
+        world.showTimer = showTimer;
 
-        clearAll([$world, $stats, $feedback]);
-        presentStats($stats, app.world, statsTempl);
+        clearAll([$world, $feedback]);
+        presentStats($stats, app.world);
         presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
