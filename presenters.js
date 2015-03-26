@@ -1,32 +1,32 @@
 
-var clearAll = function($elems) {
+function clearAll($elems) {
     _.each($elems, function($elem) {
         $elem.empty();
     });
 };
 
 
-var presentStats = function($parent, world) {
+function presentStats($parent, world) {
 
-    var $transportedcounter = $parent.find(".transportedcounter"),
-        $elapsedtime = $parent.find(".elapsedtime"),
-        $transportedpersec = $parent.find(".transportedpersec"),
-        $avgwaittime = $parent.find(".avgwaittime"),
-        $maxwaittime = $parent.find(".maxwaittime"),
-        $movecount = $parent.find(".movecount");
+    var elem_transportedcounter = $parent.find(".transportedcounter").get(0),
+        elem_elapsedtime = $parent.find(".elapsedtime").get(0),
+        elem_transportedpersec = $parent.find(".transportedpersec").get(0),
+        elem_avgwaittime = $parent.find(".avgwaittime").get(0),
+        elem_maxwaittime = $parent.find(".maxwaittime").get(0),
+        elem_movecount = $parent.find(".movecount").get(0);
 
-    world.on("stats_display_changed", function() {
-        $transportedcounter.text(world.transportedCounter);
-        $elapsedtime.text(world.elapsedTime.toFixed(0) + "s");
-        $transportedpersec.text(world.transportedPerSec.toPrecision(3));
-        $avgwaittime.text(world.avgWaitTime.toFixed(1) + "s");
-        $maxwaittime.text(world.maxWaitTime.toFixed(1) + "s");
-        $movecount.text(world.moveCount);
+    world.on("stats_display_changed", function updateStats() {
+        elem_transportedcounter.innerHTML = world.transportedCounter;
+        elem_elapsedtime.innerHTML = world.elapsedTime.toFixed(0) + "s";
+        elem_transportedpersec.innerHTML = world.transportedPerSec.toPrecision(3);
+        elem_avgwaittime.innerHTML = world.avgWaitTime.toFixed(1) + "s";
+        elem_maxwaittime.innerHTML = world.maxWaitTime.toFixed(1) + "s";
+        elem_movecount.innerHTML = world.moveCount;
     });
     world.trigger("stats_display_changed");
 };
 
-var presentChallenge = function($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
+function presentChallenge($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
     var $challenge = $(riot.render(challengeTempl, {
         challenge: challenge,
         num: challengeNum,
@@ -52,14 +52,14 @@ var presentChallenge = function($parent, challenge, app, world, worldController,
     });
 };
 
-var presentFeedback = function($parent, feedbackTempl, world, title, message, url) {
+function presentFeedback($parent, feedbackTempl, world, title, message, url) {
     $parent.html(riot.render(feedbackTempl, {title: title, message: message, url: url, paddingTop: world.floors.length * world.floorHeight * 0.2}));
     if(!url) {
         $parent.find("a").remove();
     }
 };
 
-var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
+function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
 
     $world.css("height", world.floorHeight * world.floors.length);
 
@@ -123,7 +123,7 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
 };
 
 
-var presentCodeStatus = function($parent, templ, error) {
+function presentCodeStatus($parent, templ, error) {
     console.log(error);
     var errorDisplay = error ? "block" : "none";
     var successDisplay = error ? "none" : "block";
@@ -136,7 +136,7 @@ var presentCodeStatus = function($parent, templ, error) {
     $parent.html(status);
 };
 
-var makeDemoFullscreen = function() {
+function makeDemoFullscreen() {
     $("body .container > *").not(".world").css("visibility", "hidden");
     $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
 };
