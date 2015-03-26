@@ -64,14 +64,6 @@ describe("Movable object", function() {
 		expect(m.y).toBe(3.0);
 		expect(movableHandlers.someHandler).toHaveBeenCalled();
 	});
-	it("moves physically to destination over time", function() {
-		//obj.movePhysically = function(newX, newY, constantAcceleration, constantDeceleration, maxSpeed, cb) {
-		m.movePhysically(2.0, 3.0, 1.0, 2.0, 5.0, movableHandlers.someHandler);
-		timeForwarder(10.0, 0.1, m.update);
-		expect(m.x).toBe(2.0);
-		expect(m.y).toBe(3.0);
-		expect(movableHandlers.someHandler).toHaveBeenCalled();
-	});
 });
 
 describe("World controller", function() {
