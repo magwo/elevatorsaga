@@ -5,6 +5,13 @@ function clearAll($elems) {
     });
 };
 
+function setTransformPos(elem, x, y) {
+    var style = "translate(" + x + "px," + y + "px)";
+    elem.style["-ms-transform"] = style;
+    elem.style["-webkit-transform"] = style;
+    elem.style["transform"] = style;
+}
+
 
 function presentStats($parent, world) {
 
@@ -60,7 +67,6 @@ function presentFeedback($parent, feedbackTempl, world, title, message, url) {
 };
 
 function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
-
     $world.css("height", world.floorHeight * world.floors.length);
 
     $world.append(_.map(world.floors, function(f) {
@@ -88,12 +94,13 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
         };
         var buttonsHtml = renderButtons(e.buttonStates);
         var $elevator = $(riot.render(elevatorTempl, {e: e, buttons: buttonsHtml}));
+        var elem_elevator = $elevator.get(0);
         $elevator.on("click", ".buttonpress", function() {
             e.pressFloorButton(parseInt($(this).text()));
         });
 
         e.on("new_state", function() {
-            $elevator.css({left: e.worldX, top: e.worldY});
+            setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
         e.on("new_current_floor", function(floor) {
             $elevator.find(".floorindicator").text(floor);
@@ -105,14 +112,16 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
+        e.trigger("new_state");
         return $elevator;
     }));
 
     world.on("new_user", function(user) {
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
+        var elem_user = $user.get(0);
 
-        user.on("new_state", function() {
-            $user.css({left: user.worldX, top: user.worldY});
+        user.on("new_state", function update_state() {
+            setTransformPos(elem_user, user.worldX, user.worldY);
             if(user.done) { $user.addClass("leaving"); }
         });
         user.on("removed", function() {

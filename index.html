@@ -30,7 +30,7 @@
 
 
     <script type="text/template" id="user-template">
-        <i class="movable fa user fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px;"></i>
+        <i class="movable fa user fa-{u.displayType} {state}"></i>
     </script>
 
     <script type="text/template" id="floor-template">
@@ -44,7 +44,7 @@
     </script>
 
     <script type="text/template" id="elevator-template">
-        <div class="elevator movable" style="left: {e.worldX}px; top: {e.worldY}px; width: {e.width}px">
+        <div class="elevator movable" style="width: {e.width}px">
             <span class="directionindicator directionindicatorup"><i class="fa fa-arrow-circle-up up activated"></i></span>
             <span class="floorindicator">{e.currentFloor}</span>
             <span class="directionindicator directionindicatordown"><i class="fa fa-arrow-circle-down down activated"></i></span>
