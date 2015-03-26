@@ -6,16 +6,22 @@ var clearAll = function($elems) {
 };
 
 
-var presentStats = function($parent, world, statsTempl) {
+var presentStats = function($parent, world) {
+
+    var $transportedcounter = $parent.find(".transportedcounter"),
+        $elapsedtime = $parent.find(".elapsedtime"),
+        $transportedpersec = $parent.find(".transportedpersec"),
+        $avgwaittime = $parent.find(".avgwaittime"),
+        $maxwaittime = $parent.find(".maxwaittime"),
+        $movecount = $parent.find(".movecount");
+
     world.on("stats_display_changed", function() {
-        $parent.html(riot.render(statsTempl, {
-            transportedCounter: world.transportedCounter,
-            elapsedTime: (world.elapsedTime).toFixed(0),
-            transportedPerSec: world.transportedPerSec.toPrecision(3),
-            avgWaitTime: (world.avgWaitTime).toFixed(1),
-            maxWaitTime: (world.maxWaitTime).toFixed(1),
-            moveCount: (world.moveCount)
-        }));
+        $transportedcounter.text(world.transportedCounter);
+        $elapsedtime.text(world.elapsedTime.toFixed(0) + "s");
+        $transportedpersec.text(world.transportedPerSec.toPrecision(3));
+        $avgwaittime.text(world.avgWaitTime.toFixed(1) + "s");
+        $maxwaittime.text(world.maxWaitTime.toFixed(1) + "s");
+        $movecount.text(world.moveCount);
     });
     world.trigger("stats_display_changed");
 };
