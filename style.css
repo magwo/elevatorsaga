@@ -196,6 +196,7 @@ button.right {
 
 .statscontainer div, .statscontainer span {
     position: absolute;
+    display: block;
     width: 240px;
     height: 10px;
 }
@@ -224,7 +225,7 @@ button.right {
     position: absolute;
     top: 0;
     left: 0;
-    display: inline-block;
+    display: block;
 }
 
 .user {

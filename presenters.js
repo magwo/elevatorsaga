@@ -86,14 +86,13 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
     $world.find(".floor").first().find(".down").addClass("invisible");
     $world.find(".floor").last().find(".up").addClass("invisible");
 
-    $world.append(_.map(world.elevators, function(e) {
-        var renderButtons = function(states) {
-            return _.map(states, function(b, i) {
-                return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
-            }).join("");
-        };
-        var buttonsHtml = renderButtons(e.buttonStates);
-        var $elevator = $(riot.render(elevatorTempl, {e: e, buttons: buttonsHtml}));
+    function renderElevatorButtons(states) {
+        return _.map(states, function(b, i) {
+            return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
+        }).join("");
+    };
+    function setUpElevator(e) {
+        var $elevator = $(riot.render(elevatorTempl, {e: e}));
         var elem_elevator = $elevator.get(0);
         $elevator.on("click", ".buttonpress", function() {
             e.pressFloorButton(parseInt($(this).text()));
@@ -106,21 +105,26 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             $elevator.find(".floorindicator").text(floor);
         });
         e.on("floor_buttons_changed", function(states) {
-            $elevator.find(".buttonindicator").html(renderButtons(states));
+            $elevator.find(".buttonindicator").html(renderElevatorButtons(states));
         });
         e.on("indicatorstate_change", function(indicatorStates) {
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
+        e.trigger("floor_buttons_changed", e.buttonStates);
         e.trigger("new_state");
         return $elevator;
+    }
+
+    $world.append(_.map(world.elevators, function(e) {
+        return setUpElevator(e);
     }));
 
     world.on("new_user", function(user) {
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
         var elem_user = $user.get(0);
 
-        user.on("new_state", function update_state() {
+        user.on("new_state", function updateUserState() {
             setTransformPos(elem_user, user.worldX, user.worldY);
             if(user.done) { $user.addClass("leaving"); }
         });

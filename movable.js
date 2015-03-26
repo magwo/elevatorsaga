@@ -38,9 +38,9 @@ var asMovable = function(obj) {
     };
 
     movable.moveTo = function(newX, newY) {
-        if(newX === null) { newX = movable.x; }
-        if(newY === null) { newY = movable.y; }
-        movable.setPosition([newX, newY]);
+        if(newX !== null) { movable.x = newX; }
+        if(newY !== null) { movable.y = newY; }
+        movable.trigger('new_state');
     };
 
     movable.isBusy = function() {
