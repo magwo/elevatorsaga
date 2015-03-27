@@ -48,7 +48,7 @@ var createWorldCreator = function() {
         user.moveTo(105+_.random(40), 0);
         user.appearOnFloor(floors[beginningFloor], destinationFloor);
         return user;
-    }
+    };
 
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
