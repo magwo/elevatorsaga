@@ -43,6 +43,13 @@ var createWorldCreator = function() {
         return user;
     };
 
+    creator.spawnUser = function(floorCount, floorHeight, floors, beginningFloor, destinationFloor) {
+        var user = creator.createRandomUser(floorCount, floorHeight);
+        user.moveTo(105+_.random(40), 0);
+        user.appearOnFloor(floors[beginningFloor], destinationFloor);
+        return user;
+    }
+
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
         var user = creator.createRandomUser(floorCount, floorHeight);
         user.moveTo(105+_.random(40), 0);
@@ -65,7 +72,8 @@ var createWorldCreator = function() {
 
     creator.createWorld = function(options) {
         console.log("Creating world with options", options);
-        var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
+        var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5, spawnPattern: [] };
+        var defaultSpawnPatternOptions = {time: 0.0, fromFloor: 0, toFloor: 1, numPeople: 0, spawnProbability: 1.0};
         options = _.defaults(_.clone(options), defaultOptions);
         console.log("Options after default are", options);
         var world = {floorHeight: options.floorHeight, transportedCounter: 0};
@@ -75,6 +83,7 @@ var createWorldCreator = function() {
         world.floors = creator.createFloors(options.floorCount, world.floorHeight);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
         world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
+        world.spawnPattern = _.map(options.spawnPattern, function(sp) { return _.defaults(_.clone(sp), defaultSpawnPatternOptions); });
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
@@ -145,7 +154,7 @@ var createWorldCreator = function() {
             });
         });
 
-        var elapsedSinceSpawn = 1.001/options.spawnRate;
+        var elapsedSinceSpawn = (options.spawnRate === 0.0) ? 0.0 : (1.001/options.spawnRate);
         var elapsedSinceStatsUpdate = 0.0;
 
         // Main update function
@@ -153,10 +162,22 @@ var createWorldCreator = function() {
             world.elapsedTime += dt;
             elapsedSinceSpawn += dt;
             elapsedSinceStatsUpdate += dt;
-            while(elapsedSinceSpawn > 1.0/options.spawnRate) {
-                elapsedSinceSpawn -= 1.0/options.spawnRate;
-                registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+            if(options.spawnRate !== 0.0) {
+                while(elapsedSinceSpawn > 1.0/options.spawnRate) {
+                    elapsedSinceSpawn -= 1.0/options.spawnRate;
+                    registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+                }
             }
+
+            _.each(world.spawnPattern, function(spawnable) {
+                if(spawnable.hasOwnProperty('completed') || spawnable.time > world.elapsedTime) return;
+
+                for(var i=0; i < spawnable.numPeople; i++) {
+                    if(_.random(0, 100) < ((1.0-spawnable.spawnProbability)*100)) continue;
+                    registerUser(creator.spawnUser(options.floorCount, world.floorHeight, world.floors, spawnable.fromFloor, spawnable.toFloor));
+                }
+                spawnable.completed = true;
+            });
 
             _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt); });
             _.each(world.users, function(u) {
@@ -172,7 +193,6 @@ var createWorldCreator = function() {
             _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
             _.each(world.users, function(u) { u.updateDisplayPosition(); });
         };
-
 
         world.unWind = function() {
             console.log("Unwinding", world);
