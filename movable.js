@@ -43,6 +43,12 @@ var asMovable = function(obj) {
         movable.trigger('new_state');
     };
 
+    movable.moveToFast = function(newX, newY) {
+        movable.x = newX;
+        movable.y = newY;
+        movable.trigger("new_state");
+    }
+
     movable.isBusy = function() {
         return movable.currentTask !== null;
     };
@@ -79,12 +85,12 @@ var asMovable = function(obj) {
         movable.currentTask = function (dt) {
             timeSpent = Math.min(timeToSpend, timeSpent + dt);
             if(timeSpent === timeToSpend) { // Epsilon issues possibly?
-                movable.setPosition([newX, newY]);
+                movable.moveToFast(newX, newY);
                 movable.currentTask = null;
                 if(cb) { cb(); }
             } else {
                 var factor = timeSpent / timeToSpend;
-                movable.setPosition([interpolator(origX, newX, factor), interpolator(origY, newY, factor)]);
+                movable.moveToFast(interpolator(origX, newX, factor), interpolator(origY, newY, factor));
             }
         };
     };

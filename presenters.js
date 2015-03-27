@@ -9,8 +9,13 @@ function setTransformPos(elem, x, y) {
     var style = "translate(" + x + "px," + y + "px)";
     elem.style["-ms-transform"] = style;
     elem.style["-webkit-transform"] = style;
-    elem.style["transform"] = style;
-}
+    elem.style.transform = style;
+};
+
+function updateUserState($user, elem_user, user) {
+    setTransformPos(elem_user, user.worldX, user.worldY);
+    if(user.done) { $user.addClass("leaving"); }
+};
 
 
 function presentStats($parent, world) {
@@ -98,14 +103,14 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             e.pressFloorButton(parseInt($(this).text()));
         });
 
-        e.on("new_state", function() {
+        e.on("new_state", function updateElevatorPosition() {
             setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
         e.on("new_current_floor", function(floor) {
-            $elevator.find(".floorindicator").text(floor);
+            $elevator.find(".floorindicator").get(0).innerHTML = floor;
         });
         e.on("floor_buttons_changed", function(states) {
-            $elevator.find(".buttonindicator").html(renderElevatorButtons(states));
+            $elevator.find(".buttonindicator").get(0).innerHTML = renderElevatorButtons(states);
         });
         e.on("indicatorstate_change", function(indicatorStates) {
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
@@ -124,10 +129,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
         var elem_user = $user.get(0);
 
-        user.on("new_state", function updateUserState() {
-            setTransformPos(elem_user, user.worldX, user.worldY);
-            if(user.done) { $user.addClass("leaving"); }
-        });
+        user.on("new_state", function() { updateUserState($user, elem_user, user); })
         user.on("removed", function() {
             $user.remove();
         });
