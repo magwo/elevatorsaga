@@ -61,17 +61,17 @@ var requireDemo = function() {
 // Simulates work-day traffic pattern
 var spawnPatternWorkDayTraffic = [
     // Person(s): spawn floor at some absolute time, go to some floor
-    {time: 1.0, fromFloor: 0, toFloor: 2, numPeople: 5, spawnProbability: 0.95}, // Morning, heading to office
-    {time: 1.0, fromFloor: 2, toFloor: 0, numPeople: 2, spawnProbability: 0.95},
-    {time: 2.0, fromFloor: 0, toFloor: 1, numPeople: 3, spawnProbability: 0.95},
-    {time: 5.0, fromFloor: 0, toFloor: 2, numPeople: 3, spawnProbability: 0.95}, // Some random people
-    {time: 7.0, fromFloor: 2, toFloor: 1, numPeople: 1, spawnProbability: 0.95},
-    {time: 12.0, fromFloor: 0, toFloor: 1, numPeople: 1, spawnProbability: 0.95},
-    {time: 25.0, fromFloor: 2, toFloor: 0, numPeople: 5, spawnProbability: 0.95}, // Lunch
-    {time: 30.0, fromFloor: 2, toFloor: 0, numPeople: 3, spawnProbability: 0.95},
-    {time: 30.0, fromFloor: 1, toFloor: 0, numPeople: 3, spawnProbability: 0.95},
-    {time: 33.0, fromFloor: 0, toFloor: 1, numPeople: 3, spawnProbability: 0.95}, // End Lunch
-    {time: 33.0, fromFloor: 0, toFloor: 2, numPeople: 5, spawnProbability: 0.95},
+    {time: 1.0, fromFloor: 0, toFloor: 2, numPeople: 5, spawnProbability: 0.80}, // Morning, heading to office
+    {time: 1.0, fromFloor: 2, toFloor: 0, numPeople: 2, spawnProbability: 0.80},
+    {time: 2.0, fromFloor: 0, toFloor: 1, numPeople: 3, spawnProbability: 0.90},
+    {time: 5.0, fromFloor: 0, toFloor: 2, numPeople: 3, spawnProbability: 0.90}, // Some random people
+    {time: 7.0, fromFloor: 2, toFloor: 1, numPeople: 1, spawnProbability: 0.90},
+    {time: 12.0, fromFloor: 0, toFloor: 1, numPeople: 1, spawnProbability: 0.90},
+    {time: 25.0, fromFloor: 2, toFloor: 0, numPeople: 5, spawnProbability: 0.70}, // Lunch
+    {time: 30.0, fromFloor: 2, toFloor: 0, numPeople: 3, spawnProbability: 0.70},
+    {time: 30.0, fromFloor: 1, toFloor: 0, numPeople: 3, spawnProbability: 0.70},
+    {time: 33.0, fromFloor: 0, toFloor: 1, numPeople: 3, spawnProbability: 0.70}, // End Lunch
+    {time: 33.0, fromFloor: 0, toFloor: 2, numPeople: 5, spawnProbability: 0.70},
     {time: 40.0, fromFloor: 2, toFloor: 0, numPeople: 2, spawnProbability: 0.95}, // Evening, heading home
     {time: 42.0, fromFloor: 2, toFloor: 0, numPeople: 2, spawnProbability: 0.95},
     {time: 42.0, fromFloor: 1, toFloor: 0, numPeople: 1, spawnProbability: 0.95},
@@ -105,6 +105,6 @@ var challenges = [
     ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireUserCountWithinTimeWithMaxWaitTime(2675, 1800, 45)}
 
     ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
-    ,{options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.0, spawnPattern: spawnPatternWorkDayTraffic}, condition: requireUserCountWithinTime(40, 60)}
+    ,{options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.0, spawnPattern: spawnPatternWorkDayTraffic}, condition: requireUserCountWithinTime(35, 60)}
 ];
 /* jshint laxcomma:false */
