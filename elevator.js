@@ -125,8 +125,8 @@ var asElevator = function(movable, speedFloorsPerSec, floorCount, floorHeight, m
             elevator.trigger("stopped_at_floor", elevator.currentFloor);
             // Need to allow users to get off first, so that new ones
             // can enter on the same floor
-            elevator.trigger("exit_available", elevator.currentFloor);
-            elevator.trigger("entrance_available", movable);
+            elevator.trigger("exit_available", elevator.currentFloor, elevator);
+            elevator.trigger("entrance_available", elevator);
         }
     };
 

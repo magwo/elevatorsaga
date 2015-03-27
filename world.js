@@ -103,47 +103,53 @@ var createWorldCreator = function() {
             });
         };
 
-        // Bind them all together
-        _.each(world.elevators, function(elevator) {
-            elevator.on("entrance_available", function() {
-                // Notify floors first because overflowing users
-                // will press buttons again
-                _.each(world.floors, function(floor, i) {
-                    if(elevator.currentFloor === i) {
-                        floor.elevatorAvailable(elevator);
-                    }
-                });
+        var handleElevAvailability = function(elevator) {
+            // Use regular loops for memory/performance reasons
+            // Notify floors first because overflowing users
+            // will press buttons again.
+            for(var i=0, len=world.floors.length; i<len; ++i) {
+                var floor = world.floors[i];
+                if(elevator.currentFloor === i) {
+                    floor.elevatorAvailable(elevator);
+                }
+            }
+            for(var users=world.users, i=0, len=users.length; i < len; ++i) {
+                var user = users[i];
+                if(user.currentFloor === elevator.currentFloor) {
+                    user.elevatorAvailable(elevator, world.floors[elevator.currentFloor]);
+                }
+            }
+        };
 
-                _.each(world.users, function(user) {
-                    if(user.currentFloor === elevator.currentFloor) {
-                        user.elevatorAvailable(elevator, world.floors[elevator.currentFloor]);
+        // Bind them all together
+        for(var i=0; i < world.elevators.length; ++i) {
+            world.elevators[i].on("entrance_available", handleElevAvailability);
+        }
+
+        var handleButtonRepressing = function(eventName, floor) {
+            // Need randomize iteration order or we'll tend to fill upp first elevator
+            for(var i=0, len=world.elevators.length, offset=_.random(len-1); i < len; ++i) {
+                var elevIndex = (i + offset) % len;
+                var elevator = world.elevators[elevIndex];
+                if( eventName === "up_button_pressed" && elevator.goingUpIndicator ||
+                    eventName === "down_button_pressed" && elevator.goingDownIndicator) {
+
+                    // Elevator is heading in correct direction, check for suitability
+                    if(elevator.currentFloor === floor.level && elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
+                        // Potentially suitable to get into
+                        // Use the interface queue functionality to queue up this action
+                        world.elevatorInterfaces[elevIndex].goToFloor(floor.level, true);
+                        return;
                     }
-                });
-            });
-        });
+                }
+            }
+        }
 
         // This will cause elevators to "re-arrive" at floors if someone presses an
         // appropriate button on the floor before the elevator has left.
-        _.each(world.floors, function(floor) {
-            floor.on("up_button_pressed down_button_pressed", function(eventName) {
-                // Need randomize iteration order or we'll tend to fill upp first elevator
-                _.each(_.sample(_.range(world.elevators.length), world.elevators.length), function(elevIndex) {
-                    var elevator = world.elevators[elevIndex];
-                    if(
-                        eventName === "up_button_pressed" && elevator.goingUpIndicator ||
-                        eventName === "down_button_pressed" && elevator.goingDownIndicator) {
-
-                        // Elevator is heading in correct direction, check for suitability
-                        if(elevator.currentFloor === floor.level && elevator.isOnAFloor() && !elevator.isMoving && !elevator.isFull()) {
-                            // Potentially suitable to get into
-                            // Use the interface queue functionality to queue up this action
-                            world.elevatorInterfaces[elevIndex].goToFloor(floor.level, true);
-                            return false;
-                        }
-                    }
-                });
-            });
-        });
+        for(var i=0; i<world.floors.length; ++i) {
+            world.floors[i].on("up_button_pressed down_button_pressed", handleButtonRepressing);
+        };
 
         var elapsedSinceSpawn = 1.001/options.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
@@ -158,19 +164,35 @@ var createWorldCreator = function() {
                 registerUser(creator.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
             }
 
-            _.each(world.elevators, function(e) { e.update(dt); e.updateElevatorMovement(dt); });
-            _.each(world.users, function(u) {
+            // Use regular for loops for performance and memory friendlyness
+            for(var i=0, len=world.elevators.length; i < len; ++i) {
+                var e = world.elevators[i];
+                e.update(dt);
+                e.updateElevatorMovement(dt);
+            }
+            for(var users=world.users, i=0, len=users.length; i < len; ++i) {
+                var u = users[i];
                 u.update(dt);
                 world.maxWaitTime = Math.max(world.maxWaitTime, world.elapsedTime - u.spawnTimestamp);
-            });
+            };
 
-            _.remove(world.users, function(u) { return u.removeMe; });
+            for(var users=world.users, i=world.users.length-1; i>=0; i--) {
+                var u = users[i];
+                if(u.removeMe) {
+                    users.splice(i, 1);
+                }
+            }
+            
             recalculateStats();
         };
 
         world.updateDisplayPositions = function() {
-            _.each(world.elevators, function(e) { e.updateDisplayPosition(); });
-            _.each(world.users, function(u) { u.updateDisplayPosition(); });
+            for(var i=0, len=world.elevators.length; i < len; ++i) {
+                world.elevators[i].updateDisplayPosition();
+            }
+            for(var users=world.users, i=0, len=users.length; i < len; ++i) {
+                users[i].updateDisplayPosition();
+            }
         };
 
 
@@ -185,7 +207,9 @@ var createWorldCreator = function() {
 
         world.init = function() {
             // Checking the floor queue of the elevators triggers the idle event here
-            _.each(world.elevatorInterfaces, function(ei) { ei.checkDestinationQueue(); });
+            for(var i=0; i < world.elevatorInterfaces.length; ++i) {
+                world.elevatorInterfaces[i].checkDestinationQueue();
+            }
         };
 
         return world;

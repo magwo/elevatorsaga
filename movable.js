@@ -24,10 +24,12 @@ var asMovable = function(obj) {
     movable.worldY = 0.0;
     movable.currentTask = null;
 
+    var tmpPosStorage = [0,0];
+
     movable.updateDisplayPosition = function() {
-        var worldPos = movable.getWorldPosition();
-        movable.worldX = worldPos[0];
-        movable.worldY = worldPos[1];
+        movable.getWorldPosition(tmpPosStorage);
+        movable.worldX = tmpPosStorage[0];
+        movable.worldY = tmpPosStorage[1];
         movable.trigger('new_state', obj);
     };
 
@@ -101,7 +103,7 @@ var asMovable = function(obj) {
         }
     };
 
-    movable.getWorldPosition = function() {
+    movable.getWorldPosition = function(storage) {
         var resultX = movable.x;
         var resultY = movable.y;
         var currentParent = movable.parent;
@@ -110,23 +112,25 @@ var asMovable = function(obj) {
             resultY += currentParent.y;
             currentParent = currentParent.parent;
         }
-        return [resultX, resultY];
+        storage[0] = resultX;
+        storage[1] = resultY;
     };
 
     movable.setParent = function(movableParent) {
-        var objWorld;
+        var objWorld = [0,0];
         if(movableParent === null) {
             if(movable.parent !== null) {
-                objWorld = movable.getWorldPosition();
+                movable.getWorldPosition(objWorld);
                 movable.parent = null;
-                movable.setPosition(objWorld);
+                movable.moveToFast(objWorld[0], objWorld[1]);
             }
         } else {
             // Parent is being set a non-null movable
-            objWorld = movable.getWorldPosition();
-            var parentWorld = movableParent.getWorldPosition();
+            movable.getWorldPosition(objWorld);
+            var parentWorld = [0,0];
+            movableParent.getWorldPosition(parentWorld);
             movable.parent = movableParent;
-            movable.setPosition([objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]]);
+            movable.moveToFast(objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]);
         }
     };
 
