@@ -52,7 +52,7 @@ function presentChallenge($parent, challenge, app, world, worldController, chall
     });
     $parent.find(".timescale_increase").on("click", function(e) {
         e.preventDefault();
-        if(worldController.timeScale < 20) {
+        if(worldController.timeScale < 40) {
             var timeScale = Math.round(worldController.timeScale * 1.618);
             worldController.setTimeScale(timeScale);
         }
@@ -103,7 +103,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             e.pressFloorButton(parseInt($(this).text()));
         });
 
-        e.on("new_state", function updateElevatorPosition() {
+        e.on("new_display_state", function updateElevatorPosition() {
             setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
         e.on("new_current_floor", function(floor) {
@@ -117,7 +117,8 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
         e.trigger("floor_buttons_changed", e.buttonStates);
-        e.trigger("new_state");
+        e.trigger("new_state", e);
+        e.trigger("new_display_state", e);
         return $elevator;
     }
 
@@ -129,7 +130,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
         var elem_user = $user.get(0);
 
-        user.on("new_state", function() { updateUserState($user, elem_user, user); })
+        user.on("new_display_state", function() { updateUserState($user, elem_user, user); })
         user.on("removed", function() {
             $user.remove();
         });

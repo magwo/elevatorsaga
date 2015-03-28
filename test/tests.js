@@ -8,12 +8,54 @@ var timeForwarder = function(dt, stepSize, fn) {
 	}
 };
 
+describe("Movable class", function() {
+	var m = null;
+	var movableHandlers = null;
+
+	beforeEach(function() {
+		m = new Movable();
+		movableHandlers = {
+			someHandler: function() {}
+		};
+		spyOn(movableHandlers, "someHandler").and.callThrough();
+	});
+	it("disallows incorrect creation", function() {
+		var faultyCreation = function () { Movable(); };
+		expect(faultyCreation).toThrow();
+	});
+	it("updates display position when told to", function() {
+		m.moveTo(1.0, 1.0);
+		m.updateDisplayPosition();
+		expect(m.worldX).toBe(1.0);
+		expect(m.worldY).toBe(1.0);
+	});
+});
+
+describe("User class", function() {
+	var u = null;
+	var handlers = null;
+
+	beforeEach(function() {
+		u = new User();
+		handlers = {
+			someHandler: function() {},
+		};
+		spyOn(handlers, "someHandler").and.callThrough();
+	});
+	it("updates display position when told to", function() {
+		u.moveTo(1.0, 1.0);
+		u.updateDisplayPosition();
+		expect(u.worldX).toBe(1.0);
+		expect(u.worldY).toBe(1.0);
+	});
+});
+
 describe("Movable object", function() {
 	var m = null;
 	var movableHandlers = null;
 
 	beforeEach(function() {
-		m = asMovable({});
+		m = new Movable();
 		movableHandlers = {
 			someHandler: function() {},
 		};
@@ -21,7 +63,7 @@ describe("Movable object", function() {
 	});
 
 	it("updates display position when told to", function() {
-		m.setPosition([1.0, 1.0]);
+		m.moveTo(1.0, 1.0);
 		m.updateDisplayPosition();
 		expect(m.worldX).toBe(1.0);
 		expect(m.worldY).toBe(1.0);
@@ -47,7 +89,7 @@ describe("Movable object", function() {
 		expect(m.y).toBe(1.0);
 	});
 	it("gets new display position when parent is moved", function() {
-		var mParent = asMovable({});
+		var mParent = new Movable();
 		m.setParent(mParent);
 		mParent.moveTo(2.0, 3.0);
 		m.updateDisplayPosition();
@@ -59,7 +101,7 @@ describe("Movable object", function() {
 	it("moves to destination over time", function() {
 		//obj.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
 		m.moveToOverTime(2.0, 3.0, 10.0, movableHandlers.someHandler);
-		timeForwarder(10.0, 0.1, m.update);
+		timeForwarder(10.0, 0.1, function(dt) { m.update(dt) });
 		expect(m.x).toBe(2.0);
 		expect(m.y).toBe(3.0);
 		expect(movableHandlers.someHandler).toHaveBeenCalled();
@@ -278,7 +320,7 @@ describe("Elevator object", function() {
 	var floorHeight = 44;
 
 	beforeEach(function() {
-		e = asElevator(asMovable({}), 1.5, floorCount, floorHeight);
+		e = new Elevator(1.5, floorCount, floorHeight);
 	});
 
 	it("moves to floors specified", function() {
@@ -287,12 +329,12 @@ describe("Elevator object", function() {
 			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			var expectedY = (floorHeight * (floorCount-1)) - floorHeight*floor;
 			expect(e.y).toBe(expectedY);
-			expect(e.currentFloor).toBe(floor);
+			expect(e.currentFloor).toBe(floor, "Floor num");
 		});
 	});
 
 	it("can change direction", function() {
-		e.setPosition([0, 0]);
+		e.moveTo(0, 0);
 		e.setFloorPosition(0);
 		expect(e.currentFloor).toBe(0);
 		var originalY = e.y;
@@ -306,7 +348,7 @@ describe("Elevator object", function() {
 	});
 
 	it("is correctly aware of it being on a floor", function() {
-		e.setPosition([0, 0]);
+		e.moveTo(0, 0);
 		e.setFloorPosition(0);
 		expect(e.isOnAFloor()).toBe(true);
 		e.y = e.y + 0.0000000000000001;
@@ -352,7 +394,7 @@ describe("API", function() {
 		var e = null;
 		var elevInterface = null;
 		beforeEach(function() {
-			e = asElevator(asMovable({}), 1.5, 4, 40);
+			e =  new Elevator(1.5, 4, 40);
 			e.setFloorPosition(0);
 			elevInterface = asElevatorInterface({}, e, 4);
 		});

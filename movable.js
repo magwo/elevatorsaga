@@ -12,11 +12,11 @@ var coolInterpolate = function(value0, value1, x) {
 };
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
-var asMovable = function(obj) {
-    var movable = obj;
 
-    riot.observable(obj);
-
+function Movable() {
+    newGuard(this, Movable);
+    var movable = this;
+    movable = riot.observable(movable);
     movable.x = 0.0;
     movable.y = 0.0;
     movable.parent = null;
@@ -24,116 +24,115 @@ var asMovable = function(obj) {
     movable.worldY = 0.0;
     movable.currentTask = null;
 
-    var tmpPosStorage = [0,0];
+    movable._tmpPosStorage = [0,0];
 
-    movable.updateDisplayPosition = function() {
-        movable.getWorldPosition(tmpPosStorage);
-        movable.worldX = tmpPosStorage[0];
-        movable.worldY = tmpPosStorage[1];
-        movable.trigger('new_state', obj);
-    };
+    movable.trigger('new_state', movable);
+}
 
-    movable.setPosition = function(position) {
-        movable.x = position[0];
-        movable.y = position[1];
-        movable.trigger('new_state');
-    };
-
-    movable.moveTo = function(newX, newY) {
-        if(newX !== null) { movable.x = newX; }
-        if(newY !== null) { movable.y = newY; }
-        movable.trigger('new_state');
-    };
-
-    movable.moveToFast = function(newX, newY) {
-        movable.x = newX;
-        movable.y = newY;
-        movable.trigger("new_state");
+Movable.prototype.updateDisplayPosition = function(forceTrigger) {
+    var tmpPosStorage = this._tmpPosStorage;
+    this.getWorldPosition(tmpPosStorage);
+    var oldX = this.worldX;
+    var oldY = this.worldY;
+    this.worldX = tmpPosStorage[0];
+    this.worldY = tmpPosStorage[1];
+    if(oldX !== this.worldX || oldY !== this.worldY || forceTrigger === true) {
+        this.trigger('new_display_state', this);
     }
+};
 
-    movable.isBusy = function() {
-        return movable.currentTask !== null;
-    };
+Movable.prototype.moveTo = function(newX, newY) {
+    if(newX !== null) { this.x = newX; }
+    if(newY !== null) { this.y = newY; }
+    this.trigger("new_state", this);
+};
 
-    movable.makeSureNotBusy = function() {
-        if(movable.isBusy()) {
-            console.error("Attempt to use movable while it was busy", obj);
-            throw({message: "Object is busy - you should use callback", obj: obj});
+Movable.prototype.moveToFast = function(newX, newY) {
+    this.x = newX;
+    this.y = newY;
+    this.trigger("new_state", this);
+}
+
+Movable.prototype.isBusy = function() {
+    return this.currentTask !== null;
+};
+
+Movable.prototype.makeSureNotBusy = function() {
+    if(this.isBusy()) {
+        console.error("Attempt to use movable while it was busy", this);
+        throw({message: "Object is busy - you should use callback", obj: this});
+    }
+};
+
+Movable.prototype.wait = function(millis, cb) {
+    this.makeSureNotBusy();
+    var timeSpent = 0.0;
+    var self = this;
+    self.currentTask = function waitTask(dt) {
+        timeSpent += dt;
+        if(timeSpent > millis) {
+            self.currentTask = null;
+            if(cb) { cb(); }
         }
     };
+};
 
-    movable.wait = function(millis, cb) {
-        movable.makeSureNotBusy();
-        var timeSpent = 0.0;
-        movable.currentTask = function(dt) {
-            timeSpent += dt;
-            if(timeSpent > millis) {
-                movable.currentTask = null;
-                if(cb) { cb(); }
-            }
-        };
-    };
-
-    movable.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
-        movable.makeSureNotBusy();
-        movable.currentTask = true;
-        if(newX === null) { newX = movable.x; }
-        if(newY === null) { newY = movable.y; }
-        if(typeof interpolator === "undefined") { interpolator = DEFAULT_INTERPOLATOR; }
-        var origX = movable.x;
-        var origY = movable.y;
-        var timeSpent = 0.0;
-
-        movable.currentTask = function (dt) {
-            timeSpent = Math.min(timeToSpend, timeSpent + dt);
-            if(timeSpent === timeToSpend) { // Epsilon issues possibly?
-                movable.moveToFast(newX, newY);
-                movable.currentTask = null;
-                if(cb) { cb(); }
-            } else {
-                var factor = timeSpent / timeToSpend;
-                movable.moveToFast(interpolator(origX, newX, factor), interpolator(origY, newY, factor));
-            }
-        };
-    };
-
-    movable.update = function(dt) {
-        if(movable.currentTask !== null) {
-            movable.currentTask(dt);
-        }
-    };
-
-    movable.getWorldPosition = function(storage) {
-        var resultX = movable.x;
-        var resultY = movable.y;
-        var currentParent = movable.parent;
-        while(currentParent !== null) {
-            resultX += currentParent.x;
-            resultY += currentParent.y;
-            currentParent = currentParent.parent;
-        }
-        storage[0] = resultX;
-        storage[1] = resultY;
-    };
-
-    movable.setParent = function(movableParent) {
-        var objWorld = [0,0];
-        if(movableParent === null) {
-            if(movable.parent !== null) {
-                movable.getWorldPosition(objWorld);
-                movable.parent = null;
-                movable.moveToFast(objWorld[0], objWorld[1]);
-            }
+Movable.prototype.moveToOverTime = function(newX, newY, timeToSpend, interpolator, cb) {
+    this.makeSureNotBusy();
+    this.currentTask = true;
+    if(newX === null) { newX = this.x; }
+    if(newY === null) { newY = this.y; }
+    if(typeof interpolator === "undefined") { interpolator = DEFAULT_INTERPOLATOR; }
+    var origX = this.x;
+    var origY = this.y;
+    var timeSpent = 0.0;
+    var self = this;
+    self.currentTask = function moveToOverTimeTask(dt) {
+        timeSpent = Math.min(timeToSpend, timeSpent + dt);
+        if(timeSpent === timeToSpend) { // Epsilon issues possibly?
+            self.moveToFast(newX, newY);
+            self.currentTask = null;
+            if(cb) { cb(); }
         } else {
-            // Parent is being set a non-null movable
-            movable.getWorldPosition(objWorld);
-            var parentWorld = [0,0];
-            movableParent.getWorldPosition(parentWorld);
-            movable.parent = movableParent;
-            movable.moveToFast(objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]);
+            var factor = timeSpent / timeToSpend;
+            self.moveToFast(interpolator(origX, newX, factor), interpolator(origY, newY, factor));
         }
     };
+};
 
-    movable.trigger('new_state', obj);
-    return movable;
+Movable.prototype.update = function(dt) {
+    if(this.currentTask !== null) {
+        this.currentTask(dt);
+    }
+};
+
+Movable.prototype.getWorldPosition = function(storage) {
+    var resultX = this.x;
+    var resultY = this.y;
+    var currentParent = this.parent;
+    while(currentParent !== null) {
+        resultX += currentParent.x;
+        resultY += currentParent.y;
+        currentParent = currentParent.parent;
+    }
+    storage[0] = resultX;
+    storage[1] = resultY;
+};
+
+Movable.prototype.setParent = function(movableParent) {
+    var objWorld = [0,0];
+    if(movableParent === null) {
+        if(this.parent !== null) {
+            this.getWorldPosition(objWorld);
+            this.parent = null;
+            this.moveToFast(objWorld[0], objWorld[1]);
+        }
+    } else {
+        // Parent is being set a non-null movable
+        this.getWorldPosition(objWorld);
+        var parentWorld = [0,0];
+        movableParent.getWorldPosition(parentWorld);
+        this.parent = movableParent;
+        this.moveToFast(objWorld[0] - parentWorld[0], objWorld[1] - parentWorld[1]);
+    }
 };

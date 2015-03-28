@@ -16,8 +16,7 @@ var createWorldCreator = function() {
         elevatorCapacities = elevatorCapacities || [4];
         var currentX = 200.0;
         var elevators = _.map(_.range(elevatorCount), function(e, i) {
-            var elevator = asMovable({});
-            elevator = asElevator(elevator, 2.6, floorCount, floorHeight, elevatorCapacities[i%elevatorCapacities.length]);
+            var elevator = new Elevator(2.6, floorCount, floorHeight, elevatorCapacities[i%elevatorCapacities.length]);
 
             // Move to right x position
             elevator.moveTo(currentX, null);
@@ -29,10 +28,9 @@ var createWorldCreator = function() {
         return elevators;
     };
 
-    creator.createRandomUser = function(floorCount, floorHeight) {
-        var user = asMovable({});
+    creator.createRandomUser = function() {
         var weight = _.random(55, 100);
-        user = asUser(user, weight, floorCount, floorHeight);
+        var user = new User(weight);
         if(_.random(40) === 0) {
             user.displayType = "child";
         } else if(_.random(1) === 0) {
@@ -44,7 +42,7 @@ var createWorldCreator = function() {
     };
 
     creator.spawnUserRandomly = function(floorCount, floorHeight, floors) {
-        var user = creator.createRandomUser(floorCount, floorHeight);
+        var user = creator.createRandomUser();
         user.moveTo(105+_.random(40), 0);
         var currentFloor = _.random(1) === 0 ? 0 : _.random(floorCount - 1);
         var destinationFloor;
@@ -92,7 +90,7 @@ var createWorldCreator = function() {
 
         var registerUser = function(user) {
             world.users.push(user);
-            user.updateDisplayPosition();
+            user.updateDisplayPosition(true);
             user.spawnTimestamp = world.elapsedTime;
             world.trigger("new_user", user);
             user.on("exited_elevator", function() {
@@ -101,6 +99,7 @@ var createWorldCreator = function() {
                 world.avgWaitTime = (world.avgWaitTime * (world.transportedCounter - 1) + (world.elapsedTime - user.spawnTimestamp)) / world.transportedCounter;
                 recalculateStats();
             });
+            user.updateDisplayPosition(true);
         };
 
         var handleElevAvailability = function(elevator) {

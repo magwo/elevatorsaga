@@ -32,6 +32,9 @@ var deprecationWarning = function(name) {
     console.warn("You are using a deprecated feature scheduled for removal: " + name);
 };
 
+var newGuard = function(obj, type) {
+    if(!(obj instanceof type)) { throw "Incorrect instantiation, got " + typeof obj + " but expected " + type; }
+}
 
 var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     return function(val) {

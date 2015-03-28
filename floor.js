@@ -31,6 +31,10 @@ var asFloor = function(obj, floorLevel, yPosition) {
         }
     };
 
+    floor.getSpawnPosY = function() {
+        return floor.yPosition + 30;
+    };
+
     floor.floorNum = function() {
         return floor.level;
     };
