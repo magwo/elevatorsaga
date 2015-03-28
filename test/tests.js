@@ -8,6 +8,18 @@ var timeForwarder = function(dt, stepSize, fn) {
 	}
 };
 
+describe("Observable class", function() {
+	it("can register handler", function() {
+		var o = new riot.Observable();
+		o.on("foo", function() {});
+	});
+	it("can trigger", function() {
+		var o = new riot.Observable();
+		o.on("foo", function() {});
+		o.trigger("foo");
+	});
+});
+
 describe("Movable class", function() {
 	var m = null;
 	var movableHandlers = null;
