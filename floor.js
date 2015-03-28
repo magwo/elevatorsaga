@@ -10,14 +10,14 @@ var asFloor = function(obj, floorLevel, yPosition) {
         var prev = floor.buttonStates.up;
         floor.buttonStates.up = "activated";
         floor.trigger("buttonstate_change", floor.buttonStates);
-        if(prev !== floor.buttonStates.up) { floor.trigger("up_button_pressed"); }
+        if(prev !== floor.buttonStates.up) { floor.trigger("up_button_pressed", floor); }
     };
 
     floor.pressDownButton = function() {
         var prev = floor.buttonStates.down;
         floor.buttonStates.down = "activated";
         floor.trigger("buttonstate_change", floor.buttonStates);
-        if(prev !== floor.buttonStates.down) { floor.trigger("down_button_pressed"); }
+        if(prev !== floor.buttonStates.down) { floor.trigger("down_button_pressed", floor); }
     };
 
     floor.elevatorAvailable = function(elevator) {
@@ -29,6 +29,10 @@ var asFloor = function(obj, floorLevel, yPosition) {
             floor.buttonStates.down = "";
             floor.trigger("buttonstate_change", floor.buttonStates);
         }
+    };
+
+    floor.getSpawnPosY = function() {
+        return floor.yPosition + 30;
     };
 
     floor.floorNum = function() {

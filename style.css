@@ -191,17 +191,18 @@ button.right {
 }
 
 .statscontainer div {
-    width: 240px;
-    height: 10px;
-    margin-bottom: 8px;
     border-bottom: 1px solid #444;
 }
 
-.statscontainer .key {
-    float: left;
+.statscontainer div, .statscontainer span {
+    position: absolute;
+    display: block;
+    width: 240px;
+    height: 10px;
 }
+
 .statscontainer .value {
-    float: right;
+    text-align: right;
 }
 
 
@@ -224,7 +225,7 @@ button.right {
     position: absolute;
     top: 0;
     left: 0;
-    display: inline-block;
+    display: block;
 }
 
 .user {

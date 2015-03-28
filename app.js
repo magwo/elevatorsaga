@@ -19,6 +19,26 @@ var createEditor = function() {
             }
         }
     });
+    
+    // reindent on paste (adapted from https://github.com/ahuth/brackets-paste-and-indent/blob/master/main.js)
+    cm.on("change", function(codeMirror, change) {
+        if(change.origin !== "paste") {
+            return;
+        }
+        
+        var lineFrom = change.from.line;
+        var lineTo = change.from.line + change.text.length;
+        
+        function reindentLines(codeMirror, lineFrom, lineTo) {
+            codeMirror.operation(function() {
+                codeMirror.eachLine(lineFrom, lineTo, function(lineHandle) {
+                    codeMirror.indentLine(lineHandle.lineNo(), "smart");
+                });
+            });
+        }
+        
+        reindentLines(codeMirror, lineFrom, lineTo);
+    });
 
     var reset = function() {
         cm.setValue($("#default-elev-implementation").text().trim());
@@ -66,8 +86,11 @@ var createEditor = function() {
         var code = cm.getValue();
         var obj;
         try {
+            if (code.substr(0,1) == "{" && code.substr(-1,1) == "}") {
+                code = "(" + code + ")";
+            }
             /* jslint evil:true */
-            obj = eval("(" + code + ")");
+            obj = eval(code);
             /* jshint evil:false */
             console.log("Code is", obj);
             if(typeof obj.init !== "function") {
@@ -118,7 +141,6 @@ $(function() {
     var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
     var elevatorButtonTempl = document.getElementById("elevatorbutton-template").innerHTML.trim();
     var userTempl = document.getElementById("user-template").innerHTML.trim();
-    var statsTempl = document.getElementById("stats-template").innerHTML.trim();
     var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
     var feedbackTempl = document.getElementById("feedback-template").innerHTML.trim();
     var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
@@ -153,8 +175,8 @@ $(function() {
         app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
         window.world = app.world;
 
-        clearAll([$world, $stats, $feedback]);
-        presentStats($stats, app.world, statsTempl);
+        clearAll([$world, $feedback]);
+        presentStats($stats, app.world);
         presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 

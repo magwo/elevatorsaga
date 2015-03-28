@@ -1,26 +1,44 @@
 
-var clearAll = function($elems) {
+function clearAll($elems) {
     _.each($elems, function($elem) {
         $elem.empty();
     });
 };
 
+function setTransformPos(elem, x, y) {
+    var style = "translate(" + x + "px," + y + "px)";
+    elem.style["-ms-transform"] = style;
+    elem.style["-webkit-transform"] = style;
+    elem.style.transform = style;
+};
 
-var presentStats = function($parent, world, statsTempl) {
-    world.on("stats_display_changed", function() {
-        $parent.html(riot.render(statsTempl, {
-            transportedCounter: world.transportedCounter,
-            elapsedTime: (world.elapsedTime).toFixed(0),
-            transportedPerSec: world.transportedPerSec.toPrecision(3),
-            avgWaitTime: (world.avgWaitTime).toFixed(1),
-            maxWaitTime: (world.maxWaitTime).toFixed(1),
-            moveCount: (world.moveCount)
-        }));
+function updateUserState($user, elem_user, user) {
+    setTransformPos(elem_user, user.worldX, user.worldY);
+    if(user.done) { $user.addClass("leaving"); }
+};
+
+
+function presentStats($parent, world) {
+
+    var elem_transportedcounter = $parent.find(".transportedcounter").get(0),
+        elem_elapsedtime = $parent.find(".elapsedtime").get(0),
+        elem_transportedpersec = $parent.find(".transportedpersec").get(0),
+        elem_avgwaittime = $parent.find(".avgwaittime").get(0),
+        elem_maxwaittime = $parent.find(".maxwaittime").get(0),
+        elem_movecount = $parent.find(".movecount").get(0);
+
+    world.on("stats_display_changed", function updateStats() {
+        elem_transportedcounter.innerHTML = world.transportedCounter;
+        elem_elapsedtime.innerHTML = world.elapsedTime.toFixed(0) + "s";
+        elem_transportedpersec.innerHTML = world.transportedPerSec.toPrecision(3);
+        elem_avgwaittime.innerHTML = world.avgWaitTime.toFixed(1) + "s";
+        elem_maxwaittime.innerHTML = world.maxWaitTime.toFixed(1) + "s";
+        elem_movecount.innerHTML = world.moveCount;
     });
     world.trigger("stats_display_changed");
 };
 
-var presentChallenge = function($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
+function presentChallenge($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
     var $challenge = $(riot.render(challengeTempl, {
         challenge: challenge,
         num: challengeNum,
@@ -34,7 +52,7 @@ var presentChallenge = function($parent, challenge, app, world, worldController,
     });
     $parent.find(".timescale_increase").on("click", function(e) {
         e.preventDefault();
-        if(worldController.timeScale < 20) {
+        if(worldController.timeScale < 40) {
             var timeScale = Math.round(worldController.timeScale * 1.618);
             worldController.setTimeScale(timeScale);
         }
@@ -46,15 +64,14 @@ var presentChallenge = function($parent, challenge, app, world, worldController,
     });
 };
 
-var presentFeedback = function($parent, feedbackTempl, world, title, message, url) {
+function presentFeedback($parent, feedbackTempl, world, title, message, url) {
     $parent.html(riot.render(feedbackTempl, {title: title, message: message, url: url, paddingTop: world.floors.length * world.floorHeight * 0.2}));
     if(!url) {
         $parent.find("a").remove();
     }
 };
 
-var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
-
+function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
     $world.css("height", world.floorHeight * world.floors.length);
 
     $world.append(_.map(world.floors, function(f) {
@@ -74,41 +91,46 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
     $world.find(".floor").first().find(".down").addClass("invisible");
     $world.find(".floor").last().find(".up").addClass("invisible");
 
-    $world.append(_.map(world.elevators, function(e) {
-        var renderButtons = function(states) {
-            return _.map(states, function(b, i) {
-                return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
-            }).join("");
-        };
-        var buttonsHtml = renderButtons(e.buttonStates);
-        var $elevator = $(riot.render(elevatorTempl, {e: e, buttons: buttonsHtml}));
+    function renderElevatorButtons(states) {
+        return _.map(states, function(b, i) {
+            return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
+        }).join("");
+    };
+    function setUpElevator(e) {
+        var $elevator = $(riot.render(elevatorTempl, {e: e}));
+        var elem_elevator = $elevator.get(0);
         $elevator.on("click", ".buttonpress", function() {
             e.pressFloorButton(parseInt($(this).text()));
         });
 
-        e.on("new_state", function() {
-            $elevator.css({left: e.worldX, top: e.worldY});
+        e.on("new_display_state", function updateElevatorPosition() {
+            setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
         e.on("new_current_floor", function(floor) {
-            $elevator.find(".floorindicator").text(floor);
+            $elevator.find(".floorindicator").get(0).innerHTML = floor;
         });
         e.on("floor_buttons_changed", function(states) {
-            $elevator.find(".buttonindicator").html(renderButtons(states));
+            $elevator.find(".buttonindicator").get(0).innerHTML = renderElevatorButtons(states);
         });
         e.on("indicatorstate_change", function(indicatorStates) {
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
+        e.trigger("floor_buttons_changed", e.buttonStates);
+        e.trigger("new_state", e);
+        e.trigger("new_display_state", e);
         return $elevator;
+    }
+
+    $world.append(_.map(world.elevators, function(e) {
+        return setUpElevator(e);
     }));
 
     world.on("new_user", function(user) {
         var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
+        var elem_user = $user.get(0);
 
-        user.on("new_state", function() {
-            $user.css({left: user.worldX, top: user.worldY});
-            if(user.done) { $user.addClass("leaving"); }
-        });
+        user.on("new_display_state", function() { updateUserState($user, elem_user, user); })
         user.on("removed", function() {
             $user.remove();
         });
@@ -117,7 +139,7 @@ var presentWorld = function($world, world, floorTempl, elevatorTempl, elevatorBu
 };
 
 
-var presentCodeStatus = function($parent, templ, error) {
+function presentCodeStatus($parent, templ, error) {
     console.log(error);
     var errorDisplay = error ? "block" : "none";
     var successDisplay = error ? "none" : "block";
@@ -130,7 +152,7 @@ var presentCodeStatus = function($parent, templ, error) {
     $parent.html(status);
 };
 
-var makeDemoFullscreen = function() {
+function makeDemoFullscreen() {
     $("body .container > *").not(".world").css("visibility", "hidden");
     $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
 };

@@ -30,7 +30,7 @@
 
 
     <script type="text/template" id="user-template">
-        <i class="movable fa user fa-{u.displayType} {state}" style="left: {u.worldX}px; top: {u.worldY}px;"></i>
+        <i class="movable fa user fa-{u.displayType} {state}"></i>
     </script>
 
     <script type="text/template" id="floor-template">
@@ -44,12 +44,11 @@
     </script>
 
     <script type="text/template" id="elevator-template">
-        <div class="elevator movable" style="left: {e.worldX}px; top: {e.worldY}px; width: {e.width}px">
+        <div class="elevator movable" style="width: {e.width}px">
             <span class="directionindicator directionindicatorup"><i class="fa fa-arrow-circle-up up activated"></i></span>
             <span class="floorindicator">{e.currentFloor}</span>
             <span class="directionindicator directionindicatordown"><i class="fa fa-arrow-circle-down down activated"></i></span>
             <span class="buttonindicator">
-                {buttons}
             </span>
         </div>
     </script>
@@ -64,15 +63,6 @@
             <p class="emphasis-color">{message}</p>
             <a href="{url}" class="emphasis-color">Next challenge <i class="fa fa-caret-right blink" style="text-decoration: blink"></i></a>
         </div>
-    </script>
-
-    <script type="text/template" id="stats-template">
-        <div><span class="key">Transported</span><span class="value">{transportedCounter}</span></div>
-        <div><span class="key">Elapsed time</span><span class="value">{elapsedTime}s</span></div>
-        <div><span class="key">Transported/s</span><span class="value">{transportedPerSec}</span></div>
-        <div><span class="key">Avg waiting time</span><span class="value">{avgWaitTime}s</span></div>
-        <div><span class="key">Max waiting time</span><span class="value">{maxWaitTime}s</span></div>
-        <div><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value">{moveCount}</span></div>
     </script>
 
     <script type="text/template" id="challenge-template">
@@ -95,8 +85,10 @@
 {
     init: function(elevators, floors) {
         var elevator = elevators[0]; // Let's use the first elevator
+        
+        // Whenever the elevator is idle (has no more queued destinations) ...
         elevator.on("idle", function() {
-            // The elevator is idle, so let's go to all the floors (or did we forget one?)
+            // let's go to all the floors (or did we forget one?)
             elevator.goToFloor(0);
             elevator.goToFloor(1);
         });
@@ -128,7 +120,14 @@
             <div class="feedbackcontainer"></div>
             <div class="innerworld">
             </div>
-            <div class="statscontainer"></div>
+            <div class="statscontainer">
+                <div style="top: 20px"><span class="key">Transported</span><span class="value transportedcounter"></span></div>
+                <div style="top: 40px"><span class="key">Elapsed time</span><span class="value elapsedtime"></span></div>
+                <div style="top: 60px"><span class="key">Transported/s</span><span class="value transportedpersec"></span></div>
+                <div style="top: 80px"><span class="key">Avg waiting time</span><span class="value avgwaittime"></span></div>
+                <div style="top: 100px"><span class="key">Max waiting time</span><span class="value maxwaittime"></span></div>
+                <div style="top: 120px"><span class="key" title="Number of floors that have been travelled by elevators">Moves</span><span class="value movecount"></span></div>
+            </div>
         </div>
 
         <div class="codestatus"></div>

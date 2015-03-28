@@ -38,8 +38,8 @@
         // First blow through the allocation system to make first test more predictable..
         for(var i=1000; i>0; i--) {
             var m = asMovable({});
-            var e = asElevator(asMovable({}), 1.5, 4, 40);
-            var u = asUser(asMovable({}), 10, 10, 40);
+            var e = new Elevator(1.5, 4, 40);
+            var u = new User(10, 10, 40);
         }
 
         var measure = function(name, numIterations, fn) {
@@ -53,8 +53,8 @@
         };
 
         $("#results_movable h4").append(measure("Creation", 10000, function() { var m = asMovable({}) }));
-        $("#results_elevator h4").append(measure("Creation", 10000, function() { var e = asElevator(asMovable({}), 1.5, 4, 40) }));
-        $("#results_user h4").append(measure("Creation", 10000, function() { var u = asUser(asMovable({}), 10, 10, 40) }));
+        $("#results_elevator h4").append(measure("Creation", 10000, function() { var e = new Elevator(1.5, 4, 40) }));
+        $("#results_user h4").append(measure("Creation", 10000, function() { var u = new User(10, 10, 40) }));
 
     </script>
 </body>
