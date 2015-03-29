@@ -15,8 +15,8 @@ var DEFAULT_INTERPOLATOR = coolInterpolate;
 
 function Movable() {
     newGuard(this, Movable);
+    riot.Observable.call(this);
     var movable = this;
-    movable = riot.observable(movable);
     movable.x = 0.0;
     movable.y = 0.0;
     movable.parent = null;
@@ -28,6 +28,7 @@ function Movable() {
 
     movable.trigger('new_state', movable);
 }
+Movable.prototype = Object.create(riot.Observable.prototype);
 
 Movable.prototype.updateDisplayPosition = function(forceTrigger) {
     var tmpPosStorage = this._tmpPosStorage;

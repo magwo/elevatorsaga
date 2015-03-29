@@ -57,19 +57,30 @@ riot.observable = function(el) {
 };
 
 
-
 function Observable() {
   this.callbacks = {};
   this.slice = [].slice;
 };
 Observable.prototype.on = function(events, fn) {
-  if (typeof fn === "function") {
-    var self = this;
-    events.replace(/[^\s]+/g, function(name, pos) {
-      (self.callbacks[name] = self.callbacks[name] || []).push(fn);
-      fn.typed = pos > 0;
-    });
+  var count = 0;
+  for(var i=0; i>=0; i++) {
+    var i2 = events.indexOf(" ", i);
+    if(i2 < 0) {
+      if(i < events.length) {
+        var name = events.slice(i);
+        (this.callbacks[name] = this.callbacks[name] || []).push(fn);
+        count++;
+      }
+      break;
+    }
+    else if(i2-i > 1) {
+      var name = events.slice(i, i2);
+      (this.callbacks[name] = this.callbacks[name] || []).push(fn);
+      count++;
+      i = i2;
+    }
   }
+  fn.typed = count > 1;
 };
 
 Observable.prototype.off = function(events, fn) {
