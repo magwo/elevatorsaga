@@ -12,6 +12,8 @@
     <script type="text/javascript" src="../libs/lodash.min.js"></script>
     <script type="text/javascript" src="../libs/riot.js"></script>
 
+    <script type="text/javascript" src="../libs/unobservable.js"></script>
+
     <script type="text/javascript" src="../base.js"></script>
     <script type="text/javascript" src="../movable.js"></script>
     <script type="text/javascript" src="../floor.js"></script>
@@ -35,24 +37,50 @@
 
     <script type="text/javascript">
 
+        var now = (function() {
+         
+          // Returns the number of milliseconds elapsed since either the browser navigationStart event or 
+          // the UNIX epoch, depending on availability.
+          // Where the browser supports 'performance' we use that as it is more accurate (microsoeconds
+          // will be returned in the fractional part) and more reliable as it does not rely on the system time. 
+          // Where 'performance' is not available, we will fall back to Date().getTime().
+         
+          // jsFiddle: http://jsfiddle.net/davidwaterston/xCXvJ
+         
+         
+          var performance = window.performance || {};
+            
+          performance.now = (function() {
+            return performance.now    ||
+            performance.webkitNow     ||
+            performance.msNow         ||
+            performance.oNow          ||
+            performance.mozNow        ||
+            function() { return new Date().getTime(); };
+          })();
+                  
+          return performance.now();         
+         
+        });
+
         // First blow through the allocation system to make first test more predictable..
         for(var i=1000; i>0; i--) {
-            var m = asMovable({});
+            var m = new Movable();
             var e = new Elevator(1.5, 4, 40);
             var u = new User(10, 10, 40);
         }
 
         var measure = function(name, numIterations, fn) {
-            var t0 = performance.now();
+            var t0 = now();
             for(var i=numIterations; i>0; i--) {
                 fn();
             }
-            var t1 = performance.now();
+            var t1 = now();
             var report = name + " " + numIterations * 0.001 + "k times: " + (t1 - t0).toFixed(3) + " ms";
             return report;
         };
 
-        $("#results_movable h4").append(measure("Creation", 10000, function() { var m = asMovable({}) }));
+        $("#results_movable h4").append(measure("Creation", 10000, function() { var m = new Movable() }));
         $("#results_elevator h4").append(measure("Creation", 10000, function() { var e = new Elevator(1.5, 4, 40) }));
         $("#results_user h4").append(measure("Creation", 10000, function() { var u = new User(10, 10, 40) }));
 

@@ -53,8 +53,8 @@ riot.observable = function(el) {
   };
 
   return el;
-
 };
+
 var FN = {}, // Precompiled templates (JavaScript functions)
   template_escape = {"\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'"},
   render_escape = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};

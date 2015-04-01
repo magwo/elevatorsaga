@@ -12,11 +12,12 @@ var coolInterpolate = function(value0, value1, x) {
 };
 var DEFAULT_INTERPOLATOR = coolInterpolate;
 
+var _tmpPosStorage = [0,0];
 
 function Movable() {
     newGuard(this, Movable);
+    unobservable.Observable.call(this);
     var movable = this;
-    movable = riot.observable(movable);
     movable.x = 0.0;
     movable.y = 0.0;
     movable.parent = null;
@@ -24,18 +25,16 @@ function Movable() {
     movable.worldY = 0.0;
     movable.currentTask = null;
 
-    movable._tmpPosStorage = [0,0];
-
     movable.trigger('new_state', movable);
 }
+Movable.prototype = Object.create(unobservable.Observable.prototype);
 
 Movable.prototype.updateDisplayPosition = function(forceTrigger) {
-    var tmpPosStorage = this._tmpPosStorage;
-    this.getWorldPosition(tmpPosStorage);
+    this.getWorldPosition(_tmpPosStorage);
     var oldX = this.worldX;
     var oldY = this.worldY;
-    this.worldX = tmpPosStorage[0];
-    this.worldY = tmpPosStorage[1];
+    this.worldX = _tmpPosStorage[0];
+    this.worldY = _tmpPosStorage[1];
     if(oldX !== this.worldX || oldY !== this.worldY || forceTrigger === true) {
         this.trigger('new_display_state', this);
     }
