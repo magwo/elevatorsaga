@@ -34,7 +34,7 @@ var presentChallenge = function($parent, challenge, app, world, worldController,
     });
     $parent.find(".timescale_increase").on("click", function(e) {
         e.preventDefault();
-        if(worldController.timeScale < 20) {
+        if(worldController.timeScale < 40) {
             var timeScale = Math.round(worldController.timeScale * 1.618);
             worldController.setTimeScale(timeScale);
         }
