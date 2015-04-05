@@ -217,7 +217,7 @@ var createWorldController = function(dtMax) {
 
                 var dt = (t - lastT);
                 var scaledDt = dt * 0.001 * controller.timeScale;
-                scaledDt = Math.min(scaledDt, dtMax * 40); // Prevent unhealthy looping
+                scaledDt = Math.min(scaledDt, dtMax * 3 * controller.timeScale); // Prevent unhealthy looping
                 try {
                     codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
                 } catch(e) { controller.setPaused(true); console.log("Usercode error on update", e); controller.trigger("code_error", e); }
