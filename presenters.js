@@ -92,31 +92,35 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
     $world.find(".floor").last().find(".up").addClass("invisible");
 
     function renderElevatorButtons(states) {
+        // This is a rarely executed inner-inner loop, does not need efficiency
         return _.map(states, function(b, i) {
-            return riot.render(elevatorButtonTempl, {floorNum: i, state: b ? "activated" : ""});
+            return riot.render(elevatorButtonTempl, {floorNum: i});
         }).join("");
     };
+
     function setUpElevator(e) {
         var $elevator = $(riot.render(elevatorTempl, {e: e}));
         var elem_elevator = $elevator.get(0);
+        $elevator.find(".buttonindicator").html(renderElevatorButtons(e.buttonStates));
+        var $buttons = _.map($elevator.find(".buttonindicator").children(), function(c) { return $(c); });
+        var elem_floorindicator = $elevator.find(".floorindicator > span").get(0);
+
         $elevator.on("click", ".buttonpress", function() {
             e.pressFloorButton(parseInt($(this).text()));
         });
-
         e.on("new_display_state", function updateElevatorPosition() {
             setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
-        e.on("new_current_floor", function(floor) {
-            $elevator.find(".floorindicator").get(0).innerHTML = floor;
+        e.on("new_current_floor", function update_current_floor(floor) {
+            elem_floorindicator.className = "number" + floor;
         });
-        e.on("floor_buttons_changed", function(states) {
-            $elevator.find(".buttonindicator").get(0).innerHTML = renderElevatorButtons(states);
+        e.on("floor_buttons_changed", function update_floor_buttons(states, indexChanged) {
+            $buttons[indexChanged].toggleClass("activated", states[indexChanged]);
         });
-        e.on("indicatorstate_change", function(indicatorStates) {
+        e.on("indicatorstate_change", function indicatorstate_change(indicatorStates) {
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
-        e.trigger("floor_buttons_changed", e.buttonStates);
         e.trigger("new_state", e);
         e.trigger("new_display_state", e);
         return $elevator;

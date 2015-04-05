@@ -48,15 +48,14 @@
     <script type="text/template" id="elevator-template">
         <div class="elevator movable" style="width: {e.width}px">
             <span class="directionindicator directionindicatorup"><i class="fa fa-arrow-circle-up up activated"></i></span>
-            <span class="floorindicator">{e.currentFloor}</span>
+            <span class="floorindicator"><span></span></span>
             <span class="directionindicator directionindicatordown"><i class="fa fa-arrow-circle-down down activated"></i></span>
-            <span class="buttonindicator">
-            </span>
+            <span class="buttonindicator"></span>
         </div>
     </script>
 
     <script type="text/template" id="elevatorbutton-template">
-        <span class="buttonpress {state}">{floorNum}</span>
+        <span class="buttonpress">{floorNum}</span>
     </script>
 
     <script type="text/template" id="feedback-template">

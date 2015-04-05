@@ -67,7 +67,7 @@ Elevator.prototype.pressFloorButton = function(floorNumber) {
     this.buttonStates[floorNumber] = true;
     if(!prev) {
         this.trigger("floor_button_pressed", floorNumber);
-        this.trigger("floor_buttons_changed", this.buttonStates);
+        this.trigger("floor_buttons_changed", this.buttonStates, floorNumber);
     }
 };
 
@@ -138,7 +138,7 @@ Elevator.prototype.handleDestinationArrival = function() {
 
     if(this.isOnAFloor()) {
         this.buttonStates[this.currentFloor] = false;
-        this.trigger("floor_buttons_changed", this.buttonStates);
+        this.trigger("floor_buttons_changed", this.buttonStates, this.currentFloor);
         this.trigger("stopped_at_floor", this.currentFloor);
         // Need to allow users to get off first, so that new ones
         // can enter on the same floor
