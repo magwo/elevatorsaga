@@ -101,7 +101,7 @@ var createEditor = function() {
             }
             returnObj.trigger("code_success");
         } catch(e) {
-            returnObj.trigger("code_error", e);
+            returnObj.trigger("usercode_error", e);
             return null;
         }
         return obj;
@@ -150,9 +150,9 @@ $(function() {
 
     var app = riot.observable({});
     app.worldController = createWorldController(1.0 / 60.0);
-    app.worldController.on("code_error", function(e) {
+    app.worldController.on("usercode_error", function(e) {
         console.log("World raised code error", e);
-        editor.trigger("code_error", e);
+        editor.trigger("usercode_error", e);
     });
 
     console.log(app.worldController);
@@ -213,7 +213,7 @@ $(function() {
     editor.on("code_success", function() {
         presentCodeStatus($codestatus, codeStatusTempl);
     });
-    editor.on("code_error", function(error) {
+    editor.on("usercode_error", function(error) {
         presentCodeStatus($codestatus, codeStatusTempl, error);
     });
 

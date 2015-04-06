@@ -4,10 +4,10 @@
 var createWorldCreator = function() {
     var creator = {};
 
-    creator.createFloors = function(floorCount, floorHeight) {
+    creator.createFloors = function(floorCount, floorHeight, errorHandler) {
         var floors = _.map(_.range(floorCount), function(e, i) {
             var yPos = (floorCount - 1 - i) * floorHeight;
-            var floor = asFloor({}, i, yPos);
+            var floor = asFloor({}, i, yPos, errorHandler);
             return floor;
         });
         return floors;
@@ -69,10 +69,13 @@ var createWorldCreator = function() {
         var world = {floorHeight: options.floorHeight, transportedCounter: 0};
         riot.observable(world);
 
+        var handleUserCodeError = function(e) {
+            world.trigger("usercode_error", e);
+        }
 
-        world.floors = creator.createFloors(options.floorCount, world.floorHeight);
+        world.floors = creator.createFloors(options.floorCount, world.floorHeight, handleUserCodeError);
         world.elevators = creator.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
-        world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount); });
+        world.elevatorInterfaces = _.map(world.elevators, function(e) { return asElevatorInterface({}, e, options.floorCount, handleUserCodeError); });
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
@@ -227,6 +230,7 @@ var createWorldController = function(dtMax) {
         controller.challengeEnded = false;
         var lastT = null;
         var firstUpdate = true;
+        world.on("usercode_error", controller.handleUserCodeError);
         var updater = function(t) {
             if(!controller.isPaused && !world.challengeEnded && lastT !== null) {
                 if(firstUpdate) {
@@ -235,7 +239,7 @@ var createWorldController = function(dtMax) {
                     try {
                         codeObj.init(world.elevatorInterfaces, world.floors);
                         world.init();
-                    } catch(e) { controller.setPaused(true); controller.trigger("code_error", e); }
+                    } catch(e) { controller.handleUserCodeError(e); }
                 }
 
                 var dt = (t - lastT);
@@ -243,7 +247,7 @@ var createWorldController = function(dtMax) {
                 scaledDt = Math.min(scaledDt, dtMax * 3 * controller.timeScale); // Limit to prevent unhealthy substepping
                 try {
                     codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
-                } catch(e) { controller.setPaused(true); console.log("Usercode error on update", e); controller.trigger("code_error", e); }
+                } catch(e) { controller.handleUserCodeError(e); }
                 while(scaledDt > 0.0 && !world.challengeEnded) {
                     var thisDt = Math.min(dtMax, scaledDt);
                     world.update(thisDt);
@@ -261,6 +265,12 @@ var createWorldController = function(dtMax) {
             controller.setPaused(false);
         }
         animationFrameRequester(updater);
+    };
+
+    controller.handleUserCodeError = function(e) {
+        controller.setPaused(true);
+        console.log("Usercode error on update", e);
+        controller.trigger("usercode_error", e);
     };
 
     controller.setPaused = function(paused) {

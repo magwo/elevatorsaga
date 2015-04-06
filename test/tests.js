@@ -125,6 +125,7 @@ describe("World controller", function() {
 	beforeEach(function() {
 		controller = createWorldController(DT_MAX);
 		fakeWorld = { update: function(dt) {}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
+		fakeWorld = riot.observable(fakeWorld);
 		fakeCodeObj = { init: function() {}, update: function() {} };
 		frameRequester = createFrameRequester(10.0);
 		spyOn(fakeWorld, "update").and.callThrough();
@@ -401,7 +402,7 @@ describe("API", function() {
 		it("propagates stopped_at_floor event", function() {
 			elevInterface.on("stopped_at_floor", handlers.someHandler);
 			e.trigger("stopped_at_floor", 3);
-			expect(handlers.someHandler).toHaveBeenCalledWith(3);
+			expect(handlers.someHandler.calls.mostRecent().args.slice(0, 1)).toEqual([3]);
 		});
 
 		it("does not propagate stopped event", function() {
