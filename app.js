@@ -109,6 +109,9 @@ var createEditor = function() {
     returnObj.setCode = function(code) {
         cm.setValue(code);
     };
+    returnObj.setDevTestCode = function() {
+        cm.setValue($("#devtest-elev-implementation").text().trim());
+    }
 
     $("#button_apply").click(function() {
         returnObj.trigger("apply_code");
@@ -235,7 +238,7 @@ $(function() {
             } else if(key === "timescale") {
                 timeScale = parseFloat(val);
             } else if(key === "devtest") {
-                editor.setCode(window.testingImpl);
+                editor.setDevTestCode();
             } else if(key === "fullscreen") {
                 makeDemoFullscreen();
             }
