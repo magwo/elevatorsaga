@@ -123,6 +123,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
         });
         e.trigger("new_state", e);
         e.trigger("new_display_state", e);
+        e.trigger("new_current_floor", e.currentFloor);
         return $elevator;
     }
 
