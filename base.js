@@ -58,3 +58,13 @@ window.accelerationNeededToAchieveChangeDistance = function(currentSpeed, target
     var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
     return requiredAcceleration;
 };
+
+// Fake frame requester helper used for testing and fitness simulations
+var createFrameRequester = function(timeStep) {
+    var currentT = 0.0;
+    var currentCb = null;
+    return {
+        register: function(cb) { currentCb = cb; },
+        trigger: function() { currentT += timeStep; if(currentCb !== null) { currentCb(currentT); } }
+    };
+};

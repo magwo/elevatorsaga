@@ -114,14 +114,6 @@ describe("World controller", function() {
 	var fakeCodeObj = null;
 	var frameRequester = null;
 	var DT_MAX = 1000.0 / 59;
-	var createFrameRequester = function(timeStep) {
-		var currentT = 0.0;
-		var currentCb = null;
-		return {
-			register: function(cb) { currentCb = cb; },
-			trigger: function() { currentT += timeStep; if(currentCb !== null) { currentCb(currentT); } }
-		};
-	};
 	beforeEach(function() {
 		controller = createWorldController(DT_MAX);
 		fakeWorld = { update: function(dt) {}, init: function() {}, updateDisplayPositions: function() {}, trigger: function() {} };
