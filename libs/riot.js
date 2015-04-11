@@ -116,4 +116,4 @@ riot.render = function(tmpl, data, escape_fn) {
 
   };
 })();
-})(typeof window !== "undefined" ? window.riot = {} : exports);
+})(typeof window !== "undefined" ? window.riot = {} : (typeof exports !== "undefined" ? exports : self.riot = {}));

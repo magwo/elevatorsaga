@@ -65,7 +65,6 @@ var createWorldCreator = function() {
         console.log("Creating world with options", options);
         var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
         options = _.defaults(_.clone(options), defaultOptions);
-        console.log("Options after default are", options);
         var world = {floorHeight: options.floorHeight, transportedCounter: 0};
         riot.observable(world);
 
@@ -87,6 +86,7 @@ var createWorldCreator = function() {
 
         var recalculateStats = function() {
             world.transportedPerSec = world.transportedCounter / world.elapsedTime;
+            // TODO: Optimize this loop?
             world.moveCount = _.reduce(world.elevators, function(sum, elevator) { return sum+elevator.moveCount; }, 0);
             world.trigger("stats_changed");
         };
@@ -227,7 +227,6 @@ var createWorldController = function(dtMax) {
     controller.isPaused = true;
     controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
         controller.isPaused = true;
-        controller.challengeEnded = false;
         var lastT = null;
         var firstUpdate = true;
         world.on("usercode_error", controller.handleUserCodeError);

@@ -1,8 +1,8 @@
 // Console shim
 (function () {
     var f = function () {};
-    if (!window.console) {
-        window.console = {
+    if (!console) {
+        console = {
             log:f, info:f, warn:f, debug:f, error:f
         };
     }
@@ -48,12 +48,12 @@ var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     };
 };
 
-window.distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
+distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
     // v² = u² + 2a * d
     var requiredDistance = (Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / (2 * acceleration);
     return requiredDistance;
 };
-window.accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
+accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
     // v² = u² + 2a * d
     var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
     return requiredAcceleration;
@@ -61,10 +61,27 @@ window.accelerationNeededToAchieveChangeDistance = function(currentSpeed, target
 
 // Fake frame requester helper used for testing and fitness simulations
 var createFrameRequester = function(timeStep) {
-    var currentT = 0.0;
     var currentCb = null;
-    return {
-        register: function(cb) { currentCb = cb; },
-        trigger: function() { currentT += timeStep; if(currentCb !== null) { currentCb(currentT); } }
-    };
+    var requester = {};
+    requester.currentT = 0.0;
+    requester.register = function(cb) { currentCb = cb; };
+    requester.trigger = function() { requester.currentT += timeStep; if(currentCb !== null) { currentCb(requester.currentT); } };
+    return requester;
 };
+
+var getCodeObjFromCode = function(code) {
+    if (code.substr(0,1) == "{" && code.substr(-1,1) == "}") {
+        code = "(" + code + ")";
+    }
+    /* jslint evil:true */
+    obj = eval(code);
+    /* jshint evil:false */
+    if(typeof obj.init !== "function") {
+        throw "Code must contain an init function";
+    }
+    if(typeof obj.update !== "function") {
+        throw "Code must contain an update function";
+    }
+    return obj;
+}
+    
