@@ -46,6 +46,7 @@ var createEditor = function() {
     var saveCode = function() {
         localStorage.setItem(lsKey, cm.getValue());
         $("#save_message").text("Code saved " + new Date().toTimeString());
+        returnObj.trigger("change");
     };
 
     var existingCode = localStorage.getItem(lsKey);
@@ -75,30 +76,18 @@ var createEditor = function() {
         cm.focus();
     });
 
+    var returnObj = riot.observable({});
     var autoSaver = _.debounce(saveCode, 1000);
     cm.on("change", function() {
         autoSaver();
     });
 
-    var returnObj = riot.observable({});
     returnObj.getCodeObj = function() {
         console.log("Getting code...");
         var code = cm.getValue();
         var obj;
         try {
-            if (code.substr(0,1) == "{" && code.substr(-1,1) == "}") {
-                code = "(" + code + ")";
-            }
-            /* jslint evil:true */
-            obj = eval(code);
-            /* jshint evil:false */
-            console.log("Code is", obj);
-            if(typeof obj.init !== "function") {
-                throw "Code must contain an init function";
-            }
-            if(typeof obj.update !== "function") {
-                throw "Code must contain an update function";
-            }
+            obj = getCodeObjFromCode(code);
             returnObj.trigger("code_success");
         } catch(e) {
             returnObj.trigger("usercode_error", e);
@@ -109,6 +98,9 @@ var createEditor = function() {
     returnObj.setCode = function(code) {
         cm.setValue(code);
     };
+    returnObj.getCode = function() {
+        return cm.getValue();
+    }
     returnObj.setDevTestCode = function() {
         cm.setValue($("#devtest-elev-implementation").text().trim());
     }
@@ -195,7 +187,6 @@ $(function() {
                 app.worldController.setPaused(true);
                 if(challengeStatus) {
                     presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
-
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
                 }
@@ -216,6 +207,20 @@ $(function() {
     editor.on("usercode_error", function(error) {
         presentCodeStatus($codestatus, codeStatusTempl, error);
     });
+    editor.on("change", function() {
+        $("#fitness_message").addClass("faded");
+        var codeStr = editor.getCode();
+        fitnessSuite(codeStr, true, function(results) {
+            var message = "";
+            if(!results.error) {
+                message = "Fitness avg wait times: " + _.map(results, function(r){ return r.options.description + ": " + r.result.avgWaitTime.toPrecision(3) + "s" }).join("&nbsp&nbsp&nbsp");
+            } else {
+                message = "Could not compute fitness due to error: " + results.error;
+            }
+            $("#fitness_message").html(message).removeClass("faded");
+        });
+    });
+    editor.trigger("change");
 
     riot.route(function(path) {
         params = _.reduce(path.split(","), function(result, p) {
