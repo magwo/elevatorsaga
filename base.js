@@ -70,7 +70,7 @@ var createFrameRequester = function(timeStep) {
 };
 
 var getCodeObjFromCode = function(code) {
-    if (code.substr(0,1) == "{" && code.substr(-1,1) == "}") {
+    if (code.trim().substr(0,1) == "{" && code.trim().substr(-1,1) == "}") {
         code = "(" + code + ")";
     }
     /* jslint evil:true */
@@ -84,4 +84,4 @@ var getCodeObjFromCode = function(code) {
     }
     return obj;
 }
-    
+
