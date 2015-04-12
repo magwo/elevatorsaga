@@ -368,3 +368,18 @@ describe("API", function() {
 		});
 	});
 });
+
+describe("base", function() {
+	describe("getCodeObjFromCode", function() {
+		var testCode = "{init: function init() {}, update: function update() {}}";
+		it("handles trailing whitespace", function() {
+			expect(getCodeObjFromCode(testCode + "\n")).toEqual(jasmine.any(Object));
+		});
+		it("handles prefix whitespace", function() {
+			expect(getCodeObjFromCode("\n" + testCode)).toEqual(jasmine.any(Object));
+		});
+		it("handles prefix and trailing whitespace", function() {
+			expect(getCodeObjFromCode("\n" + testCode + "\n")).toEqual(jasmine.any(Object));
+		});
+	});
+});

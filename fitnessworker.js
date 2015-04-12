@@ -3,9 +3,9 @@ importScripts("base.js", "movable.js", "floor.js", "user.js", "elevator.js", "in
 
 
 onmessage = function(msg) {
-	// Assume it is a code object that should be fitness-tested
-	var codeStr = msg.data;
-	var results = doFitnessSuite(codeStr, 6);
-	console.log("Posting message back", results);
-	postMessage(results);
+    // Assume it is a code object that should be fitness-tested
+    var codeStr = msg.data;
+    var results = doFitnessSuite(codeStr, 6);
+    console.log("Posting message back", results);
+    postMessage(results);
 };
