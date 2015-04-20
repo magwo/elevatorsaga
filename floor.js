@@ -11,7 +11,7 @@ var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
         try {
             floor.trigger(event, arg1, arg2, arg3, arg4);
         } catch(e) { errorHandler(e); }
-    }
+    };
 
     floor.pressUpButton = function() {
         var prev = floor.buttonStates.up;
