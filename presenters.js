@@ -28,12 +28,12 @@ function presentStats($parent, world) {
         elem_movecount = $parent.find(".movecount").get(0);
 
     world.on("stats_display_changed", function updateStats() {
-        elem_transportedcounter.innerHTML = world.transportedCounter;
-        elem_elapsedtime.innerHTML = world.elapsedTime.toFixed(0) + "s";
-        elem_transportedpersec.innerHTML = world.transportedPerSec.toPrecision(3);
-        elem_avgwaittime.innerHTML = world.avgWaitTime.toFixed(1) + "s";
-        elem_maxwaittime.innerHTML = world.maxWaitTime.toFixed(1) + "s";
-        elem_movecount.innerHTML = world.moveCount;
+        elem_transportedcounter.textContent = world.transportedCounter;
+        elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "s";
+        elem_transportedpersec.textContent = world.transportedPerSec.toPrecision(3);
+        elem_avgwaittime.textContent = world.avgWaitTime.toFixed(1) + "s";
+        elem_maxwaittime.textContent = world.maxWaitTime.toFixed(1) + "s";
+        elem_movecount.textContent = world.moveCount;
     });
     world.trigger("stats_display_changed");
 };
