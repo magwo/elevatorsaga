@@ -82,16 +82,20 @@ function doFitnessSuite(codeStr, runCount) {
 function fitnessSuite(codeStr, preferWorker, callback) {
     if(!!Worker && preferWorker) {
         // Web workers are available, neat.
-        var w = new Worker("fitnessworker.js");
-        w.postMessage(codeStr);
-        w.onmessage = function(msg) {
-            console.log("Got message from fitness worker", msg);
-            var results = msg.data;
-            callback(results);
-        };
-    } else {
-        // Fall back do synch calculation without web worker
-        var results = doFitnessSuite(codeStr, 2);
-        callback(results);
+        try {
+            var w = new Worker("fitnessworker.js");
+            w.postMessage(codeStr);
+            w.onmessage = function(msg) {
+                console.log("Got message from fitness worker", msg);
+                var results = msg.data;
+                callback(results);
+            };
+            return;
+        } catch(e) {
+            console.log("Fitness worker creation failed, falling back to normal", e);
+        }
     }
+    // Fall back do synch calculation without web worker
+    var results = doFitnessSuite(codeStr, 2);
+    callback(results);
 };
