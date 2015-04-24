@@ -59,7 +59,6 @@ var requireDemo = function() {
 };
 
 /* jshint laxcomma:true */
-// Note: Make sure number css classes are enough for floor counts
 var challenges = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}

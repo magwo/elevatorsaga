@@ -291,32 +291,6 @@ button.right {
     color: rgba(255, 255, 255, 0.3);
 }
 
-.elevator .number0:after { content: "0"; }
-.elevator .number1:after { content: "1"; }
-.elevator .number2:after { content: "2"; }
-.elevator .number3:after { content: "3"; }
-.elevator .number4:after { content: "4"; }
-.elevator .number5:after { content: "5"; }
-.elevator .number6:after { content: "6"; }
-.elevator .number7:after { content: "7"; }
-.elevator .number8:after { content: "8"; }
-.elevator .number9:after { content: "9"; }
-.elevator .number10:after { content: "10"; }
-.elevator .number11:after { content: "11"; }
-.elevator .number12:after { content: "12"; }
-.elevator .number13:after { content: "13"; }
-.elevator .number14:after { content: "14"; }
-.elevator .number15:after { content: "15"; }
-.elevator .number16:after { content: "16"; }
-.elevator .number17:after { content: "17"; }
-.elevator .number18:after { content: "18"; }
-.elevator .number19:after { content: "19"; }
-.elevator .number20:after { content: "20"; }
-.elevator .number21:after { content: "21"; }
-.elevator .number22:after { content: "22"; }
-.elevator .number23:after { content: "23"; }
-.elevator .number24:after { content: "24"; }
-
 
 .elevator .buttonindicator {
     display: inline-block;

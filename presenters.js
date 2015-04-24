@@ -6,10 +6,10 @@ function clearAll($elems) {
 };
 
 function setTransformPos(elem, x, y) {
-    var style = "translate(" + x + "px," + y + "px)";
+    var style = "translate(" + x + "px," + y + "px) translateZ(0)";
+    elem.style.transform = style;
     elem.style["-ms-transform"] = style;
     elem.style["-webkit-transform"] = style;
-    elem.style.transform = style;
 };
 
 function updateUserState($user, elem_user, user) {
@@ -28,12 +28,12 @@ function presentStats($parent, world) {
         elem_movecount = $parent.find(".movecount").get(0);
 
     world.on("stats_display_changed", function updateStats() {
-        elem_transportedcounter.innerHTML = world.transportedCounter;
-        elem_elapsedtime.innerHTML = world.elapsedTime.toFixed(0) + "s";
-        elem_transportedpersec.innerHTML = world.transportedPerSec.toPrecision(3);
-        elem_avgwaittime.innerHTML = world.avgWaitTime.toFixed(1) + "s";
-        elem_maxwaittime.innerHTML = world.maxWaitTime.toFixed(1) + "s";
-        elem_movecount.innerHTML = world.moveCount;
+        elem_transportedcounter.textContent = world.transportedCounter;
+        elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "s";
+        elem_transportedpersec.textContent = world.transportedPerSec.toPrecision(3);
+        elem_avgwaittime.textContent = world.avgWaitTime.toFixed(1) + "s";
+        elem_maxwaittime.textContent = world.maxWaitTime.toFixed(1) + "s";
+        elem_movecount.textContent = world.moveCount;
     });
     world.trigger("stats_display_changed");
 };
@@ -112,7 +112,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
             setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
         e.on("new_current_floor", function update_current_floor(floor) {
-            elem_floorindicator.className = "number" + floor;
+            elem_floorindicator.textContent = floor;
         });
         e.on("floor_buttons_changed", function update_floor_buttons(states, indexChanged) {
             $buttons[indexChanged].toggleClass("activated", states[indexChanged]);
