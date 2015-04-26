@@ -76,14 +76,16 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
 
     $world.append(_.map(world.floors, function(f) {
         var $floor = $(riot.render(floorTempl, f));
+        var $up = $floor.find(".up");
+        var $down = $floor.find(".down");
         f.on("buttonstate_change", function(buttonStates) {
-            $floor.find(".up").toggleClass("activated", buttonStates.up !== "");
-            $floor.find(".down").toggleClass("activated", buttonStates.down !== "");
+            $up.toggleClass("activated", buttonStates.up !== "");
+            $down.toggleClass("activated", buttonStates.down !== "");
         });
-        $floor.find(".up").on("click", function() {
+        $up.on("click", function() {
             f.pressUpButton();
         });
-        $floor.find(".down").on("click", function() {
+        $down.on("click", function() {
             f.pressDownButton();
         });
         return $floor;
