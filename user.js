@@ -67,7 +67,7 @@ User.prototype.elevatorAvailable = function(elevator, floor) {
         this.moveToOverTime(pos[0], pos[1], 1, undefined, function() {
             elevator.pressFloorButton(self.destinationFloor);
         });
-        this.exitAvailableHandler = function (floorNum, elevator) { self.handleExit(elevator.currentFloor, elevator) };
+        this.exitAvailableHandler = function (floorNum, elevator) { self.handleExit(elevator.currentFloor, elevator); };
         elevator.on("exit_available", this.exitAvailableHandler);
     } else {
         this.pressFloorButton(floor);
