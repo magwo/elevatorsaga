@@ -45,6 +45,7 @@ Elevator.prototype = Object.create(Movable.prototype);
 Elevator.prototype.setFloorPosition = function(floor) {
     var destination = this.getYPosOfFloor(floor);
     this.currentFloor = floor;
+    this.nextCleanlyStoppableFloor = floor;
     this.moveTo(null, destination);
 };
 
