@@ -265,8 +265,31 @@ describe("Elevator Saga", function() {
 			expect(e.getPressedFloors()).toEqual([2,3]);
 		});
 
+
+		it("reports not approaching floor 0 when going up from floor 0", function() {
+			e.goToFloor(1);
+			timeForwarder(0.01, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(e.isApproachingFloor(0)).toBe(false);
+		});
+
+		it("reports approaching floor 2 when going up from floor 0", function() {
+			e.goToFloor(1);
+			timeForwarder(0.01, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(e.isApproachingFloor(2)).toBe(true);
+		});
+
+		it("reports approaching floor 2 when going down from floor 3", function() {
+			e.setFloorPosition(3);
+			e.goToFloor(2);
+			timeForwarder(0.01, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(e.isApproachingFloor(2)).toBe(true);
+		});
+
 		it("emits no passing floor events when going from floor 0 to 1", function() {
 			e.on("passing_floor", handlers.someHandler);
+			e.on("passing_floor", function(floorNum, direction) {
+				console.log("Passing floor yo", floorNum, direction);
+			});
 			e.goToFloor(1);
 			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			expect(e.currentFloor).toBe(1);
@@ -301,12 +324,10 @@ describe("Elevator Saga", function() {
 		it("doesnt raise unexpected events when told to stop when passing floor", function() {
 			var passingFloorEventCount = 0;
 			e.on("passing_floor", function(floorNum, direction) {
-				console.log("Exact future floor", e.getExactFutureFloorIfStopped());
 				expect(floorNum).toBe(1, "floor being passed");
 				expect(direction).toBe("up");
 				passingFloorEventCount++;
-
-				e.goToFloor(e.getExactFutureFloorIfStopped());
+				e.goToFloor(1);
 			});
 			e.goToFloor(2);
 			timeForwarder(3.0, 0.01401, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});

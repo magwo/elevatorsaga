@@ -20,7 +20,7 @@ function Elevator(speedFloorsPerSec, floorCount, floorHeight, maxUsers) {
     elevator.goingUpIndicator = true;
 
     elevator.currentFloor = 0;
-    elevator.nextCleanlyStoppableFloor = 0;
+    elevator.previousTruncFutureFloorIfStopped = 0;
     elevator.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
     elevator.moveCount = 0;
     elevator.removed = false;
@@ -45,7 +45,7 @@ Elevator.prototype = Object.create(Movable.prototype);
 Elevator.prototype.setFloorPosition = function(floor) {
     var destination = this.getYPosOfFloor(floor);
     this.currentFloor = floor;
-    this.nextCleanlyStoppableFloor = floor;
+    this.previousTruncFutureFloorIfStopped = floor;
     this.moveTo(null, destination);
 };
 
@@ -127,6 +127,7 @@ Elevator.prototype.updateElevatorMovement = function(dt) {
     }
 
     if(this.isMoving && Math.abs(destinationDiff) < 0.5 && Math.abs(this.velocityY) < 3) {
+        // Snap to destination and stop
         this.moveTo(null, this.destinationY);
         this.velocityY = 0.0;
         this.isMoving = false;
@@ -202,6 +203,12 @@ Elevator.prototype.getExactFutureFloorIfStopped = function() {
     return this.getExactFloorOfYPos(this.y - Math.sign(this.velocityY) * distanceNeededToStop);
 };
 
+Elevator.prototype.isApproachingFloor = function(floorNum) {
+    var floorYPos = this.getYPosOfFloor(floorNum);
+    var elevToFloor = floorYPos - this.y;
+    return this.velocityY !== 0.0 && (Math.sign(this.velocityY) === Math.sign(elevToFloor));
+};
+
 Elevator.prototype.isOnAFloor = function() {
     return epsilonEquals(this.getExactCurrentFloor(), this.getRoundedCurrentFloor());
 };
@@ -230,26 +237,16 @@ Elevator.prototype.handleNewState = function() {
     }
 
     // Check if we are about to pass a floor
-    // TODO: Try to make this code simpler
-    // TODO: Write tests for this code, covering any edge cases
-    if(this.velocityY !== 0.0) {
-        var nextCleanlyStoppableFloor = this.getExactFutureFloorIfStopped();
-        nextCleanlyStoppableFloor = (this.velocityY > 0.0 ? Math.floor : Math.ceil)(nextCleanlyStoppableFloor);
+    var futureTruncFloorIfStopped = Math.trunc(this.getExactFutureFloorIfStopped());
+    if(futureTruncFloorIfStopped !== this.previousTruncFutureFloorIfStopped) {
+        var floorBeingPassed = this.velocityY > 0.0 ? this.previousTruncFutureFloorIfStopped : futureTruncFloorIfStopped;
 
-        if(this.nextCleanlyStoppableFloor !== nextCleanlyStoppableFloor) {
-            var destinationFloor = this.getDestinationFloor();
-            if(destinationFloor !== this.nextCleanlyStoppableFloor) {
-                var isApproachingPreviousFloor = Math.sign(this.velocityY) === Math.sign(this.getYPosOfFloor(this.nextCleanlyStoppableFloor) - this.y);
-                if(isApproachingPreviousFloor) {
-                    var direction = this.velocityY > 0.0 ? "down" : "up";
-                    this.trigger("passing_floor", this.nextCleanlyStoppableFloor, direction);
-                }
-                // Destination floor might have changed during the event triggering...
-                if(this.getDestinationFloor() !== this.nextCleanlyStoppableFloor) {
-                    this.nextCleanlyStoppableFloor = nextCleanlyStoppableFloor;
-                }
-            }
+        // Never emit passing_floor event for the destination floor
+        // Because if it's the destination we're not going to pass it, at least not intentionally
+        if(this.getDestinationFloor() !== floorBeingPassed && this.isApproachingFloor(floorBeingPassed)) {
+            var direction = this.velocityY > 0.0 ? "down" : "up";
+            this.trigger("passing_floor", floorBeingPassed, direction);
         }
     }
+    this.previousTruncFutureFloorIfStopped = futureTruncFloorIfStopped;
 };
-
