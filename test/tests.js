@@ -277,21 +277,15 @@ describe("Elevator Saga", function() {
 			e.goToFloor(2);
 			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			expect(e.currentFloor).toBe(2);
+			expect(handlers.someHandler.calls.count()).toEqual(1);
 			expect(handlers.someHandler.calls.mostRecent().args.slice(0, 1)).toEqual([1]);
-		});
-		it("emits passing floor event when going from floor 2 to 0", function() {
-			e.setFloorPosition(3);
-			e.on("passing_floor", handlers.someHandler);
-			e.goToFloor(0);
-			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
-			expect(e.currentFloor).toBe(0);
-			expect(handlers.someHandler.calls.mostRecent().args.slice(0, 1)).toEqual([1]);	
 		});
 		it("emits passing floor events when going from floor 0 to 3", function() {
 			e.on("passing_floor", handlers.someHandler);
 			e.goToFloor(3);
 			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			expect(e.currentFloor).toBe(3);
+			expect(handlers.someHandler.calls.count()).toEqual(2);
 			expect(handlers.someHandler.calls.argsFor(0).slice(0, 1)).toEqual([1]);
 			expect(handlers.someHandler.calls.argsFor(1).slice(0, 1)).toEqual([2]);
 		});
@@ -300,6 +294,7 @@ describe("Elevator Saga", function() {
 			e.goToFloor(3);
 			timeForwarder(10.0, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 			expect(e.currentFloor).toBe(3);
+			expect(handlers.someHandler.calls.count()).toEqual(2);
 			expect(handlers.someHandler.calls.argsFor(0).slice(0, 1)).toEqual([1]);
 			expect(handlers.someHandler.calls.argsFor(1).slice(0, 1)).toEqual([2]);
 		});
