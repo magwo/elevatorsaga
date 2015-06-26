@@ -298,6 +298,22 @@ describe("Elevator Saga", function() {
 			expect(handlers.someHandler.calls.argsFor(0).slice(0, 1)).toEqual([1]);
 			expect(handlers.someHandler.calls.argsFor(1).slice(0, 1)).toEqual([2]);
 		});
+		it("doesnt raise unexpected events when told to stop when passing floor", function() {
+			var passingFloorEventCount = 0;
+			e.on("passing_floor", function(floorNum, direction) {
+				console.log("Exact future floor", e.getExactFutureFloorIfStopped());
+				expect(floorNum).toBe(1, "floor being passed");
+				expect(direction).toBe("up");
+				passingFloorEventCount++;
+
+				e.goToFloor(e.getExactFutureFloorIfStopped());
+			});
+			e.goToFloor(2);
+			timeForwarder(3.0, 0.01401, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+			expect(passingFloorEventCount).toBe(1, "event count");
+			expect(e.getExactCurrentFloor()).toBeLessThan(1.15, "current floor");
+		});
+
 	});
 
 
