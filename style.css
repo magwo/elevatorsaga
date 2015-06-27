@@ -219,6 +219,7 @@ button.right {
     width: 1280px;
     height: 2000px;
     padding-top: 20px;
+    line-height: 20px;
     text-align: center;
     background-color: rgba(44,44,44, 0.6);
     z-index: 5;
