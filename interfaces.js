@@ -11,7 +11,7 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
         try {
             elevatorInterface.trigger(event, arg1, arg2, arg3, arg4);
         } catch(e) { errorHandler(e); }
-    }
+    };
 
     elevatorInterface.checkDestinationQueue = function() {
         if(!elevator.isBusy()) {
