@@ -327,11 +327,11 @@ describe("Elevator Saga", function() {
 				expect(floorNum).toBe(1, "floor being passed");
 				expect(direction).toBe("up");
 				passingFloorEventCount++;
-				e.goToFloor(1);
+				e.goToFloor(e.getExactFutureFloorIfStopped());
 			});
 			e.goToFloor(2);
 			timeForwarder(3.0, 0.01401, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
-			expect(passingFloorEventCount).toBe(1, "event count");
+			expect(passingFloorEventCount).toBeGreaterThan(0, "event count");
 			expect(e.getExactCurrentFloor()).toBeLessThan(1.15, "current floor");
 		});
 
