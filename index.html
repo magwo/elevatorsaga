@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="libs/codemirror/codemirror.css">
     <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
     <link rel="stylesheet" href="style.css" type="text/css" media="all">
-    
+
     <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="libs/lodash.min.js"></script>
     <script type="text/javascript" src="libs/riot.js"></script>
@@ -87,7 +87,7 @@
 {
     init: function(elevators, floors) {
         var elevator = elevators[0]; // Let's use the first elevator
-        
+
         // Whenever the elevator is idle (has no more queued destinations) ...
         elevator.on("idle", function() {
             // let's go to all the floors (or did we forget one?)
@@ -110,7 +110,7 @@
                     (-e.loadFactor()*e.loadFactor() * 3);
             });
         };
-        
+
         _.each(floors, function(floor) {
             floor.on("down_button_pressed up_button_pressed", function() {
                 var elevator = selectElevatorForFloorPickup(floor.level);
@@ -176,13 +176,13 @@
         <span id="save_message" style="float: right"></span>
         <span id="fitness_message" style="float: right"></span>
         <div style="clear:both;"></div>
-        
+
         <div style="margin-top: 20px">
             <h3>Confused? Open the <a href="documentation.html">Help and API documentation</a> page</h3>
         </div>
         <div class="footer">
             <h4>Made by Magnus Wolffelt and contributors</h4>
-            <h4>Version <span class="emphasis-color">1.6.2</span></h4>
+            <h4>Version <span class="emphasis-color">1.6.3</span></h4>
             <h4><a href="https://github.com/magwo/elevatorsaga">Source code</a> on GitHub</h4>
             <h4><a href="test/index.html">Run tests</a></h4>
         </div>
