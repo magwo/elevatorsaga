@@ -103,6 +103,7 @@ elevator.goToFloor(2, true); // Do it before anything else</code></pre></td></tr
                     <tr><td>loadFactor</td><td>function</td><td><small>Gets the load factor of the elevator. 0 means empty, 1 means full. Varies with passenger weights, which vary - not an exact measure.</small></td><td><pre><code>if(elevator.loadFactor() < 0.4) {
     // Maybe use this elevator, since it's not full yet?
 }</code></pre></td></tr>
+                    <tr><td>destinationDirection</td><td>function</td><td><small>Gets the direction the elevator is currently going to move toward. Can be "up", "down" or "stopped".</small></td></tr>
                     <tr><td>destinationQueue</td><td>array</td><td><small>The current destination queue, meaning the floor numbers the elevator is scheduled to go to. Can be modified and emptied if desired. Note that you need to call checkDestinationQueue() for the change to take effect immediately.</small></td><td><pre><code>elevator.destinationQueue = [];
 elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>checkDestinationQueue</td><td>function</td><td><small>Checks the destination queue for any new destinations to go to. Note that you only need to call this if you modify the destination queue explicitly.</small></td><td><pre><code>elevator.checkDestinationQueue();</code></pre></td></tr>
@@ -140,7 +141,7 @@ elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor. Note that passengers will press the button again if they fail to enter an elevator.</small></td><td><pre><code>floor.on("down_button_pressed", function() {
     // Maybe tell an elevator to go to this floor?
 })</code></pre></td></tr>
-                
+
                 </tbody>
             </table>
         </div>

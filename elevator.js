@@ -96,7 +96,7 @@ Elevator.prototype.updateElevatorMovement = function(dt) {
     var destinationDiff = this.destinationY - this.y;
     var directionSign = Math.sign(destinationDiff);
     var velocitySign = Math.sign(this.velocityY);
-    var acceleration = +0;
+    var acceleration = 0.0;
     if(destinationDiff !== 0.0) {
         if(directionSign === velocitySign) {
             // Moving in correct direction
