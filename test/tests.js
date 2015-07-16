@@ -335,6 +335,22 @@ describe("Elevator Saga", function() {
 			expect(e.getExactCurrentFloor()).toBeLessThan(1.15, "current floor");
 		});
 
+		it("doesnt seem to overshoot when stopping at floors", function() {
+			_.each(_.range(60, 120, 2.32133), function(updatesPerSecond) {
+				var STEPSIZE = 1.0 / updatesPerSecond;
+				e.setFloorPosition(1);
+				e.goToFloor(3);
+				timeForwarder(5.0, STEPSIZE, function(dt) {
+					e.update(dt);
+					e.updateElevatorMovement(dt);
+					expect(e.getExactCurrentFloor()).toBeWithinRange(1.0, 3.0, "(STEPSIZE is " + STEPSIZE + ")");
+				});
+				expect(e.getExactCurrentFloor()).toEqual(3.0);
+			});
+
+
+		});
+
 	});
 
 
@@ -347,33 +363,36 @@ describe("Elevator Saga", function() {
 				e.setFloorPosition(0);
 				elevInterface = asElevatorInterface({}, e, 4);
 			});
-			it("propagates stopped_at_floor event", function() {
-				elevInterface.on("stopped_at_floor", handlers.someHandler);
-				e.trigger("stopped_at_floor", 3);
-				expect(handlers.someHandler.calls.mostRecent().args.slice(0, 1)).toEqual([3]);
-			});
 
-			it("does not propagate stopped event", function() {
-				elevInterface.on("stopped", handlers.someHandler);
-				e.trigger("stopped", 3.1);
-				expect(handlers.someHandler).not.toHaveBeenCalled();
-			});
+			describe("events", function() {
+				it("propagates stopped_at_floor event", function() {
+					elevInterface.on("stopped_at_floor", handlers.someHandler);
+					e.trigger("stopped_at_floor", 3);
+					expect(handlers.someHandler.calls.mostRecent().args.slice(0, 1)).toEqual([3]);
+				});
 
-			it("triggers idle event at start", function() {
-				elevInterface.on("idle", handlers.someHandler);
-				elevInterface.checkDestinationQueue();
-				expect(handlers.someHandler).toHaveBeenCalled();
-			});
+				it("does not propagate stopped event", function() {
+					elevInterface.on("stopped", handlers.someHandler);
+					e.trigger("stopped", 3.1);
+					expect(handlers.someHandler).not.toHaveBeenCalled();
+				});
 
-			it("triggers idle event when queue empties", function() {
-				elevInterface.on("idle", handlers.someHandler);
-				elevInterface.destinationQueue = [11, 21];
-				e.y = 11;
-				e.trigger("stopped", e.y);
-				expect(handlers.someHandler).not.toHaveBeenCalled();
-				e.y = 21;
-				e.trigger("stopped", e.y);
-				expect(handlers.someHandler).toHaveBeenCalled();
+				it("triggers idle event at start", function() {
+					elevInterface.on("idle", handlers.someHandler);
+					elevInterface.checkDestinationQueue();
+					expect(handlers.someHandler).toHaveBeenCalled();
+				});
+
+				it("triggers idle event when queue empties", function() {
+					elevInterface.on("idle", handlers.someHandler);
+					elevInterface.destinationQueue = [11, 21];
+					e.y = 11;
+					e.trigger("stopped", e.y);
+					expect(handlers.someHandler).not.toHaveBeenCalled();
+					e.y = 21;
+					e.trigger("stopped", e.y);
+					expect(handlers.someHandler).toHaveBeenCalled();
+				});
 			});
 
 			it("stops when told told to stop", function() {
@@ -390,6 +409,23 @@ describe("Elevator Saga", function() {
 				timeForwarder(10, 0.015, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
 				expect(e.y).not.toBe(whenMovingY);
 				expect(e.y).not.toBe(originalY);
+			});
+
+			describe("destination direction", function() {
+				it("reports up when going up", function() {
+					e.setFloorPosition(1);
+					elevInterface.goToFloor(1);
+					expect(elevInterface.destinationDirection()).toBe("stopped");
+				});
+				it("reports up when going up", function() {
+					elevInterface.goToFloor(1);
+					expect(elevInterface.destinationDirection()).toBe("up");
+				});
+				it("reports down when going down", function() {
+					e.setFloorPosition(3);
+					elevInterface.goToFloor(2);
+					expect(elevInterface.destinationDirection()).toBe("down");
+				});
 			});
 
 			it("stores going up and going down properties", function() {

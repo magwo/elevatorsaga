@@ -1,6 +1,4 @@
 
-window.testingImpl = '{\n    init: function(elevators, floors) {\n        var rotator = 0;\n        _.each(floors, function(floor) {\n            floor.on("up_button_pressed down_button_pressed", function() {\n                var elevator = elevators[(rotator++) % elevators.length];\n                elevator.goToFloor(floor.level);\n            }); \n        });\n        _.each(elevators, function(elevator) {\n            elevator.on("floor_button_pressed", function(floorNum) {\n                elevator.goToFloor(floorNum);\n            });\n            elevator.on("idle", function() {\n                elevator.goToFloor(0);\n            });\n        });\n    },\n    update: function(dt, elevators, floors) {\n    }\n}';
-
 var createEditor = function() {
     var lsKey = "elevatorCrushCode_v5";
 
@@ -19,16 +17,16 @@ var createEditor = function() {
             }
         }
     });
-    
+
     // reindent on paste (adapted from https://github.com/ahuth/brackets-paste-and-indent/blob/master/main.js)
     cm.on("change", function(codeMirror, change) {
         if(change.origin !== "paste") {
             return;
         }
-        
+
         var lineFrom = change.from.line;
         var lineTo = change.from.line + change.text.length;
-        
+
         function reindentLines(codeMirror, lineFrom, lineTo) {
             codeMirror.operation(function() {
                 codeMirror.eachLine(lineFrom, lineTo, function(lineHandle) {
@@ -36,7 +34,7 @@ var createEditor = function() {
                 });
             });
         }
-        
+
         reindentLines(codeMirror, lineFrom, lineTo);
     });
 

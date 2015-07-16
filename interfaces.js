@@ -49,6 +49,10 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
     elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
     elevatorInterface.maxPassengerCount = function() { return elevator.maxUsers; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
+    elevatorInterface.destinationDirection = function() {
+      if(elevator.destinationY === elevator.y) { return "stopped"; }
+      return elevator.destinationY > elevator.y ? "down" : "up";
+    }
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
 
