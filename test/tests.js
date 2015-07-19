@@ -321,7 +321,7 @@ describe("Elevator Saga", function() {
 			expect(handlers.someHandler.calls.argsFor(0).slice(0, 1)).toEqual([1]);
 			expect(handlers.someHandler.calls.argsFor(1).slice(0, 1)).toEqual([2]);
 		});
-		it("doesnt raise unexpected events when told to stop when passing floor", function() {
+		it("doesnt raise unexpected events when told to stop(ish) when passing floor", function() {
 			var passingFloorEventCount = 0;
 			e.on("passing_floor", function(floorNum, direction) {
 				expect(floorNum).toBe(1, "floor being passed");
@@ -456,6 +456,21 @@ describe("Elevator Saga", function() {
 				_.chain(_.range(20)).map(fnNewUser).forEach(fnEnterElevator);
 				var load = elevInterface.loadFactor();
 				expect(load >= 0 && load <= 1).toBeTruthy();
+			});
+
+			it("doesnt raise unexpected events when told to stop when passing floor", function() {
+				e.setFloorPosition(2);
+				elevInterface.goToFloor(0);
+				var passingFloorEventCount = 0;
+				elevInterface.on("passing_floor", function(floorNum, direction) {
+					passingFloorEventCount++;
+					// We only expect to be passing floor 1, but it is possible and ok that several
+					// such events are raised, due to possible overshoot.
+					expect(floorNum).toBe(1, "floor being passed");
+					elevInterface.stop();
+				});
+				timeForwarder(3.0, 0.01401, function(dt) {e.update(dt); e.updateElevatorMovement(dt);});
+				expect(passingFloorEventCount).toBeGreaterThan(0);
 			});
 		});
 	});
