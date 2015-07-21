@@ -239,7 +239,12 @@ Elevator.prototype.handleNewState = function() {
     // Check if we are about to pass a floor
     var futureTruncFloorIfStopped = Math.trunc(this.getExactFutureFloorIfStopped());
     if(futureTruncFloorIfStopped !== this.previousTruncFutureFloorIfStopped) {
-        var floorBeingPassed = this.velocityY > 0.0 ? this.previousTruncFutureFloorIfStopped : futureTruncFloorIfStopped;
+        // The following is somewhat ugly.
+        // A formally correct solution should iterate and generate events for all passed floors,
+        // because the elevator could theoretically have such a velocity that it would
+        // pass more than one floor over the course of one state change (update).
+        // But I can't currently be arsed to implement it because it's overkill.
+        var floorBeingPassed = Math.round(this.getExactFutureFloorIfStopped());
 
         // Never emit passing_floor event for the destination floor
         // Because if it's the destination we're not going to pass it, at least not intentionally
