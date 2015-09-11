@@ -190,6 +190,20 @@ describe("Elevator Saga", function() {
 				expect(challengeReq.evaluate(fakeWorld)).toBe(true);
 			});
 		});
+		describe("requireUserCountWithinMovesAndTime", function (){
+			it("evaluates correctly", function() {
+				var challengeReq = requireUserCountWithinMovesAndTime(10, 20, 30);
+				expect(challengeReq.evaluate(fakeWorld)).toBe(null);
+				fakeWorld.moveCount = 21;
+				expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+				fakeWorld.transportedCounter = 15;
+                expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+                fakeWorld.elapsedTime = 29.2;
+				expect(challengeReq.evaluate(fakeWorld)).toBe(false);
+				fakeWorld.moveCount = 20;
+				expect(challengeReq.evaluate(fakeWorld)).toBe(true);
+			});
+		});
 		describe("requireUserCountWithinMovesAndMaxWaitTime", function (){
 			it("evaluates correctly", function() {
 				var challengeReq = requireUserCountWithinMovesAndMaxWaitTime(150, 250, 25);

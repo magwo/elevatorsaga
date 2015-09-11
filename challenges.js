@@ -51,6 +51,19 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
     };
 };
 
+var requireUserCountWithinMovesAndTime = function(userCount, moveLimit, timeLimit) {
+    return {
+        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people using <span class='emphasis-color'>" + moveLimit + "</span> elevator moves or less in <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> seconds or less",
+        evaluate: function(world) {
+            if(world.elapsedTime >= timeLimit || world.transportedCounter >= userCount || world.moveCount >= moveLimit) {
+                return world.elapsedTime <= timeLimit && world.transportedCounter >= userCount && world.moveCount <= moveLimit;
+            } else {
+                return null;
+            }
+        }
+    };
+};
+
 var requireUserCountWithinMovesAndMaxWaitTime = function(userCount, moveLimit, maxWaitTime) {
     return {
         description: "Transport <span class='emphasis-color'>" + userCount + "</span> people using <span class='emphasis-color'>" + moveLimit + "</span> elevator moves or less and let no one wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> seconds",
@@ -95,6 +108,8 @@ var challenges = [
     ,{options: {floorCount: 21, elevatorCount: 5, spawnRate: 1.9, elevatorCapacities: [10]}, condition: requireUserCountWithinTime(110, 80)}
 
     ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireUserCountWithinTimeWithMaxWaitTime(2675, 1800, 45)}
+
+    ,{options: {floorCount: 4, elevatorCount: 2, spawnRate: 1.4, elevatorCapacities: [4,4]}, condition: requireUserCountWithinMovesAndTime(40, 40, 40)}
 
     ,{options: {floorCount: 7, elevatorCount: 3, spawnRate: 1.3}, condition: requireUserCountWithinMovesAndMaxWaitTime(150, 250, 25)}
 
