@@ -412,7 +412,7 @@ describe("Elevator Saga", function() {
 			});
 
 			describe("destination direction", function() {
-				it("reports up when going up", function() {
+				it("reports stopped when stopped", function() {
 					e.setFloorPosition(1);
 					elevInterface.goToFloor(1);
 					expect(elevInterface.destinationDirection()).toBe("stopped");
