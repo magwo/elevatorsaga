@@ -376,3 +376,7 @@ button.right {
 .doctable td {
     font: 13px Consolas, Monaco, monospace;
 }
+
+.expanded {
+    height: auto;
+}
