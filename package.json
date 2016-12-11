@@ -1,0 +1,36 @@
+{
+  "name": "elevatorsaga-master",
+  "version": "1.0.0",
+  "description": "The elevator programming game",
+  "main": "index.html",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.3",
+    "gulp": "^3.8.11",
+    "jsonfile": "^2.0.0",
+    "lodash": "^3.2.0",
+    "q": "^1.1.2",
+    "selenium-webdriver": "^2.44.0",
+    "fs": "^0.0.2",
+    "yargs": "^3.0.4",
+    "util": "^0.10.3"
+  },
+  "devDependencies": {
+    "run-sequence": "^1.0.2"
+  },
+  "scripts": {
+    "test": "gulp --numberOfTestsPerChallenge 10 --timeScale 21"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magwo/elevatorsaga"
+  },
+  "author": "Magnus Wolffelt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/magwo/elevatorsaga/issues"
+  },
+  "homepage": "https://github.com/magwo/elevatorsaga"
+}

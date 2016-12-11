@@ -1,0 +1,2177 @@
+[
+  {
+    "name": "Alber70g's solution",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Solution-by-alber70g",
+    "solution": "alber70g.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 40
+      },
+      {
+        "challengeId": 3,
+        "percent": 50
+      },
+      {
+        "challengeId": 4,
+        "percent": 80
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 30
+      },
+      {
+        "challengeId": 7,
+        "percent": 10
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 80
+      },
+      {
+        "challengeId": 12,
+        "percent": 20
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 40
+      },
+      {
+        "challengeId": 16,
+        "percent": 90
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "aonsager's solution",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/aonsager%27s-solution",
+    "solution": "aonsager.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 60
+      },
+      {
+        "challengeId": 6,
+        "percent": 40
+      },
+      {
+        "challengeId": 7,
+        "percent": 40
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 10
+      },
+      {
+        "challengeId": 11,
+        "percent": 90
+      },
+      {
+        "challengeId": 12,
+        "percent": 60
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 70
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "AzizHarrington's Solution Levels 1-12",
+    "url": "https://github.com/AzizHarrington/elevatorsaga/blob/master/solutions.js",
+    "solution": "azizharrington.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 40
+      },
+      {
+        "challengeId": 6,
+        "percent": 40
+      },
+      {
+        "challengeId": 7,
+        "percent": 30
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 90
+      },
+      {
+        "challengeId": 10,
+        "percent": 50
+      },
+      {
+        "challengeId": 11,
+        "percent": 60
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 30
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 30
+      }
+    ]
+  },
+  {
+    "name": "benjamg's solution for 1 to 16",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/All-puzzle-solution-by-@benjamg-%28struggles-with-2,-5-and-16%29",
+    "solution": "benjamg.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 40
+      },
+      {
+        "challengeId": 3,
+        "percent": 40
+      },
+      {
+        "challengeId": 4,
+        "percent": 80
+      },
+      {
+        "challengeId": 5,
+        "percent": 50
+      },
+      {
+        "challengeId": 6,
+        "percent": 100
+      },
+      {
+        "challengeId": 7,
+        "percent": 100
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 40
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 80
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 10
+      }
+    ]
+  },
+  {
+    "name": "O(log(n))-competitive solution",
+    "url": "https://github.com/bgwines/elevator-saga",
+    "solution": "bgwines.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 40
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 90
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 60
+      },
+      {
+        "challengeId": 12,
+        "percent": 50
+      },
+      {
+        "challengeId": 13,
+        "percent": 10
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 40
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "Bisqwit's solution for all levels",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Solution-by-Bisqwit",
+    "solution": "bisqwit.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 80
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 80
+      },
+      {
+        "challengeId": 6,
+        "percent": 60
+      },
+      {
+        "challengeId": 7,
+        "percent": 20
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 60
+      },
+      {
+        "challengeId": 13,
+        "percent": 10
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 40
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 30
+      }
+    ]
+  },
+  {
+    "name": "Hacky solution to every \"N-elevator moves or less\" level (v 0.1)",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Christian-Genco%27s-hacky-solution-to-every-%22N-elevator-moves-or-less%22-level",
+    "solution": "christiangenco.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 0
+      },
+      {
+        "challengeId": 2,
+        "percent": 0
+      },
+      {
+        "challengeId": 3,
+        "percent": 0
+      },
+      {
+        "challengeId": 4,
+        "percent": 0
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 100
+      },
+      {
+        "challengeId": 7,
+        "percent": 100
+      },
+      {
+        "challengeId": 8,
+        "percent": 0
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 0
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "default",
+    "url": "http://play.elevatorsaga.com/",
+    "solution": "default.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 0
+      },
+      {
+        "challengeId": 2,
+        "percent": 0
+      },
+      {
+        "challengeId": 3,
+        "percent": 0
+      },
+      {
+        "challengeId": 4,
+        "percent": 0
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 0
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 0
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "DeSjoerd solution (v 0.9)",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Solution-by-DeSjoerd",
+    "solution": "desjoerd.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 40
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 10
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 80
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 50
+      },
+      {
+        "challengeId": 12,
+        "percent": 30
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 30
+      },
+      {
+        "challengeId": 15,
+        "percent": 70
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "Dustin's Solution",
+    "url": "https://gist.github.com/dustinbarnes/7944c85e24011105c7c9",
+    "solution": "dustinbarnes.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 40
+      },
+      {
+        "challengeId": 6,
+        "percent": 70
+      },
+      {
+        "challengeId": 7,
+        "percent": 60
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 90
+      },
+      {
+        "challengeId": 10,
+        "percent": 10
+      },
+      {
+        "challengeId": 11,
+        "percent": 80
+      },
+      {
+        "challengeId": 12,
+        "percent": 60
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 70
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "Eric's Solution for levels 1-7",
+    "url": "https://github.com/ericdorsey/elevatorsaga",
+    "solution": "ericdorsey.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 80
+      },
+      {
+        "challengeId": 2,
+        "percent": 40
+      },
+      {
+        "challengeId": 3,
+        "percent": 80
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 60
+      },
+      {
+        "challengeId": 6,
+        "percent": 50
+      },
+      {
+        "challengeId": 7,
+        "percent": 50
+      },
+      {
+        "challengeId": 8,
+        "percent": 0
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 10
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "indutny's solution",
+    "url": "https://gist.github.com/indutny/b717bff602dd205b52c1",
+    "solution": "indutny.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 90
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 90
+      },
+      {
+        "challengeId": 6,
+        "percent": 60
+      },
+      {
+        "challengeId": 7,
+        "percent": 20
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 30
+      },
+      {
+        "challengeId": 11,
+        "percent": 70
+      },
+      {
+        "challengeId": 12,
+        "percent": 30
+      },
+      {
+        "challengeId": 13,
+        "percent": 10
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 30
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 80
+      }
+    ]
+  },
+  {
+    "name": "Jacqt and Dvdhsu; for level 17. Basic solution that works surprisignly well on problem 17. Elevators go from 0 to 20 to 0 to 20 repeatedly",
+    "url": "https://github.com/jacqt/elevatorbot",
+    "solution": "jacqt.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 40
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 80
+      },
+      {
+        "challengeId": 5,
+        "percent": 40
+      },
+      {
+        "challengeId": 6,
+        "percent": 50
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 80
+      },
+      {
+        "challengeId": 10,
+        "percent": 10
+      },
+      {
+        "challengeId": 11,
+        "percent": 10
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "Jayswain's solution for 1 - 7",
+    "url": "https://github.com/jayswain/elevator_saga_solution",
+    "solution": "jayswain.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 60
+      },
+      {
+        "challengeId": 2,
+        "percent": 0
+      },
+      {
+        "challengeId": 3,
+        "percent": 20
+      },
+      {
+        "challengeId": 4,
+        "percent": 0
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 90
+      },
+      {
+        "challengeId": 7,
+        "percent": 20
+      },
+      {
+        "challengeId": 8,
+        "percent": 0
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 0
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "jstnlef's solution for most levels",
+    "url": "https://github.com/jstnlef/elevator-saga",
+    "solution": "jstnlef.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 90
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 90
+      },
+      {
+        "challengeId": 6,
+        "percent": 30
+      },
+      {
+        "challengeId": 7,
+        "percent": 30
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 60
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 60
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 30
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 70
+      }
+    ]
+  },
+  {
+    "name": "kballenegger's solution",
+    "url": "https://gist.github.com/kballenegger/e275a99d50de2ee07f97",
+    "solution": "kballenegger.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 40
+      },
+      {
+        "challengeId": 3,
+        "percent": 40
+      },
+      {
+        "challengeId": 4,
+        "percent": 40
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 20
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 10
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 90
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "kisPocok's Solution for level 0-12; with Hungarian comments.",
+    "url": "https://gist.github.com/kisPocok/50deb558c941552b04c8",
+    "solution": "kispocok.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 100
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 80
+      },
+      {
+        "challengeId": 5,
+        "percent": 60
+      },
+      {
+        "challengeId": 6,
+        "percent": 90
+      },
+      {
+        "challengeId": 7,
+        "percent": 30
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 80
+      },
+      {
+        "challengeId": 10,
+        "percent": 30
+      },
+      {
+        "challengeId": 11,
+        "percent": 40
+      },
+      {
+        "challengeId": 12,
+        "percent": 10
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 10
+      }
+    ]
+  },
+  {
+    "name": "Kaue's Solution for level 17; each elevator is fair (ie no starvation); using direction lights; load balancing using the modulo operator (it is more effective than 'least loaded'); local scheduling.",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Kaue's-Solution",
+    "solution": "kssilveira.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 20
+      },
+      {
+        "challengeId": 6,
+        "percent": 60
+      },
+      {
+        "challengeId": 7,
+        "percent": 20
+      },
+      {
+        "challengeId": 8,
+        "percent": 90
+      },
+      {
+        "challengeId": 9,
+        "percent": 20
+      },
+      {
+        "challengeId": 10,
+        "percent": 20
+      },
+      {
+        "challengeId": 11,
+        "percent": 20
+      },
+      {
+        "challengeId": 12,
+        "percent": 10
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 30
+      }
+    ]
+  },
+  {
+    "name": "marado's solution for 1-12",
+    "url": "https://github.com/marado/elevator-saga-solutions/",
+    "solution": "marado.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 60
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 80
+      },
+      {
+        "challengeId": 6,
+        "percent": 10
+      },
+      {
+        "challengeId": 7,
+        "percent": 20
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 70
+      },
+      {
+        "challengeId": 12,
+        "percent": 10
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "Markavian's Solution for all levels, with a mode switch",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Markavian's-Solution",
+    "solution": "markavian.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 80
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 10
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 20
+      },
+      {
+        "challengeId": 11,
+        "percent": 90
+      },
+      {
+        "challengeId": 12,
+        "percent": 70
+      },
+      {
+        "challengeId": 13,
+        "percent": 20
+      },
+      {
+        "challengeId": 14,
+        "percent": 40
+      },
+      {
+        "challengeId": 15,
+        "percent": 70
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "MarkusMattinen's solution (includes benchmarks for all challenges)",
+    "url": "https://github.com/MarkusMattinen/elevatorsaga-solutions",
+    "solution": "markusmattinen.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 70
+      },
+      {
+        "challengeId": 6,
+        "percent": 100
+      },
+      {
+        "challengeId": 7,
+        "percent": 100
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 50
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 80
+      },
+      {
+        "challengeId": 13,
+        "percent": 20
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 80
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 20
+      }
+    ]
+  },
+  {
+    "name": "Solution with working lights!|nichampagne's Solution",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/nichampagne's-Solution-w--Working-Lights!",
+    "solution": "nichampagne.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 90
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 70
+      },
+      {
+        "challengeId": 6,
+        "percent": 70
+      },
+      {
+        "challengeId": 7,
+        "percent": 50
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 30
+      },
+      {
+        "challengeId": 11,
+        "percent": 90
+      },
+      {
+        "challengeId": 12,
+        "percent": 80
+      },
+      {
+        "challengeId": 13,
+        "percent": 10
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 60
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "Cheng's Solution with balanced benchmarks for level 17",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Cheng%27s-Solution-%28Balanced-Benchmarks%29",
+    "solution": "onlyurei.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 20
+      },
+      {
+        "challengeId": 6,
+        "percent": 30
+      },
+      {
+        "challengeId": 7,
+        "percent": 40
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 90
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 30
+      },
+      {
+        "challengeId": 12,
+        "percent": 10
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 30
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "rachkoud",
+    "url": "https://github.com/rachkoud",
+    "solution": "rachkoud.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 80
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 90
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 10
+      },
+      {
+        "challengeId": 8,
+        "percent": 90
+      },
+      {
+        "challengeId": 9,
+        "percent": 80
+      },
+      {
+        "challengeId": 10,
+        "percent": 70
+      },
+      {
+        "challengeId": 11,
+        "percent": 80
+      },
+      {
+        "challengeId": 12,
+        "percent": 30
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 80
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 70
+      }
+    ]
+  },
+  {
+    "name": "SKooDA's Solution for ** manualy controlled ** game",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/SKooDA's-very-ugly-%22manual-control%22-solution",
+    "solution": "skooda.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 0
+      },
+      {
+        "challengeId": 2,
+        "percent": 0
+      },
+      {
+        "challengeId": 3,
+        "percent": 0
+      },
+      {
+        "challengeId": 4,
+        "percent": 0
+      },
+      {
+        "challengeId": 5,
+        "percent": 0
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 0
+      },
+      {
+        "challengeId": 9,
+        "percent": 0
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 0
+      },
+      {
+        "challengeId": 12,
+        "percent": 0
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 0
+      },
+      {
+        "challengeId": 16,
+        "percent": 0
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  },
+  {
+    "name": "tasuk's solution Worse than Markus Mattinen's solution.",
+    "url": "https://github.com/tasuk/elevatorsaga-solver",
+    "solution": "tasuk.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 50
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 70
+      },
+      {
+        "challengeId": 6,
+        "percent": 80
+      },
+      {
+        "challengeId": 7,
+        "percent": 100
+      },
+      {
+        "challengeId": 8,
+        "percent": 60
+      },
+      {
+        "challengeId": 9,
+        "percent": 90
+      },
+      {
+        "challengeId": 10,
+        "percent": 40
+      },
+      {
+        "challengeId": 11,
+        "percent": 70
+      },
+      {
+        "challengeId": 12,
+        "percent": 50
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 0
+      },
+      {
+        "challengeId": 15,
+        "percent": 10
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "toonvr's solution (v 1.2)",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/toonvr%27s-solution",
+    "solution": "toonvr.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 90
+      },
+      {
+        "challengeId": 3,
+        "percent": 100
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 70
+      },
+      {
+        "challengeId": 6,
+        "percent": 70
+      },
+      {
+        "challengeId": 7,
+        "percent": 30
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 70
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 60
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 20
+      },
+      {
+        "challengeId": 15,
+        "percent": 50
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 10
+      }
+    ]
+  },
+  {
+    "name": "xoqem's solution for all levels (though not optimized for number of moves)",
+    "url": "https://github.com/xoqem/ElevatorSagaSolution",
+    "solution": "xoqem.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 100
+      },
+      {
+        "challengeId": 2,
+        "percent": 100
+      },
+      {
+        "challengeId": 3,
+        "percent": 90
+      },
+      {
+        "challengeId": 4,
+        "percent": 100
+      },
+      {
+        "challengeId": 5,
+        "percent": 70
+      },
+      {
+        "challengeId": 6,
+        "percent": 40
+      },
+      {
+        "challengeId": 7,
+        "percent": 70
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 20
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 50
+      },
+      {
+        "challengeId": 13,
+        "percent": 0
+      },
+      {
+        "challengeId": 14,
+        "percent": 20
+      },
+      {
+        "challengeId": 15,
+        "percent": 30
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 60
+      }
+    ]
+  },
+  {
+    "name": "yk11's solution for all levels",
+    "url": "https://github.com/magwo/elevatorsaga/wiki/Solution-by-yk11",
+    "solution": "yk11.solution.js",
+    "challenges": [
+      {
+        "challengeId": 1,
+        "percent": 90
+      },
+      {
+        "challengeId": 2,
+        "percent": 50
+      },
+      {
+        "challengeId": 3,
+        "percent": 70
+      },
+      {
+        "challengeId": 4,
+        "percent": 90
+      },
+      {
+        "challengeId": 5,
+        "percent": 80
+      },
+      {
+        "challengeId": 6,
+        "percent": 0
+      },
+      {
+        "challengeId": 7,
+        "percent": 0
+      },
+      {
+        "challengeId": 8,
+        "percent": 100
+      },
+      {
+        "challengeId": 9,
+        "percent": 100
+      },
+      {
+        "challengeId": 10,
+        "percent": 0
+      },
+      {
+        "challengeId": 11,
+        "percent": 100
+      },
+      {
+        "challengeId": 12,
+        "percent": 30
+      },
+      {
+        "challengeId": 13,
+        "percent": 10
+      },
+      {
+        "challengeId": 14,
+        "percent": 10
+      },
+      {
+        "challengeId": 15,
+        "percent": 40
+      },
+      {
+        "challengeId": 16,
+        "percent": 100
+      },
+      {
+        "challengeId": 17,
+        "percent": 0
+      }
+    ]
+  }
+]
