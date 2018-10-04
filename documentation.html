@@ -55,8 +55,14 @@
         // dt is the number of game seconds that passed since the last time update was called
     }
 }</code></pre></div>
-            <p>These functions will then be called by the game during the challenge.<br>
-            <span class="emphasis-color">init</span> will be called when the challenge starts, and <span class="emphasis-color">update</span> repeatedly during the challenge.
+            <p>
+                These functions will then be called by the game during the challenge.
+            </p>
+            <p>
+                <span class="emphasis-color">init</span> will be called when the challenge starts. <span class="emphasis-color">elevators</span> will be an array of Elevator objects, <span class="emphasis-color">floors</span> will be an array of Floor objects, and <span class="emphasis-color">this</span> will be the object you declared.
+            </p>
+            <p>
+                <span class="emphasis-color">update</span> will be called every frame the challenge updates, approximately 60 times per real-time second on most computers. <span class="emphasis-color">dt</span> will be the number of in-game seconds that have passed since the previous update (not necessarily an integer!), <span class="emphasis-color">elevators</span> will be an array of Elevator objects, <span class="emphasis-color">floors</span> will be an array of Floor objects, and <span class="emphasis-color">this</span> will be the object you declared.
             </p>
             <p>
                 Normally you will put most of your code in the <span class="emphasis-color">init</span> function, to set up event listeners and logic.
