@@ -119,7 +119,7 @@ elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>floor_button_pressed</td><td><small>乗客がエレベータ内の行き先フロアボタンを押したときに発火するイベントです。</small></td><td><pre><code>elevator.on("floor_button_pressed", function(floorNum) {
     // この階に行くようにエレベータに命令する？
 })</code></pre></td></tr>
-                    <tr><td>passing_floor</td><td><small>エレベータがフロアを追加する直前に発火するイベントです。そのフロアに停止すべきかを判断するのに利用できます。ただし、このイベントはdestination フロアには発火しません。尚、"Direction"は"up"か"down"です。</small></td><td><pre><code>elevator.on("passing_floor", function(floorNum, direction) { ... });</code></pre></td></tr>
+                    <tr><td>passing_floor</td><td><small>エレベータがフロアを通過する直前に発火するイベントです。そのフロアに停止すべきかを判断するのに利用できます。ただし、このイベントはdestination フロアには発火しません。尚、"Direction"は"up"か"down"です。</small></td><td><pre><code>elevator.on("passing_floor", function(floorNum, direction) { ... });</code></pre></td></tr>
                     <tr><td>stopped_at_floor</td><td><small>フロアに到着した時に発火するイベント。</small></td><td><pre><code>elevator.on("stopped_at_floor", function(floorNum) {
     // 次にどこに行くかを決定する？
 })</code></pre></td></tr>
@@ -129,7 +129,7 @@ elevator.checkDestinationQueue();</code></pre></td></tr>
             <table class="doctable">
                 <thead><th width="150">Property</th><th width="90">Type</th><th width="190">Explanation</th><th width="*">Example</th></thead>
                 <tbody>
-                <tr><td>floorNum</td><td>function</td><td><small>エレベータがフロアに到着した際に発火するイベントです。</small></td><td><pre><code>if(floor.floorNum() > 3) { ... }</code></pre></td></tr>
+                <tr><td>floorNum</td><td>function</td><td><small>そのフロアの階数を示します。</small></td><td><pre><code>if(floor.floorNum() > 3) { ... }</code></pre></td></tr>
                 </tbody>
             </table>
             <table class="doctable">
