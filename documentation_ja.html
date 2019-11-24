@@ -23,7 +23,7 @@
             <h2>このゲームについて</h2>
             <p>
                 これはプログラミングのゲームです!<br>
-                あなたはJavaScript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide">JavaScript</a>のプログラムを書いてエレベーターの動作をプログラミングします。
+                あなたは <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide">JavaScript</a>のプログラムを書いてエレベーターの動作をプログラミングします。
             </p>
             <p>
                 ゴールは効率的にユーザを各階に運ぶことです。<br>
@@ -34,17 +34,17 @@
             <h2>プレイ方法</h2>
             <p>
                 ゲームビュー下部にコードを書き、 <span class="emphasis-color">Apply</span> ボタンを押すとそのレベルが開始されます。<br>
-                ゲーム中の時間は <i class="fa fa-plus emphasis-color"></i> と <i class="fa fa-minus emphasis-color"></i> のボタンによって調整することができます。.
+                ゲーム中の時間の速度は <i class="fa fa-plus emphasis-color"></i> と <i class="fa fa-minus emphasis-color"></i> のボタンによって調整することができます。.
             </p>
             <p>
-                もし、あなたのプログラムにエラーがある場合、 ブラウザ上の開発ツールでを用いることでデバッグできます。
-                もし、最初からやり直したい場合は <span class="emphasis-color">Reset</span> ボタンを押します。. リセットされるのでバグはなくなりますが、初期状態に戻ります。<br>
-                もし、 <a href="http://www.sublimetext.com/">Sublime Text</a>のようなエディタを使いたいのでしたら、コードをそのエディタで編集して画面下部にコードを貼り付けてください。<br>
-                編集中のプログラムは自動的にローカルストレージに保存されます。このため、誤ってブラウザを閉じても消えることはありません。
+                あなたのプログラムにエラーがある場合、 ブラウザ上の開発ツールを用いることでデバッグできます。
+                最初からやり直したい場合は <span class="emphasis-color">Reset</span> ボタンを押します。すべてがリセットされるのでバグはなくなりますが、初期状態に戻ります。<br>
+                もし、 <a href="http://www.sublimetext.com/">Sublime Text</a>のようなエディタを使いたいのでしたら、コードをそのエディタで編集してコードを貼り付けてください。<br>
+                画面下部のプログラムは自動的にローカルストレージに保存されます。このため、誤ってブラウザを閉じても消えることはありません。
             </p>
             <h2>プログラムの基本</h2>
             <p>
-                プログラムは <span class="emphasis-color">init</span> and <span class="emphasis-color">update</span>という2つの関数を含む必要があります。
+                プログラムは <span class="emphasis-color">init</span> と <span class="emphasis-color">update</span>という2つの関数を含む必要があります。
             </p>
             <div><pre><code>{
     init: function(elevators, floors) {
@@ -52,14 +52,14 @@
     },
     update: function(dt, elevators, floors) {
         // elevators、floorはarray型です
-        // dtは最後にupdate関数を呼び出してからのゲーム内の秒数です。
+        // dtは最後にupdate関数を呼び出してから、この関数が呼ばれるまでのゲーム内の秒数です。
     }
 }</code></pre></div>
             <p>この２つの関数はゲーム中に自動的に呼び出されます。<br>
-            <span class="emphasis-color">init</span> はゲームの開始時に、 <span class="emphasis-color">update</span> はチャレンジ中に繰り返し呼ばれる関数です。
+            <span class="emphasis-color">init</span> はゲームの開始時に、<span class="emphasis-color">update</span> はゲーム中に繰り返し呼ばれる関数です。
             </p>
             <p>
-                一般的に、イベントリスナーの設置とロジック設定のために多くのコードは <span class="emphasis-color">init</span>関数に書かれます。
+                一般的に、多くのコードは <span class="emphasis-color">init</span>にイベントリスナーとロジックが書かれます。
             </p>
             <h2>コード例</h2>
             <h3>エレベータの制御方法</h3>
@@ -77,7 +77,7 @@
                 <dt><pre><code>elevator.on("floor_button_pressed", function(floorNum) { ... } );</code></pre></dt>
                     <dd>floor_button_pressedイベント: 乗客によってボタンが押された時に発火します。floorNumには押された階が入ります。</dd>
                 <dt><pre><code>floor.on("up_button_pressed", function() { ... } );</code></pre></dt>
-                    <dd>up_button_pressed"イベント: そのfloorで待っているユーザが上ボタンを押したときに発火します。ほかの(上の)階に行きたいことを示します。</dd>
+                    <dd>up_button_pressed"イベント: そのfloorで待っているユーザが上ボタンを押したときに発火します。上の階に行きたい乗客がいることを示します。</dd>
             </dl>
 
             <h2 id="docs">API ドキュメント</h2>
@@ -85,10 +85,9 @@
             <table class="doctable">
                 <thead><th width="150">Property</th><th width="90">Type</th><th width="190">説明</th><th width="*">例</th></thead>
                 <tbody>
-                    <tr><td>goToFloor</td><td>function</td><td><small>第一引数に指定されたフロアをキューに入れます。ただし、第二引数にtrueを設定するとキューに入ることなくその階に向かいます。そのあと、キューに入っているフロアに向かいます。</small></td><td><pre><code>elevator.goToFloor(3); // ほかのキュー動作の後に3階に向かいます
+                    <tr><td>goToFloor</td><td>function</td><td><small>第一引数に指定されたフロアをキューに入れます。第二引数にtrueを設定するとキューに入ることなくその階に向かいます。そのあと、キューに入っているフロアに向かいます。</small></td><td><pre><code>elevator.goToFloor(3); // ほかのキュー動作の後に3階に向かいます
 elevator.goToFloor(2, true); // キューの内容にかかわらず2階に向かいます</code></pre></td></tr>
-                    <tr><td>stop</td><td>function</td><td><small>動作キューをクリアし、エレベータをストップします。通常、エレベータをストップすることはありません。この関数は再スケジューリングロジックの実装のために用意されています。この関数が呼ばれたときおそらくエレベータはフロアに停止していないので、乗客は降りることができません。
-Clear the destination queue and stop the elevator if it is moving. Note that you normally don't need to stop elevators - it is intended for advanced solutions with in-transit rescheduling logic. Also, note that the elevator will probably not stop at a floor, so passengers will not get out.</small></td><td><pre><code>elevator.stop();</code></pre></td></tr>
+                    <tr><td>stop</td><td>function</td><td><small>動作キューをクリアし、エレベータをストップします。通常、エレベータをストップすることはありません。この関数は再スケジューリングロジックの実装のために用意されています。この関数が呼ばれたときおそらくエレベータはフロアに停止していないので、乗客は降りることができません。</small></td><td><pre><code>elevator.stop();</code></pre></td></tr>
                     <tr><td>currentFloor</td><td>function</td><td><small>エレベータのいるフロアを返します</small></td><td><pre><code>if(elevator.currentFloor() === 0) {
     // 何らかの動作
 }</code></pre></td></tr>
@@ -99,7 +98,7 @@ Clear the destination queue and stop the elevator if it is moving. Note that you
     elevator.goingUpIndicator(false);
 }</code></pre></td></tr>
                     <tr><td>maxPassengerCount</td><td>function</td><td><small>最大乗車人数を取得します</small></td><td><pre><code>if(elevator.maxPassengerCount() > 5) {
-    // なにか特別なことにこの大きなエレベータを使いします
+    // なにか特別なことにこの大きなエレベータを使います
 }</code></pre></td></tr>
                     <tr><td>loadFactor</td><td>function</td><td><small>エレベータに乗っている人々の重さを得ます。そのエレベータごとに0が空、1がFULLを示します。</small></td><td><pre><code>if(elevator.loadFactor() < 0.4) {
     // Maybe use this elevator, since it's not full yet?
@@ -107,7 +106,7 @@ Clear the destination queue and stop the elevator if it is moving. Note that you
                     <tr><td>destinationDirection</td><td>function</td><td><small>エレベータの今の状態を得ます。 "up", "down" or "stopped"のいずれかです。</small></td></tr>
                     <tr><td>destinationQueue</td><td>array</td><td><small>そのエレベータの今の行き先キューをgetします。これは設定することが可能です(空にすることも可能です)。変更を即座に反映したい場合、checkDestinationQueue関数を呼ぶ必要があります。</small></td><td><pre><code>elevator.destinationQueue = [];
 elevator.checkDestinationQueue();</code></pre></td></tr>
-                    <tr><td>checkDestinationQueue</td><td>function</td><td><small>この関数はdestinationDirectionを手動で編集した場合に呼ぶ必要があります。この関数はdestinationDirectionを参照し、次の宛先を決定します。</small></td><td><pre><code>elevator.checkDestinationQueue();</code></pre></td></tr>
+                    <tr><td>checkDestinationQueue</td><td>function</td><td><small>この関数はdestinationDirectionを手動で編集した場合に呼ぶ必要があります。この関数はdestination queueを参照し、次の宛先を決定します。</small></td><td><pre><code>elevator.checkDestinationQueue();</code></pre></td></tr>
                     <tr><td>getPressedFloors</td><td>function</td><td><small>現在押されているフロアを配列で取得します。</small></td><td><pre><code>if(elevator.getPressedFloors().length > 0) {
     // 最初に押されたフロアに行く？
 }</code></pre></td></tr>
