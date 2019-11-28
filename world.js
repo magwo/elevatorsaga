@@ -22,6 +22,7 @@ var createWorldCreator = function() {
             elevator.moveTo(currentX, null);
             elevator.setFloorPosition(0);
             elevator.updateDisplayPosition();
+            elevator.moveCount = 0;
             currentX += (20 + elevator.width);
             return elevator;
         });
