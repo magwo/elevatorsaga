@@ -148,6 +148,7 @@ $(function() {
     console.log(app.worldController);
     app.worldCreator = createWorldCreator();
     app.world = undefined;
+    app.agent = undefined;
 
     app.currentChallengeIndex = 0;
 
@@ -188,15 +189,22 @@ $(function() {
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
                 }
+                if (autoStart && app.agent.playing()) {
+                    app.agent.train(()=> app.startChallenge(challengeIndex, autoStart));
+                }
             }
         });
 
         var codeObj = editor.getCodeObj();
         console.log("Starting...");
         app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);
+        if (app.agent) {
+            app.agent.play(app.world);
+        }
     };
 
     editor.on("apply_code", function() {
+        app.agent = createAgent(challenges[app.currentChallengeIndex].options, true);
         app.startChallenge(app.currentChallengeIndex, true);
     });
     editor.on("code_success", function() {
