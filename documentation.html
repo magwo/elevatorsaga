@@ -135,10 +135,10 @@ elevator.checkDestinationQueue();</code></pre></td></tr>
             <table class="doctable">
                 <thead><th width="150">Event</th><th width="280">Explanation</th><th>Example</th></thead>
                 <tbody>
-                    <tr><td>up_button_pressed</td><td><small>Triggered when someone has pressed the up button at a floor. Note that passengers will press the button again if they fail to enter an elevator.</small></td><td><pre><code>floor.on("up_button_pressed", function() {
+                    <tr><td>up_button_pressed</td><td><small>Triggered when someone has pressed the up button at a floor. Note that passengers will press the button again if they fail to enter an elevator.</small></td><td><pre><code>floor.on("up_button_pressed", function(floor) {
     // Maybe tell an elevator to go to this floor?
 })</code></pre></td></tr>
-                    <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor. Note that passengers will press the button again if they fail to enter an elevator.</small></td><td><pre><code>floor.on("down_button_pressed", function() {
+                    <tr><td>down_button_pressed</td><td><small>Triggered when someone has pressed the down button at a floor. Note that passengers will press the button again if they fail to enter an elevator.</small></td><td><pre><code>floor.on("down_button_pressed", function(floor) {
     // Maybe tell an elevator to go to this floor?
 })</code></pre></td></tr>
 
