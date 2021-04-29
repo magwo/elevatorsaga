@@ -74,6 +74,16 @@ var createEditor = function() {
         cm.focus();
     });
 
+    var $textEditorBox = $(".CodeMirror");
+    var isExpanded = false;
+    var buttonHtml = "Expand";
+    $("#button_expand").click(function(){
+        $textEditorBox.toggleClass("expanded");
+        isExpanded = !(isExpanded);
+        buttonHtml = isExpanded ? "Collapse" : "Expand";
+        $(this).html(buttonHtml);
+    });
+
     var returnObj = riot.observable({});
     var autoSaver = _.debounce(saveCode, 1000);
     cm.on("change", function() {
@@ -98,10 +108,10 @@ var createEditor = function() {
     };
     returnObj.getCode = function() {
         return cm.getValue();
-    }
+    };
     returnObj.setDevTestCode = function() {
         cm.setValue($("#devtest-elev-implementation").text().trim());
-    }
+    };
 
     $("#button_apply").click(function() {
         returnObj.trigger("apply_code");
