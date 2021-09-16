@@ -232,7 +232,6 @@ $(function() {
     editor.trigger("change");
 
     riot.route(function(path) {
-        console.log("yay!");
         params = _.reduce(path.split(","), function(result, p) {
             var match = p.match(/(\w+)=(\w+$)/);
             if(match) { result[match[1]] = match[2]; } return result;

@@ -39796,11 +39796,9 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
 (function(riot) { "use strict";
 
 riot.observable = function(el) {
-  //debugger;
   var callbacks = {}, slice = [].slice;
 
   el.on = function(events, fn) {
-    //debugger;
     if (typeof fn === "function") {
       events.replace(/[^\s]+/g, function(name, pos) {
         (callbacks[name] = callbacks[name] || []).push(fn);
@@ -39832,7 +39830,6 @@ riot.observable = function(el) {
   };
 
   el.trigger = function(name) {
-    //debugger;
     var args = slice.call(arguments, 1),
       fns = callbacks[name] || [];
 
@@ -39892,7 +39889,6 @@ riot.render = function(tmpl, data, escape_fn) {
 
   // standard browsers
   if (listen) {
-    //debugger;
     listen("popstate", pop, false);
     doc.addEventListener("DOMContentLoaded", pop, false);
 
@@ -41158,7 +41154,6 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function() {
     editor.trigger("change");
 
     riot.route(function(path) {
-        console.log("yay!");
         params = lodash__WEBPACK_IMPORTED_MODULE_5___default().reduce(path.split(","), function(result, p) {
             var match = p.match(/(\w+)=(\w+$)/);
             if(match) { result[match[1]] = match[2]; } return result;
