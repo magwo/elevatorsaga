@@ -54,7 +54,7 @@ var createEditor = function() {
     };
     var saveCode = function() {
         localStorage.setItem(lsKey, cm.getValue());
-        $("#save_message").text("Code saved " + new Date().toTimeString());
+        $("#save_message").text("コードを保存しました： " + new Date().toTimeString());
         returnObj.trigger("change");
     };
 
@@ -195,9 +195,9 @@ $(function() {
                 app.world.challengeEnded = true;
                 app.worldController.setPaused(true);
                 if(challengeStatus) {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
+                    presentFeedback($feedback, feedbackTempl, app.world, "成功です!", "目標を達成しました", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
                 } else {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
+                    presentFeedback($feedback, feedbackTempl, app.world, "目標失敗", "プログラムを改良する必要があるかも？", "");
                 }
             }
         });

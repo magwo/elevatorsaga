@@ -32,10 +32,10 @@ function presentStats($parent, world) {
 
     world.on("stats_display_changed", function updateStats() {
         elem_transportedcounter.textContent = world.transportedCounter;
-        elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "s";
+        elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "秒";
         elem_transportedpersec.textContent = world.transportedPerSec.toPrecision(3);
-        elem_avgwaittime.textContent = world.avgWaitTime.toFixed(1) + "s";
-        elem_maxwaittime.textContent = world.maxWaitTime.toFixed(1) + "s";
+        elem_avgwaittime.textContent = world.avgWaitTime.toFixed(1) + "秒";
+        elem_maxwaittime.textContent = world.maxWaitTime.toFixed(1) + "秒";
         elem_movecount.textContent = world.moveCount;
     });
     world.trigger("stats_display_changed");
@@ -46,7 +46,7 @@ function presentChallenge($parent, challenge, app, world, worldController, chall
         challenge: challenge,
         num: challengeNum,
         timeScale: worldController.timeScale.toFixed(0) + "x",
-        startButtonText: world.challengeEnded ? "<i class='fa fa-repeat'></i> Restart" : (worldController.isPaused ? "Start" : "Pause")
+        startButtonText: world.challengeEnded ? "<i class='fa fa-repeat'></i> 再開" : (worldController.isPaused ? "スタート" : "一時停止")
     }));
     $parent.html($challenge);
 
