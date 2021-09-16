@@ -1,0 +1,75 @@
+doctype html
+html(lang="ja")
+  head
+    title Elevator Saga - エレベータをプログラミングしよう！
+    meta(http-equiv="Content-Type" content="text/html;charset=UTF-8")
+    link(rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all")
+    link(rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:400,700,300" type="text/css")
+    link(rel="stylesheet" href="libs/codemirror/codemirror.css")
+    link(rel="stylesheet" href="libs/codemirror/themes/solarized.css")
+    link(rel="stylesheet" href="style.css" type="text/css" media="all")
+
+    script(src="app.js")
+
+  body
+    .container
+      .header
+        h1.left Elevator Saga #[em.emphasis-color The elevator programming game]
+        a.right(href="https://github.com/magwo/elevatorsaga/wiki") Wiki / 解答例
+        a.right(href="documentation.html#docs") ドキュメンテーション
+        a.right(href="documentation.html") ヘルプ
+
+      noscript
+        h2 このブラウザは JavaScript が有効になっていません．
+        |  このページには JavaScript によって実装されたブラウザで動作するプログラミングゲームが含まれています．
+
+      .challenge(style="height: 40px")
+
+      .world
+        .feedbackcontainer
+        .innerworld
+        .statscontainer
+          div(style="top: 20px")
+            span.key 運んだ人数
+            span.value.transportedcounter
+
+          div(style="top: 40px")
+            span.key 経過時間
+            span.value.elapsedtime
+
+          div(style="top: 60px")
+            span.key 1秒間に運んだ人数
+            span.value.transportedpersec
+
+          div(style="top: 80px")
+            span.key 平均待機時間
+            span.value.avgwaittime
+
+          div(style="top: 100px")
+            span.key 最大待機時間
+            span.value.maxwaittime
+
+          div(style="top: 120px")
+            span.key(title="エレベータがフロアに到着した総回数") 移動回数
+            span.value.movecount
+
+      .codestatus
+      .code
+        textarea#code(name="Code")
+
+      button#button_reset(style="float: left") リセット
+      button#button_resetundo(style="float: left") やり直し
+      button#button_apply(style="float: right") 適用
+      button#button_save(style="float: right") 保存
+      span#save_message(style="float: right")
+      span#fitness_message(style="float: right")
+      div(style="clear: both;")
+
+      div(style="margin-top: 20px")
+        h3 ヒントが必要ですか？　#[a(href="documentation.html") ヘルプと API ドキュメンテーション]のページを参照してみましょう．
+
+      .footer
+        h4 Made by Magnus Wolffelt and contributors
+        h4 Version #[span.emphasis-color 1.6.5]
+        h4 #[a(href="https://github.com/Double-oxygeN/elevatorsaga") Source code] on GitHub
+        h4: a(href="test/index.html") Run tests

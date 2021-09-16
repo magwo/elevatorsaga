@@ -1,252 +1,32 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
-var createEditor = function() {
-    var lsKey = "elevatorCrushCode_v5";
+/***/ "./src/js/app.js":
+/*!***********************!*\
+  !*** ./src/js/app.js ***!
+  \***********************/
+/***/ (() => {
 
-    var cm = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        indentUnit: 4,
-        indentWithTabs: false,
-        theme: "solarized light",
-        mode: "javascript",
-        autoCloseBrackets: true,
-        extraKeys: {
-            // the following Tab key mapping is from http://codemirror.net/doc/manual.html#keymaps
-            Tab: function(cm) {
-                var spaces = new Array(cm.getOption("indentUnit") + 1).join(" ");
-                cm.replaceSelection(spaces);
-            }
-        }
-    });
+eval("\nvar createEditor = function() {\n    var lsKey = \"elevatorCrushCode_v5\";\n\n    var cm = CodeMirror.fromTextArea(document.getElementById(\"code\"), {\n        lineNumbers: true,\n        indentUnit: 4,\n        indentWithTabs: false,\n        theme: \"solarized light\",\n        mode: \"javascript\",\n        autoCloseBrackets: true,\n        extraKeys: {\n            // the following Tab key mapping is from http://codemirror.net/doc/manual.html#keymaps\n            Tab: function(cm) {\n                var spaces = new Array(cm.getOption(\"indentUnit\") + 1).join(\" \");\n                cm.replaceSelection(spaces);\n            }\n        }\n    });\n\n    // reindent on paste (adapted from https://github.com/ahuth/brackets-paste-and-indent/blob/master/main.js)\n    cm.on(\"change\", function(codeMirror, change) {\n        if(change.origin !== \"paste\") {\n            return;\n        }\n\n        var lineFrom = change.from.line;\n        var lineTo = change.from.line + change.text.length;\n\n        function reindentLines(codeMirror, lineFrom, lineTo) {\n            codeMirror.operation(function() {\n                codeMirror.eachLine(lineFrom, lineTo, function(lineHandle) {\n                    codeMirror.indentLine(lineHandle.lineNo(), \"smart\");\n                });\n            });\n        }\n\n        reindentLines(codeMirror, lineFrom, lineTo);\n    });\n\n    var reset = function() {\n        cm.setValue($(\"#default-elev-implementation\").text().trim());\n    };\n    var saveCode = function() {\n        localStorage.setItem(lsKey, cm.getValue());\n        $(\"#save_message\").text(\"Code saved \" + new Date().toTimeString());\n        returnObj.trigger(\"change\");\n    };\n\n    var existingCode = localStorage.getItem(lsKey);\n    if(existingCode) {\n        cm.setValue(existingCode);\n    } else {\n        reset();\n    }\n\n    $(\"#button_save\").click(function() {\n        saveCode();\n        cm.focus();\n    });\n\n    $(\"#button_reset\").click(function() {\n        if(confirm(\"Do you really want to reset to the default implementation?\")) {\n            localStorage.setItem(\"develevateBackupCode\", cm.getValue());\n            reset();\n        }\n        cm.focus();\n    });\n\n    $(\"#button_resetundo\").click(function() {\n        if(confirm(\"Do you want to bring back the code as before the last reset?\")) {\n            cm.setValue(localStorage.getItem(\"develevateBackupCode\") || \"\");\n        }\n        cm.focus();\n    });\n\n    var returnObj = riot.observable({});\n    var autoSaver = _.debounce(saveCode, 1000);\n    cm.on(\"change\", function() {\n        autoSaver();\n    });\n\n    returnObj.getCodeObj = function() {\n        console.log(\"Getting code...\");\n        var code = cm.getValue();\n        var obj;\n        try {\n            obj = getCodeObjFromCode(code);\n            returnObj.trigger(\"code_success\");\n        } catch(e) {\n            returnObj.trigger(\"usercode_error\", e);\n            return null;\n        }\n        return obj;\n    };\n    returnObj.setCode = function(code) {\n        cm.setValue(code);\n    };\n    returnObj.getCode = function() {\n        return cm.getValue();\n    }\n    returnObj.setDevTestCode = function() {\n        cm.setValue($(\"#devtest-elev-implementation\").text().trim());\n    }\n\n    $(\"#button_apply\").click(function() {\n        returnObj.trigger(\"apply_code\");\n    });\n    return returnObj;\n};\n\n\nvar createParamsUrl = function(current, overrides) {\n    return \"#\" + _.map(_.merge(current, overrides), function(val, key) {\n        return key + \"=\" + val;\n    }).join(\",\");\n};\n\n\n\n$(function() {\n    var tsKey = \"elevatorTimeScale\";\n    var editor = createEditor();\n\n    var params = {};\n\n    var $world = $(\".innerworld\");\n    var $stats = $(\".statscontainer\");\n    var $feedback = $(\".feedbackcontainer\");\n    var $challenge = $(\".challenge\");\n    var $codestatus = $(\".codestatus\");\n\n    var floorTempl = document.getElementById(\"floor-template\").innerHTML.trim();\n    var elevatorTempl = document.getElementById(\"elevator-template\").innerHTML.trim();\n    var elevatorButtonTempl = document.getElementById(\"elevatorbutton-template\").innerHTML.trim();\n    var userTempl = document.getElementById(\"user-template\").innerHTML.trim();\n    var challengeTempl = document.getElementById(\"challenge-template\").innerHTML.trim();\n    var feedbackTempl = document.getElementById(\"feedback-template\").innerHTML.trim();\n    var codeStatusTempl = document.getElementById(\"codestatus-template\").innerHTML.trim();\n\n    var app = riot.observable({});\n    app.worldController = createWorldController(1.0 / 60.0);\n    app.worldController.on(\"usercode_error\", function(e) {\n        console.log(\"World raised code error\", e);\n        editor.trigger(\"usercode_error\", e);\n    });\n\n    console.log(app.worldController);\n    app.worldCreator = createWorldCreator();\n    app.world = undefined;\n\n    app.currentChallengeIndex = 0;\n\n    app.startStopOrRestart = function() {\n        if(app.world.challengeEnded) {\n            app.startChallenge(app.currentChallengeIndex);\n        } else {\n            app.worldController.setPaused(!app.worldController.isPaused);\n        }\n    };\n\n    app.startChallenge = function(challengeIndex, autoStart) {\n        if(typeof app.world !== \"undefined\") {\n            app.world.unWind();\n            // TODO: Investigate if memory leaks happen here\n        }\n        app.currentChallengeIndex = challengeIndex;\n        app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);\n        window.world = app.world;\n\n        clearAll([$world, $feedback]);\n        presentStats($stats, app.world);\n        presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);\n        presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);\n\n        app.worldController.on(\"timescale_changed\", function() {\n            localStorage.setItem(tsKey, app.worldController.timeScale);\n            presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);\n        });\n\n        app.world.on(\"stats_changed\", function() {\n            var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);\n            if(challengeStatus !== null) {\n                app.world.challengeEnded = true;\n                app.worldController.setPaused(true);\n                if(challengeStatus) {\n                    presentFeedback($feedback, feedbackTempl, app.world, \"Success!\", \"Challenge completed\", createParamsUrl(params, { challenge: (challengeIndex + 2)}));\n                } else {\n                    presentFeedback($feedback, feedbackTempl, app.world, \"Challenge failed\", \"Maybe your program needs an improvement?\", \"\");\n                }\n            }\n        });\n\n        var codeObj = editor.getCodeObj();\n        console.log(\"Starting...\");\n        app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);\n    };\n\n    editor.on(\"apply_code\", function() {\n        app.startChallenge(app.currentChallengeIndex, true);\n    });\n    editor.on(\"code_success\", function() {\n        presentCodeStatus($codestatus, codeStatusTempl);\n    });\n    editor.on(\"usercode_error\", function(error) {\n        presentCodeStatus($codestatus, codeStatusTempl, error);\n    });\n    editor.on(\"change\", function() {\n        $(\"#fitness_message\").addClass(\"faded\");\n        var codeStr = editor.getCode();\n        // fitnessSuite(codeStr, true, function(results) {\n        //     var message = \"\";\n        //     if(!results.error) {\n        //         message = \"Fitness avg wait times: \" + _.map(results, function(r){ return r.options.description + \": \" + r.result.avgWaitTime.toPrecision(3) + \"s\" }).join(\"&nbsp&nbsp&nbsp\");\n        //     } else {\n        //         message = \"Could not compute fitness due to error: \" + results.error;\n        //     }\n        //     $(\"#fitness_message\").html(message).removeClass(\"faded\");\n        // });\n    });\n    editor.trigger(\"change\");\n\n    riot.route(function(path) {\n        params = _.reduce(path.split(\",\"), function(result, p) {\n            var match = p.match(/(\\w+)=(\\w+$)/);\n            if(match) { result[match[1]] = match[2]; } return result;\n        }, {});\n        var requestedChallenge = 0;\n        var autoStart = false;\n        var timeScale = parseFloat(localStorage.getItem(tsKey)) || 2.0;\n        _.each(params, function(val, key) {\n            if(key === \"challenge\") {\n                requestedChallenge = _.parseInt(val) - 1;\n                if(requestedChallenge < 0 || requestedChallenge >= challenges.length) {\n                    console.log(\"Invalid challenge index\", requestedChallenge);\n                    console.log(\"Defaulting to first challenge\");\n                    requestedChallenge = 0;\n                }\n            } else if(key === \"autostart\") {\n                autoStart = val === \"false\" ? false : true;\n            } else if(key === \"timescale\") {\n                timeScale = parseFloat(val);\n            } else if(key === \"devtest\") {\n                editor.setDevTestCode();\n            } else if(key === \"fullscreen\") {\n                makeDemoFullscreen();\n            }\n        });\n        app.worldController.setTimeScale(timeScale);\n        app.startChallenge(requestedChallenge, autoStart);\n    });\n});\n\n\n//# sourceURL=webpack://elevatorsaga/./src/js/app.js?");
 
-    // reindent on paste (adapted from https://github.com/ahuth/brackets-paste-and-indent/blob/master/main.js)
-    cm.on("change", function(codeMirror, change) {
-        if(change.origin !== "paste") {
-            return;
-        }
+/***/ })
 
-        var lineFrom = change.from.line;
-        var lineTo = change.from.line + change.text.length;
-
-        function reindentLines(codeMirror, lineFrom, lineTo) {
-            codeMirror.operation(function() {
-                codeMirror.eachLine(lineFrom, lineTo, function(lineHandle) {
-                    codeMirror.indentLine(lineHandle.lineNo(), "smart");
-                });
-            });
-        }
-
-        reindentLines(codeMirror, lineFrom, lineTo);
-    });
-
-    var reset = function() {
-        cm.setValue($("#default-elev-implementation").text().trim());
-    };
-    var saveCode = function() {
-        localStorage.setItem(lsKey, cm.getValue());
-        $("#save_message").text("Code saved " + new Date().toTimeString());
-        returnObj.trigger("change");
-    };
-
-    var existingCode = localStorage.getItem(lsKey);
-    if(existingCode) {
-        cm.setValue(existingCode);
-    } else {
-        reset();
-    }
-
-    $("#button_save").click(function() {
-        saveCode();
-        cm.focus();
-    });
-
-    $("#button_reset").click(function() {
-        if(confirm("Do you really want to reset to the default implementation?")) {
-            localStorage.setItem("develevateBackupCode", cm.getValue());
-            reset();
-        }
-        cm.focus();
-    });
-
-    $("#button_resetundo").click(function() {
-        if(confirm("Do you want to bring back the code as before the last reset?")) {
-            cm.setValue(localStorage.getItem("develevateBackupCode") || "");
-        }
-        cm.focus();
-    });
-
-    var returnObj = riot.observable({});
-    var autoSaver = _.debounce(saveCode, 1000);
-    cm.on("change", function() {
-        autoSaver();
-    });
-
-    returnObj.getCodeObj = function() {
-        console.log("Getting code...");
-        var code = cm.getValue();
-        var obj;
-        try {
-            obj = getCodeObjFromCode(code);
-            returnObj.trigger("code_success");
-        } catch(e) {
-            returnObj.trigger("usercode_error", e);
-            return null;
-        }
-        return obj;
-    };
-    returnObj.setCode = function(code) {
-        cm.setValue(code);
-    };
-    returnObj.getCode = function() {
-        return cm.getValue();
-    }
-    returnObj.setDevTestCode = function() {
-        cm.setValue($("#devtest-elev-implementation").text().trim());
-    }
-
-    $("#button_apply").click(function() {
-        returnObj.trigger("apply_code");
-    });
-    return returnObj;
-};
-
-
-var createParamsUrl = function(current, overrides) {
-    return "#" + _.map(_.merge(current, overrides), function(val, key) {
-        return key + "=" + val;
-    }).join(",");
-};
-
-
-
-$(function() {
-    var tsKey = "elevatorTimeScale";
-    var editor = createEditor();
-
-    var params = {};
-
-    var $world = $(".innerworld");
-    var $stats = $(".statscontainer");
-    var $feedback = $(".feedbackcontainer");
-    var $challenge = $(".challenge");
-    var $codestatus = $(".codestatus");
-
-    var floorTempl = document.getElementById("floor-template").innerHTML.trim();
-    var elevatorTempl = document.getElementById("elevator-template").innerHTML.trim();
-    var elevatorButtonTempl = document.getElementById("elevatorbutton-template").innerHTML.trim();
-    var userTempl = document.getElementById("user-template").innerHTML.trim();
-    var challengeTempl = document.getElementById("challenge-template").innerHTML.trim();
-    var feedbackTempl = document.getElementById("feedback-template").innerHTML.trim();
-    var codeStatusTempl = document.getElementById("codestatus-template").innerHTML.trim();
-
-    var app = riot.observable({});
-    app.worldController = createWorldController(1.0 / 60.0);
-    app.worldController.on("usercode_error", function(e) {
-        console.log("World raised code error", e);
-        editor.trigger("usercode_error", e);
-    });
-
-    console.log(app.worldController);
-    app.worldCreator = createWorldCreator();
-    app.world = undefined;
-
-    app.currentChallengeIndex = 0;
-
-    app.startStopOrRestart = function() {
-        if(app.world.challengeEnded) {
-            app.startChallenge(app.currentChallengeIndex);
-        } else {
-            app.worldController.setPaused(!app.worldController.isPaused);
-        }
-    };
-
-    app.startChallenge = function(challengeIndex, autoStart) {
-        if(typeof app.world !== "undefined") {
-            app.world.unWind();
-            // TODO: Investigate if memory leaks happen here
-        }
-        app.currentChallengeIndex = challengeIndex;
-        app.world = app.worldCreator.createWorld(challenges[challengeIndex].options);
-        window.world = app.world;
-
-        clearAll([$world, $feedback]);
-        presentStats($stats, app.world);
-        presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
-        presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
-
-        app.worldController.on("timescale_changed", function() {
-            localStorage.setItem(tsKey, app.worldController.timeScale);
-            presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
-        });
-
-        app.world.on("stats_changed", function() {
-            var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
-            if(challengeStatus !== null) {
-                app.world.challengeEnded = true;
-                app.worldController.setPaused(true);
-                if(challengeStatus) {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Success!", "Challenge completed", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
-                } else {
-                    presentFeedback($feedback, feedbackTempl, app.world, "Challenge failed", "Maybe your program needs an improvement?", "");
-                }
-            }
-        });
-
-        var codeObj = editor.getCodeObj();
-        console.log("Starting...");
-        app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);
-    };
-
-    editor.on("apply_code", function() {
-        app.startChallenge(app.currentChallengeIndex, true);
-    });
-    editor.on("code_success", function() {
-        presentCodeStatus($codestatus, codeStatusTempl);
-    });
-    editor.on("usercode_error", function(error) {
-        presentCodeStatus($codestatus, codeStatusTempl, error);
-    });
-    editor.on("change", function() {
-        $("#fitness_message").addClass("faded");
-        var codeStr = editor.getCode();
-        // fitnessSuite(codeStr, true, function(results) {
-        //     var message = "";
-        //     if(!results.error) {
-        //         message = "Fitness avg wait times: " + _.map(results, function(r){ return r.options.description + ": " + r.result.avgWaitTime.toPrecision(3) + "s" }).join("&nbsp&nbsp&nbsp");
-        //     } else {
-        //         message = "Could not compute fitness due to error: " + results.error;
-        //     }
-        //     $("#fitness_message").html(message).removeClass("faded");
-        // });
-    });
-    editor.trigger("change");
-
-    riot.route(function(path) {
-        params = _.reduce(path.split(","), function(result, p) {
-            var match = p.match(/(\w+)=(\w+$)/);
-            if(match) { result[match[1]] = match[2]; } return result;
-        }, {});
-        var requestedChallenge = 0;
-        var autoStart = false;
-        var timeScale = parseFloat(localStorage.getItem(tsKey)) || 2.0;
-        _.each(params, function(val, key) {
-            if(key === "challenge") {
-                requestedChallenge = _.parseInt(val) - 1;
-                if(requestedChallenge < 0 || requestedChallenge >= challenges.length) {
-                    console.log("Invalid challenge index", requestedChallenge);
-                    console.log("Defaulting to first challenge");
-                    requestedChallenge = 0;
-                }
-            } else if(key === "autostart") {
-                autoStart = val === "false" ? false : true;
-            } else if(key === "timescale") {
-                timeScale = parseFloat(val);
-            } else if(key === "devtest") {
-                editor.setDevTestCode();
-            } else if(key === "fullscreen") {
-                makeDemoFullscreen();
-            }
-        });
-        app.worldController.setTimeScale(timeScale);
-        app.startChallenge(requestedChallenge, autoStart);
-    });
-});
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./src/js/app.js"]();
+/******/ 	
+/******/ })()
+;
