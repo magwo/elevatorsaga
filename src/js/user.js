@@ -1,3 +1,7 @@
+import { newGuard } from './base';
+import Movable from './movable';
+import { linearInterpolate } from './movable';
+
 function User(weight) {
     newGuard(this, User);
     Movable.call(this);
@@ -73,3 +77,5 @@ User.prototype.elevatorAvailable = function(elevator, floor) {
         this.pressFloorButton(floor);
     }
 };
+
+export { User as default };

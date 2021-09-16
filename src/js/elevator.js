@@ -1,3 +1,6 @@
+import { newGuard, distanceNeededToAchieveSpeed, limitNumber, epsilonEquals, accelerationNeededToAchieveChangeDistance } from './base';
+import Movable from './movable';
+
 function newElevStateHandler(elevator) { elevator.handleNewState(); }
 
 function Elevator(speedFloorsPerSec, floorCount, floorHeight, maxUsers) {
@@ -255,3 +258,5 @@ Elevator.prototype.handleNewState = function() {
     }
     this.previousTruncFutureFloorIfStopped = futureTruncFloorIfStopped;
 };
+
+export { Elevator as default };

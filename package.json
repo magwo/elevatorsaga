@@ -27,6 +27,13 @@
     "gulp-postcss": "^9.0.1",
     "gulp-pug-3": "^1.2.2",
     "livescript": "^1.6.0",
+    "postcss-import": "^14.0.2",
     "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "codemirror": "^5.62.3",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "riot": "^3.13.2"
   }
 }

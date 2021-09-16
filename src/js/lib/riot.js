@@ -2,9 +2,11 @@
 (function(riot) { "use strict";
 
 riot.observable = function(el) {
+  //debugger;
   var callbacks = {}, slice = [].slice;
 
   el.on = function(events, fn) {
+    //debugger;
     if (typeof fn === "function") {
       events.replace(/[^\s]+/g, function(name, pos) {
         (callbacks[name] = callbacks[name] || []).push(fn);
@@ -36,6 +38,7 @@ riot.observable = function(el) {
   };
 
   el.trigger = function(name) {
+    //debugger;
     var args = slice.call(arguments, 1),
       fns = callbacks[name] || [];
 
@@ -95,6 +98,7 @@ riot.render = function(tmpl, data, escape_fn) {
 
   // standard browsers
   if (listen) {
+    //debugger;
     listen("popstate", pop, false);
     doc.addEventListener("DOMContentLoaded", pop, false);
 

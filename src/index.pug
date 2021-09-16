@@ -5,11 +5,56 @@ html(lang="ja")
     meta(http-equiv="Content-Type" content="text/html;charset=UTF-8")
     link(rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all")
     link(rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:400,700,300" type="text/css")
-    link(rel="stylesheet" href="libs/codemirror/codemirror.css")
-    link(rel="stylesheet" href="libs/codemirror/themes/solarized.css")
     link(rel="stylesheet" href="style.css" type="text/css" media="all")
 
     script(src="app.js")
+
+    script#user-template(type="text/template")
+      i.movable.fa.user(class="fa-{u.displayType} {state}")
+
+    script#floor-template(type="text/template")
+      .floor(style="top: {yPosition}px")
+        span.floornumber {level}
+        span.buttonindicator
+          i.fa.fa-arrow-circle-up.up
+          i.fa.fa-arrow-circle-down.down
+
+    script#elevator-template(type="text/template")
+      .elevator.movable(style="width: {e.width}px")
+        span.directionindicator.directionindicatorup: i.fa.fa-arrow-circle-up.up.activated
+        span.floorindicator: span
+        span.directionindicator.directionindicatordown: i.fa.fa-arrow-circle-down.down.activated
+        span.buttonindicator
+
+    script#elevatorbutton-template(type="text/template")
+      span.buttonpress {floorNum}
+
+    script#feedback-template(type="text/template")
+      .feedback
+        h2.emphasis-color {title}
+        p.emphasis-color {message}
+        a.emphasis-color(href="{url}") Next challenge #[i.fa.fa-caret-right.blink(style="text-decoration: blink")]
+
+    script#challenge-template(type="text/template")
+      .left
+        h3 第{num}問：{challenge.condition.description}
+
+      button.right.startstop.unselectable(style="width: 110px") {startButtonText}
+      h3.right
+        i.fa.fa-minus-square.timescale_decrease.unselectable
+        span.emphasis-color(style="display: inline-block; width: 22px; text-align: center") {timeScale}
+        i.fa.fa-plus-square.timescale_increase.unselectable
+
+    script#codestatus-template(type="text/template")
+      h5.error(style="display: {errorDisplay}")
+        i.fa.fa-warning.error-color
+        | コードに誤りがあります：{errorMessage}
+
+    script#default-elev-implementation(type="text/plain")
+      include templates/default-elev-implementation.js
+
+    script#devtest-elev-implementation(type="text/plain")
+      include templates/devtest-elev-implementation.js
 
   body
     .container
@@ -20,8 +65,9 @@ html(lang="ja")
         a.right(href="documentation.html") ヘルプ
 
       noscript
-        h2 このブラウザは JavaScript が有効になっていません．
-        |  このページには JavaScript によって実装されたブラウザで動作するプログラミングゲームが含まれています．
+        h2.
+          このブラウザは JavaScript が有効になっていません．
+          このページには JavaScript によって実装されたブラウザで動作するプログラミングゲームが含まれています．
 
       .challenge(style="height: 40px")
 

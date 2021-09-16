@@ -48,12 +48,12 @@ var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     };
 };
 
-distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
+var distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
     // v² = u² + 2a * d
     var requiredDistance = (Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / (2 * acceleration);
     return requiredDistance;
 };
-accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
+var accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
     // v² = u² + 2a * d
     var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
     return requiredAcceleration;
@@ -74,7 +74,7 @@ var getCodeObjFromCode = function(code) {
         code = "(" + code + ")";
     }
     /* jslint evil:true */
-    obj = eval(code);
+    var obj = eval(code);
     /* jshint evil:false */
     if(typeof obj.init !== "function") {
         throw "Code must contain an init function";
@@ -85,3 +85,12 @@ var getCodeObjFromCode = function(code) {
     return obj;
 }
 
+export {
+    newGuard,
+    distanceNeededToAchieveSpeed,
+    createBoolPassthroughFunction,
+    limitNumber,
+    getCodeObjFromCode,
+    epsilonEquals,
+    accelerationNeededToAchieveChangeDistance
+};

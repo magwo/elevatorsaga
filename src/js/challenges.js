@@ -86,3 +86,5 @@ var challenges = [
     ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
 ];
 /* jshint laxcomma:false */
+
+export { challenges };

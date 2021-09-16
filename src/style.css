@@ -1,4 +1,5 @@
-
+@import "codemirror/lib/codemirror.css";
+@import "codemirror/theme/solarized.css";
 
 html, body {
     background-color: #BFBD9F;

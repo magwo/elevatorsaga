@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import './lib/riot';
+import _ from 'lodash';
 
 function clearAll($elems) {
     _.each($elems, function($elem) {
@@ -163,3 +166,5 @@ function makeDemoFullscreen() {
     $("body .container > *").not(".world").css("visibility", "hidden");
     $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
 };
+
+export { clearAll, presentChallenge, presentStats, presentWorld, presentCodeStatus, presentFeedback };

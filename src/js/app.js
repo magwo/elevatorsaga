@@ -1,3 +1,14 @@
+import $ from 'jquery';
+import CodeMirror from 'codemirror';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/mode/javascript/javascript';
+import './lib/riot';
+import _ from 'lodash';
+
+import { getCodeObjFromCode } from './base';
+import { createWorldCreator, createWorldController } from './world';
+import { challenges } from './challenges';
+import { clearAll, presentStats, presentChallenge, presentWorld, presentCodeStatus, presentFeedback } from './presenters';
 
 var createEditor = function() {
     var lsKey = "elevatorCrushCode_v5";
@@ -221,6 +232,7 @@ $(function() {
     editor.trigger("change");
 
     riot.route(function(path) {
+        console.log("yay!");
         params = _.reduce(path.split(","), function(result, p) {
             var match = p.match(/(\w+)=(\w+$)/);
             if(match) { result[match[1]] = match[2]; } return result;

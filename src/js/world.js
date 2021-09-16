@@ -1,5 +1,9 @@
+import './lib/riot';
 
-
+import { asFloor } from './floor';
+import { asElevatorInterface } from './interfaces';
+import Elevator from './elevator';
+import User from './user';
 
 var createWorldCreator = function() {
     var creator = {};
@@ -283,3 +287,5 @@ var createWorldController = function(dtMax) {
 
     return controller;
 };
+
+export { createWorldCreator, createWorldController };

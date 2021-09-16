@@ -1,3 +1,6 @@
+import './lib/riot';
+
+import { createBoolPassthroughFunction, limitNumber, epsilonEquals } from './base';
 
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
@@ -59,7 +62,7 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
     elevator.on("stopped", function(position) {
         if(elevatorInterface.destinationQueue.length && epsilonEquals(_.first(elevatorInterface.destinationQueue), position)) {
             // Reached the destination, so remove element at front of queue
-            elevatorInterface.destinationQueue = _.rest(elevatorInterface.destinationQueue);
+            elevatorInterface.destinationQueue = _.drop(elevatorInterface.destinationQueue);
             if(elevator.isOnAFloor()) {
                 elevator.wait(1, function() {
                     elevatorInterface.checkDestinationQueue();
@@ -83,3 +86,5 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
 
     return elevatorInterface;
 };
+
+export { asElevatorInterface };
