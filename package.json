@@ -1,0 +1,30 @@
+{
+  "name": "elevatorsaga",
+  "version": "1.1.0",
+  "description": "Elevator saga in Japanese",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Double-oxygeN/elevatorsaga.git"
+  },
+  "keywords": [
+    "elevator"
+  ],
+  "author": "Double-oxygeN <mail@double-oxygen.net> (https://github.com/Double-oxygeN)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Double-oxygeN/elevatorsaga/issues"
+  },
+  "homepage": "https://github.com/Double-oxygeN/elevatorsaga#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-pug-3": "^1.2.2",
+    "livescript": "^1.6.0",
+    "webpack-stream": "^7.0.0"
+  }
+}
