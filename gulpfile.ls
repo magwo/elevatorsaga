@@ -4,6 +4,7 @@ require! {
   'gulp-pug-3': pug
   'gulp-htmlmin': htmlmin
   'webpack-stream': webpack
+  'gulp-postcss': postcss
   './webpack.config.ls': webpack-config
 }
 
@@ -17,6 +18,12 @@ build-html = (done) ->
     .pipe htmlmin!
     .pipe dest dest-dir
 
+build-css = (done) ->
+  src "#src-dir/style.css"
+    .pipe plumber!
+    .pipe postcss!
+    .pipe dest dest-dir
+
 build-webpack = (done) ->
   src "#src-dir/js/app.js"
     .pipe plumber!
@@ -25,4 +32,4 @@ build-webpack = (done) ->
 
 exports <<<
   default: series do
-    parallel build-html, build-webpack
+    parallel build-html, build-webpack, build-css
