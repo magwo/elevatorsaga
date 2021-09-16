@@ -1,7 +1,7 @@
 
 var requireUserCountWithinTime = function(userCount, timeLimit) {
     return {
-        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people in <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> seconds or less",
+        description: "<span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
         evaluate: function(world) {
             if(world.elapsedTime >= timeLimit || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.transportedCounter >= userCount;
@@ -14,7 +14,7 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
 
 var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
     return {
-        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people and let no one wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> seconds",
+        description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
         evaluate: function(world) {
             if(world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
@@ -27,20 +27,20 @@ var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
 
 var requireUserCountWithinTimeWithMaxWaitTime = function(userCount, timeLimit, maxWaitTime) {
     return {
-       description: "Transport <span class='emphasis-color'>" + userCount + "</span> people in <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> seconds or less and let no one wait more than <span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> seconds",
-       evaluate: function(world) {
+        description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
+        evaluate: function(world) {
             if(world.elapsedTime >= timeLimit || world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
             } else {
                 return null;
             }
-       }
+        }
     };
 };
 
 var requireUserCountWithinMoves = function(userCount, moveLimit) {
     return {
-        description: "Transport <span class='emphasis-color'>" + userCount + "</span> people using <span class='emphasis-color'>" + moveLimit + "</span> elevator moves or less",
+        description: "<span class='emphasis-color'>" + moveLimit + "</span> 回以内の移動で <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
         evaluate: function(world) {
             if(world.moveCount >= moveLimit || world.transportedCounter >= userCount) {
                 return world.moveCount <= moveLimit && world.transportedCounter >= userCount;
@@ -53,7 +53,7 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
 
 var requireDemo = function() {
     return {
-        description: "Perpetual demo",
+        description: "エンドレス",
         evaluate: function() { return null; }
     };
 };
