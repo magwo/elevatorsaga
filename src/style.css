@@ -1,7 +1,6 @@
 @import "codemirror/lib/codemirror.css";
 @import "codemirror/theme/solarized.css";
 
-/* @import "highlight.js/styles/default.css"; */
 @import "highlight.js/styles/base16/solarized-light.css";
 
 html, body {
@@ -12,7 +11,7 @@ html, body {
 }
 
 body {
-    font-family: Oswald, Arial, Helvetica, sans-serif;
+    font-family: Oswald, Arial, Helvetica, 'Noto Sans JP', sans-serif;
 }
 h1, h2, h3, h4, h5 {
     margin-top: 0.4em;
