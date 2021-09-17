@@ -1,25 +1,25 @@
 // Console shim
 (function () {
-    var f = function () {};
+    const f = () => {};
     if (!console) {
+        // @ts-ignore
         console = {
             log:f, info:f, warn:f, debug:f, error:f
         };
     }
 }());
 
-var limitNumber = function(num, min, max) {
+export const limitNumber = (num: number, min: number, max: number) => {
     return Math.min(max, Math.max(num, min));
 };
 
-var epsilonEquals = function(a, b) {
-    return Math.abs(a-b) < 0.00000001;
+export const epsilonEquals = (a: number, b: number) => {
+    return Math.abs(a - b) < 0.00000001;
 };
 
 // Polyfill from MDN
-var sign = function(x) {
-    x = +x; // convert to a number
-    if (x === 0 || isNaN(x)){
+const sign = (x: number) => {
+    if (x === 0 || isNaN(x)) {
         return x;
     }
     return x > 0 ? 1 : -1;
@@ -28,16 +28,17 @@ if(typeof Math.sign === "undefined") {
     Math.sign = sign;
 }
 
-var deprecationWarning = function(name) {
+const deprecationWarning = (name: string) => {
     console.warn("You are using a deprecated feature scheduled for removal: " + name);
 };
 
-var newGuard = function(obj, type) {
+/** @deprecated */
+export const newGuard = (obj, type) => {
     if(!(obj instanceof type)) { throw "Incorrect instantiation, got " + typeof obj + " but expected " + type; }
-}
+};
 
-var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
-    return function(val) {
+export const createBoolPassthroughFunction = (owner, obj, objPropertyName: string) => {
+    return (val) => {
         if(typeof val !== "undefined") {
             obj[objPropertyName] = val ? true : false;
             obj.trigger("change:" + objPropertyName, obj[objPropertyName]);
@@ -48,33 +49,34 @@ var createBoolPassthroughFunction = function(owner, obj, objPropertyName) {
     };
 };
 
-var distanceNeededToAchieveSpeed = function(currentSpeed, targetSpeed, acceleration) {
+export const distanceNeededToAchieveSpeed = (currentSpeed: number, targetSpeed: number, acceleration: number) => {
     // v² = u² + 2a * d
-    var requiredDistance = (Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / (2 * acceleration);
+    const requiredDistance = (Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / (2 * acceleration);
     return requiredDistance;
 };
-var accelerationNeededToAchieveChangeDistance = function(currentSpeed, targetSpeed, distance) {
+export const accelerationNeededToAchieveChangeDistance = (currentSpeed: number, targetSpeed: number, distance: number) => {
     // v² = u² + 2a * d
-    var requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
+    const requiredAcceleration = 0.5 * ((Math.pow(targetSpeed, 2) - Math.pow(currentSpeed, 2)) / distance);
     return requiredAcceleration;
 };
 
 // Fake frame requester helper used for testing and fitness simulations
-var createFrameRequester = function(timeStep) {
-    var currentCb = null;
-    var requester = {};
-    requester.currentT = 0.0;
-    requester.register = function(cb) { currentCb = cb; };
-    requester.trigger = function() { requester.currentT += timeStep; if(currentCb !== null) { currentCb(requester.currentT); } };
+const createFrameRequester = (timeStep: number) => {
+    let currentCb = (t: number) => {};
+    let requester = {
+        currentT: 0.0,
+        register(cb: (t: number) => void) { currentCb = cb; },
+        trigger(this: { currentT: number }) { this.currentT += timeStep; currentCb(this.currentT); }
+    };
     return requester;
 };
 
-var getCodeObjFromCode = function(code) {
-    if (code.trim().substr(0,1) == "{" && code.trim().substr(-1,1) == "}") {
+export const getCodeObjFromCode = (code: string) => {
+    if (code.trim().substr(0,1) === "{" && code.trim().substr(-1,1) === "}") {
         code = "(" + code + ")";
     }
     /* jslint evil:true */
-    var obj = eval(code);
+    const obj: { init: (elevators: any[], floors: any[]) => void; update: (dt: number, elevators: any[], floors: any[]) => void } = eval(code);
     /* jshint evil:false */
     if(typeof obj.init !== "function") {
         throw "Code must contain an init function";
@@ -84,13 +86,3 @@ var getCodeObjFromCode = function(code) {
     }
     return obj;
 }
-
-export {
-    newGuard,
-    distanceNeededToAchieveSpeed,
-    createBoolPassthroughFunction,
-    limitNumber,
-    getCodeObjFromCode,
-    epsilonEquals,
-    accelerationNeededToAchieveChangeDistance
-};
