@@ -36,7 +36,7 @@ build-css = (done) ->
     .pipe dest dest-dir
 
 build-webpack = (done) ->
-  src ["#src-dir/js/app.js" "#src-dir/js/documentation.js"]
+  src ["#src-dir/ts/app.ts" "#src-dir/ts/documentation.ts"]
     .pipe plumber!
     .pipe webpack config: webpack-config
     .pipe dest dest-dir

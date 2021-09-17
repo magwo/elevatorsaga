@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "./public/",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "alwaysStrict": true
+  },
+  "include": [ "src/ts/**/*" ],
+  "exclude": [ "node_modules" ]
+}

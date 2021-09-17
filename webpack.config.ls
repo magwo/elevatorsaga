@@ -7,11 +7,16 @@ module.exports =
     filename: '[name].js'
 
   entry:
-    app: './src/js/app.js'
-    documentation: './src/js/documentation.js'
+    app: './src/ts/app.ts'
+    documentation: './src/ts/documentation.ts'
 
   module:
     rules:
       * test: /\.js$/
 
-      ...
+      * test: /\.ts$/
+        use: 'ts-loader'
+        exclude: /node_modules/
+
+  resolve:
+    extensions: <[ .ts .js ]>
