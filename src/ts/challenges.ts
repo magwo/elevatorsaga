@@ -1,8 +1,7 @@
-
-var requireUserCountWithinTime = function(userCount, timeLimit) {
+const requireUserCountWithinTime = function(userCount: number, timeLimit: number) {
     return {
         description: "<span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
-        evaluate: function(world) {
+        evaluate(world: { elapsedTime: number; transportedCounter: number }) {
             if(world.elapsedTime >= timeLimit || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.transportedCounter >= userCount;
             } else {
@@ -12,10 +11,10 @@ var requireUserCountWithinTime = function(userCount, timeLimit) {
     };
 };
 
-var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
+const requireUserCountWithMaxWaitTime = (userCount: number, maxWaitTime: number) => {
     return {
         description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
-        evaluate: function(world) {
+        evaluate(world: { maxWaitTime: number; transportedCounter: number }) {
             if(world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
             } else {
@@ -25,10 +24,10 @@ var requireUserCountWithMaxWaitTime = function(userCount, maxWaitTime) {
     };
 };
 
-var requireUserCountWithinTimeWithMaxWaitTime = function(userCount, timeLimit, maxWaitTime) {
+const requireUserCountWithinTimeWithMaxWaitTime = (userCount: number, timeLimit: number, maxWaitTime: number) => {
     return {
         description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
-        evaluate: function(world) {
+        evaluate(world: { elapsedTime: number; maxWaitTime: number; transportedCounter: number }) {
             if(world.elapsedTime >= timeLimit || world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
             } else {
@@ -38,10 +37,10 @@ var requireUserCountWithinTimeWithMaxWaitTime = function(userCount, timeLimit, m
     };
 };
 
-var requireUserCountWithinMoves = function(userCount, moveLimit) {
+const requireUserCountWithinMoves = (userCount: number, moveLimit: number) => {
     return {
         description: "<span class='emphasis-color'>" + moveLimit + "</span> 回以内の移動で <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
-        evaluate: function(world) {
+        evaluate(world: { moveCount: number; transportedCounter: number }) {
             if(world.moveCount >= moveLimit || world.transportedCounter >= userCount) {
                 return world.moveCount <= moveLimit && world.transportedCounter >= userCount;
             } else {
@@ -51,15 +50,15 @@ var requireUserCountWithinMoves = function(userCount, moveLimit) {
     };
 };
 
-var requireDemo = function() {
+const requireDemo = () => {
     return {
         description: "エンドレス",
-        evaluate: function() { return null; }
+        evaluate() { return null; }
     };
 };
 
 /* jshint laxcomma:true */
-var challenges = [
+export const challenges = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.5, elevatorCapacities: [6]}, condition: requireUserCountWithinTime(23, 60)}
@@ -86,5 +85,3 @@ var challenges = [
     ,{options: {floorCount: 21, elevatorCount: 8, spawnRate: 1.5, elevatorCapacities: [6,8]}, condition: requireDemo()}
 ];
 /* jshint laxcomma:false */
-
-export { challenges };
