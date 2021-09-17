@@ -1,0 +1,2 @@
+elevator.destinationQueue = [];
+elevator.checkDestinationQueue();

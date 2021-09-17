@@ -1,6 +1,9 @@
 @import "codemirror/lib/codemirror.css";
 @import "codemirror/theme/solarized.css";
 
+/* @import "highlight.js/styles/default.css"; */
+@import "highlight.js/styles/base16/solarized-light.css";
+
 html, body {
     background-color: #BFBD9F;
     color: white;

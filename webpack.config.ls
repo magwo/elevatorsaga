@@ -4,7 +4,11 @@ module.exports =
   mode: \development
   devtool: 'cheap-source-map'
   output:
-    filename: 'app.js'
+    filename: '[name].js'
+
+  entry:
+    app: './src/js/app.js'
+    documentation: './src/js/documentation.js'
 
   module:
     rules:

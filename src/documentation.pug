@@ -1,0 +1,216 @@
+doctype html
+html(lang="ja")
+  head
+    title Elevator Saga - ヘルプと API ドキュメンテーション
+    meta(http-equiv="Content-Type" content="text/html;charset=UTF-8")
+    link(rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all")
+    link(rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:400,700,300" type="text/css")
+    link(rel="stylesheet" href="style.css" type="text/css" media="all")
+
+    script(src="documentation.js")
+
+  body
+    .container(style="width: 960px")
+      .header
+        h1 Elevator Saga #[em.emphasis-color Help and API documentation]
+
+      .help
+        h2 このゲームについて
+        p.
+          Elevator Saga とは、プログラミングのゲームです！
+          #[a(href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide") JavaScript] で書いたプログラムでエレベータを動かしてみましょう。
+
+        p.
+          人々を適切な方法で目的地まで運ぶことがこのゲームの目標です。
+          より良いプログラムを書くことで、より難度の高い目標に挑戦することができます。
+          最良のプログラムを実装して、すべての目標を達成してみましょう。
+
+        h2 遊び方
+        p.
+          ゲーム画面の下にあるエディタにコードを入力し、#[span.emphasis-color 適用]ボタンを押すことで目標に挑戦します。
+          右上にある#[i.fa.fa-plus.emphasis-color]や#[i.fa.fa-minus.emphasis-color]を押すことで速さを調節できます。
+
+        p.
+          プログラムにエラーが含まれる場合は、開発者ツールを用いてデバッグを試みましょう。
+          コードを初めからやり直したいときは、#[span.emphasis-color リセット]ボタンを押してみましょう。動作する単純な実装に巻き戻ります。
+          #[a(href="https://www.sublimetext.com/") Sublime Text]などの使い慣れたテキストエディタがある場合は、そちらで編集してゲームのエディタに貼り付けるのも OK です。
+          書いたコードはローカルストレージに自動保存されます。間違ってブラウザを閉じちゃっても心配しないで！
+
+        h2 基本
+        p.
+          コードは少なくとも 2 つの関数（#[span.emphasis-color init] と #[span.emphasis-color update]）を含むオブジェクトである必要があります。
+
+        div: pre: code
+          include templates/skeleton.js
+
+        p.
+          目標に挑戦している間はこれらの関数が呼び出されます。
+          #[span.emphasis-color init] は挑戦開始時に、そして #[span.emphasis-color update] は挑戦中何度も呼び出されます。
+
+        p.
+          初めは #[span.emphasis-color init] 関数内にイベントリスナや振る舞いに関するコードを書くことをおすすめします。
+
+        h2 コード例
+
+        h3 エレベータを操作するには
+        dl
+          dt: pre: code elevator.goToFloor(1);
+          dd すべてのタスクを完了したあとで、エレベータに1階に行くように指示します。エレベータが既にその階に行くことが決まっている場合は効果がありません。
+
+          dt: pre: code if(elevator.currentFloor() &gt; 2) { ... }
+          dd currentFloor を呼び出すことでエレベータが今何階にいるのかを知ることができます。エレベータから最も近い階を表す整数を手に入れますが、そこで止まっていることを表すものではありません。
+
+        h2#docs API ドキュメンテーション
+
+        h3 エレベータオブジェクト
+
+        table.doctable
+          thead
+            th(width="150") プロパティ名
+            th(width="90") 種類
+            th(width="190") 説明
+            th(width="*") 例
+
+          tbody
+            tr
+              td goToFloor
+              td メソッド
+              td: small 指定した階をキューに積みます。第2引数に true を与えたときは、エレベータはその階まで向かってから、キューに積まれた階へと向かいます。
+              td: pre: code
+                include:html-escape explanations/goToFloor.js
+
+            tr
+              td stop
+              td メソッド
+              td: small 目的地キューを空にして、エレベータを停止させます。通常はエレベータを停止させる必要はなく、動作中のリスケジューリング処理を伴う高度な解法のために用いるべきです。エレベータがどこかの階で停止しなかった場合は、乗客は降りることができません。
+              td: pre: code elevator.stop();
+
+            tr
+              td currentFloor
+              td メソッド
+              td: small エレベータが現在いる階を取得します。
+              td: pre: code
+                include:html-escape explanations/currentFloor.js
+
+            tr
+              td goingUpIndicator
+              td メソッド
+              td: small 上昇インジケータの状態を取得、あるいは設定します。待機している乗客の振る舞いが変化します。
+              td: pre: code
+                include:html-escape explanations/goingUpIndicator.js
+
+            tr
+              td goingDownIndicator
+              td メソッド
+              td: small 下降インジケータの状態を取得、あるいは設定します。待機している乗客の振る舞いが変化します。
+              td: pre: code
+                include:html-escape explanations/goingDownIndicator.js
+
+            tr
+              td maxPassengerCount
+              td メソッド
+              td: small 同時に入れる最大の乗客数を取得します。
+              td: pre: code
+                include:html-escape explanations/maxPassengerCount.js
+
+            tr
+              td loadFactor
+              td メソッド
+              td: small エレベータの積載量指数を取得します。0 ならば空、1 ならば満員を表します。乗客によって異なる体重によって変化し、正確な測定値ではありません。
+              td: pre: code
+                include:html-escape explanations/loadFactor.js
+
+            tr
+              td destinationDirection
+              td メソッド
+              td: small エレベータの進行方向を取得します。"up", "down", "stopped" のいずれかの値をとります。
+              td
+
+            tr
+              td destinationQueue
+              td 配列
+              td: small 現在の目的地キュー、すなわちエレベータが今後向かう予定の階を順に並べたものです。編集することもできますが、すぐに反映させるためには checkDestinationQueue() を呼び出す必要があります。
+              td: pre: code
+                include:html-escape explanations/destinationQueue.js
+
+            tr
+              td checkDestinationQueue
+              td メソッド
+              td: small 新しい目的地を反映させるために目的地キューを確認します。明示的に目的地キューを編集した場合にのみ使うようにしましょう。
+              td: pre: code elevator.checkDestinationQueue();
+
+            tr
+              td getPressedFloors
+              td メソッド
+              td: small 現在ボタンが押されている階を配列で取得します。
+              td: pre: code
+                include:html-escape explanations/getPressedFloors.js
+
+        table.doctable
+          thead
+            th(width="150") イベント名
+            th(width="280") 説明
+            th 例
+
+          tbody
+            tr
+              td idle
+              td: small エレベータのすべてのタスクが完了し、なにも動作していないときに発火します。
+              td: pre: code elevator.on("idle", function() { ... });
+
+            tr
+              td floor_button_pressed
+              td: small エレベータ内の乗客がボタンを押したときに発火します。
+              td: pre: code
+                include:html-escape explanations/floorButtonPressedEvent.js
+
+            tr
+              td passing_floor
+              td: small エレベータが階を通過する直前に発火します。エレベータをぴったりその階に停止させるタイミングで発火します。目的階のときには発火しません。コールバックの第2引数は "up" か "down" の値を取ります。
+              td: pre: code elevator.on("passing_floor", function(floorNum, direction) { ... });
+
+            tr
+              td stopped_at_floor
+              td: small エレベータが階に到着したときに発火します。
+              td: pre: code
+                include:html-escape explanations/stoppedAtFloorEvent.js
+
+        h3 フロアオブジェクト
+
+        table.doctable
+          thead
+            th(width="150") プロパティ名
+            th(width="90") 種類
+            th(width="190") 説明
+            th(width="*") 例
+
+          tbody
+            tr
+              td floorNum
+              td メソッド
+              td: small 階数を取得します。
+              td: pre: code if(floor.floorNum() &gt; 3) { ... }
+
+        table.doctable
+          thead
+            th(width="150") イベント名
+            th(width="200") 説明
+            th 例
+
+          tbody
+            tr
+              td up_button_pressed
+              td その階で誰かが ↑ ボタンを押したときに発火します。乗客はエレベータに乗り損ねたときにもう一度ボタンを押します。
+              td: pre: code
+                include:html-escape explanations/upButtonPressedEvent.js
+
+          tbody
+            tr
+              td down_button_pressed
+              td その階で誰かが ↓ ボタンを押したときに発火します。乗客はエレベータに乗り損ねたときにもう一度ボタンを押します。
+              td: pre: code
+                include:html-escape explanations/downButtonPressedEvent.js
+
+      .footer
+        h4 Made by Magnus Wolffelt and contributors
+        h4 #[a(href="https://github.com/Double-oxygeN/elevatorsaga") Source code] on GitHub

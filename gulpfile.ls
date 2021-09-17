@@ -14,7 +14,18 @@ dest-dir = 'public'
 build-html = (done) ->
   src "#src-dir/*.pug"
     .pipe plumber!
-    .pipe pug!
+    .pipe pug do
+      filters:
+        'html-escape': (text, options) ->
+          do
+            c <- text.replace /[&'"<>]/g
+            match c
+            case '&' then '&amp;'
+            case "'" then '&apos;'
+            case '"' then '&quot;'
+            case '<' then '&lt;'
+            case '>' then '&gt;'
+
     .pipe htmlmin!
     .pipe dest dest-dir
 
@@ -25,7 +36,7 @@ build-css = (done) ->
     .pipe dest dest-dir
 
 build-webpack = (done) ->
-  src "#src-dir/js/app.js"
+  src ["#src-dir/js/app.js" "#src-dir/js/documentation.js"]
     .pipe plumber!
     .pipe webpack config: webpack-config
     .pipe dest dest-dir

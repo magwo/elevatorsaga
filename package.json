@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "codemirror": "^5.62.3",
+    "highlight.js": "^11.2.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "riot": "^3.13.2"
