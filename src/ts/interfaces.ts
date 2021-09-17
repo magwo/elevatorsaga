@@ -1,16 +1,31 @@
-import './lib/riot';
-
+import { riot, Observable } from './lib/riot';
+import * as _ from 'lodash';
 import { createBoolPassthroughFunction, limitNumber, epsilonEquals } from './base';
+
+interface IElevator {
+    goToFloor(floorNum: number, forceNow?: boolean): void;
+    stop(): void;
+    currentFloor(): number;
+    goingUpIndicator(val: boolean): boolean;
+    goingDownIndicator(val: boolean): boolean;
+    maxPassengerCount(): number;
+    loadFactor(): number;
+    destinationDirection(): string;
+    destinationQueue: number[];
+    checkDestinationQueue(): void;
+    getFirstPressedFloor(): number;
+    getPressedFloors(): number[];
+}
 
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
-var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
-    var elevatorInterface = riot.observable(obj);
+export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandler) => {
+    let elevatorInterface = riot.observable(obj) as Observable<T> & IElevator;
 
     elevatorInterface.destinationQueue = [];
 
-    var tryTrigger = function(event, arg1, arg2, arg3, arg4) {
+    var tryTrigger = function(event, arg1?, arg2?, arg3?, arg4?) {
         try {
             elevatorInterface.trigger(event, arg1, arg2, arg3, arg4);
         } catch(e) { errorHandler(e); }
@@ -27,11 +42,11 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
     };
 
     // TODO: Write tests for this queueing logic
-    elevatorInterface.goToFloor = function(floorNum, forceNow) {
+    elevatorInterface.goToFloor = function(floorNum: number, forceNow?: boolean) {
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
         if(elevatorInterface.destinationQueue.length) {
-            var adjacentElement = forceNow ? _.first(elevatorInterface.destinationQueue) : _.last(elevatorInterface.destinationQueue);
+            const adjacentElement = forceNow ? _.first(elevatorInterface.destinationQueue) : _.last(elevatorInterface.destinationQueue);
             if(epsilonEquals(floorNum, adjacentElement)) {
                 return;
             }
@@ -53,8 +68,8 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
     elevatorInterface.maxPassengerCount = function() { return elevator.maxUsers; };
     elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
     elevatorInterface.destinationDirection = function() {
-      if(elevator.destinationY === elevator.y) { return "stopped"; }
-      return elevator.destinationY > elevator.y ? "down" : "up";
+        if(elevator.destinationY === elevator.y) { return "stopped"; }
+        return elevator.destinationY > elevator.y ? "down" : "up";
     }
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
@@ -86,5 +101,3 @@ var asElevatorInterface = function(obj, elevator, floorCount, errorHandler) {
 
     return elevatorInterface;
 };
-
-export { asElevatorInterface };

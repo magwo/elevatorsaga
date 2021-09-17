@@ -1,20 +1,50 @@
 /* Riot 1.0.2, @license MIT, (c) 2014 Muut Inc + contributors */
-(function(riot) { "use strict";
+"use strict";
 
-riot.observable = function(el) {
-  var callbacks = {}, slice = [].slice;
+let FN: { [key: string]: string } = {}; // Precompiled templates (JavaScript functions)
+const template_escape = {"\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'"};
+const render_escape = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};
 
-  el.on = function(events, fn) {
+type EscapeFunc = (str: string | null, key: string) => string;
+
+function default_escape_fn(str: string | null, key: string) {
+  return str === null ? '' : (str+'').replace(/[&\"<>]/g, function(char) {
+    return render_escape[char];
+  });
+}
+
+interface IObservable {
+  on(events, fn): this;
+  off(events, fn): this;
+  one(name, fn): this;
+  trigger(name, ...args): this;
+}
+
+export type Observable<T> = T & IObservable;
+
+type RiotApi = {
+  observable<T>(el: T): Observable<T>;
+  render(tmpl: string, data: { [key: string]: string }, escape_fn: EscapeFunc | boolean): string;
+  route?(to): void;
+}
+
+export let riot = {} as RiotApi
+
+riot.observable = (el) => {
+  let callbacks = {}, slice = [].slice;
+  let obs = {} as IObservable;
+
+  obs.on = function(events, fn) {
     if (typeof fn === "function") {
       events.replace(/[^\s]+/g, function(name, pos) {
         (callbacks[name] = callbacks[name] || []).push(fn);
         fn.typed = pos > 0;
       });
     }
-    return el;
+    return this;
   };
 
-  el.off = function(events, fn) {
+  obs.off = function(events, fn) {
     if (events === "*") callbacks = {};
     else if (fn) {
       var arr = callbacks[events];
@@ -26,18 +56,17 @@ riot.observable = function(el) {
         callbacks[name] = [];
       });
     }
-    return el;
+    return this;
   };
 
   // only single event supported
-  el.one = function(name, fn) {
+  obs.one = function(name, fn) {
     if (fn) fn.one = true;
-    return el.on(name, fn);
+    return this.on(name, fn);
   };
 
-  el.trigger = function(name) {
-    var args = slice.call(arguments, 1),
-      fns = callbacks[name] || [];
+  obs.trigger = function(name, ...args) {
+    const fns = callbacks[name] || [];
 
     for (var i = 0, fn; (fn = fns[i]); ++i) {
       if (!fn.busy) {
@@ -49,32 +78,24 @@ riot.observable = function(el) {
       }
     }
 
-    return el;
+    return this;
   };
 
-  return el;
+  return Object.assign(el, obs);
 };
 
-var FN = {}, // Precompiled templates (JavaScript functions)
-  template_escape = {"\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'"},
-  render_escape = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};
-
-function default_escape_fn(str, key) {
-  return str == null ? '' : (str+'').replace(/[&\"<>]/g, function(char) {
-    return render_escape[char];
-  });
-}
-
-riot.render = function(tmpl, data, escape_fn) {
+riot.render = (tmpl, data, escape_fn) => {
   if (escape_fn === true) escape_fn = default_escape_fn;
   tmpl = tmpl || '';
 
+  // @ts-ignore
   return (FN[tmpl] = FN[tmpl] || new Function("_", "e", "return '" +
-    tmpl.replace(/[\\\n\r']/g, function(char) {
+    tmpl.replace(/[\\\n\r']/g, (char: string) => {
       return template_escape[char];
     }).replace(/{\s*([\w\.]+)\s*}/g, "' + (e?e(_.$1,'$1'):_.$1||(_.$1==null?'':_.$1)) + '") + "'")
   )(data, escape_fn);
 };
+
 /* Cross browser popstate */
 (function () {
   // for browsers only
@@ -93,17 +114,8 @@ riot.render = function(tmpl, data, escape_fn) {
 
   /* Always fire pop event upon page load (normalize behaviour across browsers) */
 
-  // standard browsers
-  if (listen) {
-    listen("popstate", pop, false);
-    doc.addEventListener("DOMContentLoaded", pop, false);
-
-  // IE
-  } else {
-    doc.attachEvent("onreadystatechange", function() {
-      if (doc.readyState === "complete") pop("");
-    });
-  }
+  listen("popstate", pop, false);
+  doc.addEventListener("DOMContentLoaded", pop, false);
 
   /* Change the browser URL or listen to changes on the URL */
   riot.route = function(to) {
@@ -111,9 +123,8 @@ riot.render = function(tmpl, data, escape_fn) {
     if (typeof to === "function") return pops.on("pop", to);
 
     // fire
-    if (history.pushState) history.pushState(0, 0, to);
+    if (history.pushState) history.pushState(0, "0", to);
     pop(to);
 
   };
 })();
-})(typeof window !== "undefined" ? window.riot = {} : (typeof exports !== "undefined" ? exports : self.riot = {}));

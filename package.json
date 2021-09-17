@@ -33,6 +33,7 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.173",
     "codemirror": "^5.62.3",
     "highlight.js": "^11.2.0",
     "jquery": "^3.6.0",

@@ -28,7 +28,7 @@ if(typeof Math.sign === "undefined") {
     Math.sign = sign;
 }
 
-const deprecationWarning = (name: string) => {
+export const deprecationWarning = (name: string) => {
     console.warn("You are using a deprecated feature scheduled for removal: " + name);
 };
 
@@ -38,7 +38,7 @@ export const newGuard = (obj, type) => {
 };
 
 export const createBoolPassthroughFunction = (owner, obj, objPropertyName: string) => {
-    return (val) => {
+    return (val?: boolean) => {
         if(typeof val !== "undefined") {
             obj[objPropertyName] = val ? true : false;
             obj.trigger("change:" + objPropertyName, obj[objPropertyName]);
