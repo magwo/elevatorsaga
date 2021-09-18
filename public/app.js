@@ -39329,7 +39329,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 var base_1 = __webpack_require__(/*! ./base */ "./src/ts/base.ts");
-var interfaces_1 = __webpack_require__(/*! ./interfaces */ "./src/ts/interfaces.ts");
 var movable_1 = __webpack_require__(/*! ./movable */ "./src/ts/movable.ts");
 var newElevStateHandler = function (elevator) {
     elevator.handleNewState();
@@ -39567,7 +39566,7 @@ var Elevator = /** @class */ (function (_super) {
             // Never emit passing_floor event for the destination floor
             // Because if it's the destination we're not going to pass it, at least not intentionally
             if (this.getDestinationFloor() !== floorBeingPassed && this.isApproachingFloor(floorBeingPassed)) {
-                var direction = this.velocityY > 0.0 ? interfaces_1.ElevatorDirection.down : interfaces_1.ElevatorDirection.up;
+                var direction = this.velocityY > 0.0 ? "down" /* down */ : "up" /* up */;
                 this.trigger("passing_floor", floorBeingPassed, direction);
             }
         }
@@ -39675,16 +39674,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.asElevatorInterface = exports.ElevatorDirection = void 0;
+exports.asElevatorInterface = void 0;
 var riot_1 = __webpack_require__(/*! ./lib/riot */ "./src/ts/lib/riot.ts");
 var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 var base_1 = __webpack_require__(/*! ./base */ "./src/ts/base.ts");
-var ElevatorDirection;
-(function (ElevatorDirection) {
-    ElevatorDirection["up"] = "up";
-    ElevatorDirection["down"] = "down";
-    ElevatorDirection["stopped"] = "stopped";
-})(ElevatorDirection = exports.ElevatorDirection || (exports.ElevatorDirection = {}));
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
@@ -39739,9 +39732,9 @@ var asElevatorInterface = function (obj, elevator, floorCount, errorHandler) {
     elevatorInterface.loadFactor = function () { return elevator.getLoadFactor(); };
     elevatorInterface.destinationDirection = function () {
         if (elevator.destinationY === elevator.y) {
-            return ElevatorDirection.stopped;
+            return "stopped" /* stopped */;
         }
-        return elevator.destinationY > elevator.y ? ElevatorDirection.down : ElevatorDirection.up;
+        return elevator.destinationY > elevator.y ? "down" /* down */ : "up" /* up */;
     };
     elevatorInterface.goingUpIndicator = (0, base_1.createBoolPassthroughFunction)(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = (0, base_1.createBoolPassthroughFunction)(elevatorInterface, elevator, "goingDownIndicator");

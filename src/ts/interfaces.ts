@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { createBoolPassthroughFunction, limitNumber, epsilonEquals } from './base';
 import Elevator from './elevator';
 
-export enum ElevatorDirection {
+export const enum ElevatorDirection {
     up = "up",
     down = "down",
     stopped = "stopped"
