@@ -39119,8 +39119,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 "use strict";
 
-exports.__esModule = true;
-exports.getCodeObjFromCode = exports.accelerationNeededToAchieveChangeDistance = exports.distanceNeededToAchieveSpeed = exports.createBoolPassthroughFunction = exports.newGuard = exports.deprecationWarning = exports.epsilonEquals = exports.limitNumber = void 0;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getCodeObjFromCode = exports.accelerationNeededToAchieveChangeDistance = exports.distanceNeededToAchieveSpeed = exports.createBoolPassthroughFunction = exports.deprecationWarning = exports.epsilonEquals = exports.limitNumber = void 0;
 // Console shim
 (function () {
     var f = function () { };
@@ -39130,7 +39130,7 @@ exports.getCodeObjFromCode = exports.accelerationNeededToAchieveChangeDistance =
             log: f, info: f, warn: f, debug: f, error: f
         };
     }
-}());
+})();
 var limitNumber = function (num, min, max) {
     return Math.min(max, Math.max(num, min));
 };
@@ -39153,13 +39153,6 @@ var deprecationWarning = function (name) {
     console.warn("You are using a deprecated feature scheduled for removal: " + name);
 };
 exports.deprecationWarning = deprecationWarning;
-/** @deprecated */
-var newGuard = function (obj, type) {
-    if (!(obj instanceof type)) {
-        throw "Incorrect instantiation, got " + typeof obj + " but expected " + type;
-    }
-};
-exports.newGuard = newGuard;
 var createBoolPassthroughFunction = function (owner, obj, objPropertyName) {
     return function (val) {
         if (typeof val !== "undefined") {
@@ -39223,7 +39216,7 @@ exports.getCodeObjFromCode = getCodeObjFromCode;
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.challenges = void 0;
 var requireUserCountWithinTime = function (userCount, timeLimit) {
     return {
@@ -39280,7 +39273,7 @@ var requireUserCountWithinMoves = function (userCount, moveLimit) {
 var requireDemo = function () {
     return {
         description: "エンドレス",
-        evaluate: function () { return null; }
+        evaluate: function (world) { return null; }
     };
 };
 /* jshint laxcomma:true */
@@ -39333,7 +39326,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 var base_1 = __webpack_require__(/*! ./base */ "./src/ts/base.ts");
 var movable_1 = __webpack_require__(/*! ./movable */ "./src/ts/movable.ts");
@@ -39368,10 +39361,10 @@ var Elevator = /** @class */ (function (_super) {
         _this.destinationY = _this.getYPosOfFloor(_this.currentFloor);
         _this.on("new_state", newElevStateHandler);
         _this.on("change:goingUpIndicator", function (value) {
-            this.trigger("indicatorstate_change", { up: this.goingUpIndicator, down: this.goingDownIndicator });
+            _this.trigger("indicatorstate_change", { up: _this.goingUpIndicator, down: _this.goingDownIndicator });
         });
         _this.on("change:goingDownIndicator", function (value) {
-            this.trigger("indicatorstate_change", { up: this.goingUpIndicator, down: this.goingDownIndicator });
+            _this.trigger("indicatorstate_change", { up: _this.goingUpIndicator, down: _this.goingDownIndicator });
         });
         return _this;
     }
@@ -39580,7 +39573,7 @@ var Elevator = /** @class */ (function (_super) {
         this.previousTruncFutureFloorIfStopped = futureTruncFloorIfStopped;
     };
     return Elevator;
-}(movable_1["default"]));
+}(movable_1.default));
 exports["default"] = Elevator;
 
 
@@ -39603,7 +39596,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.asFloor = void 0;
 var riot_1 = __webpack_require__(/*! ./lib/riot */ "./src/ts/lib/riot.ts");
 var asFloor = function (obj, floorLevel, yPosition, errorHandler) {
@@ -39667,11 +39660,20 @@ exports.asFloor = asFloor;
 /*!******************************!*\
   !*** ./src/ts/interfaces.ts ***!
   \******************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-exports.__esModule = true;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.asElevatorInterface = void 0;
 var riot_1 = __webpack_require__(/*! ./lib/riot */ "./src/ts/lib/riot.ts");
 var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
@@ -39682,9 +39684,13 @@ var base_1 = __webpack_require__(/*! ./base */ "./src/ts/base.ts");
 var asElevatorInterface = function (obj, elevator, floorCount, errorHandler) {
     var elevatorInterface = riot_1.riot.observable(obj);
     elevatorInterface.destinationQueue = [];
-    var tryTrigger = function (event, arg1, arg2, arg3, arg4) {
+    var tryTrigger = function (event) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
         try {
-            elevatorInterface.trigger(event, arg1, arg2, arg3, arg4);
+            elevatorInterface.trigger.apply(elevatorInterface, __spreadArray([event], args, false));
         }
         catch (e) {
             errorHandler(e);
@@ -39692,7 +39698,7 @@ var asElevatorInterface = function (obj, elevator, floorCount, errorHandler) {
     };
     elevatorInterface.checkDestinationQueue = function () {
         if (!elevator.isBusy()) {
-            if (elevatorInterface.destinationQueue.length) {
+            if (elevatorInterface.destinationQueue.length > 0) {
                 elevator.goToFloor(_.first(elevatorInterface.destinationQueue));
             }
             else {
@@ -39771,16 +39777,16 @@ exports.asElevatorInterface = asElevatorInterface;
 "use strict";
 /* Riot 1.0.2, @license MIT, (c) 2014 Muut Inc + contributors */
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.riot = void 0;
 var FN = {}; // Precompiled templates (JavaScript functions)
 var template_escape = { "\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'" };
 var render_escape = { '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' };
-function default_escape_fn(str, key) {
+var default_escape_fn = function (str, key) {
     return str === null ? '' : (str + '').replace(/[&\"<>]/g, function (char) {
         return render_escape[char];
     });
-}
+};
 exports.riot = {};
 exports.riot.observable = function (el) {
     var callbacks = {}, slice = [].slice;
@@ -39859,20 +39865,22 @@ exports.riot.render = function (tmpl, data, escape_fn) {
     if (typeof window === "undefined")
         return;
     var currentHash, pops = exports.riot.observable({}), listen = window.addEventListener, doc = document;
-    function pop(hash) {
+    var pop = function (hash) {
         hash = hash.type ? location.hash : hash;
         if (hash !== currentHash)
             pops.trigger("pop", hash);
         currentHash = hash;
-    }
+    };
     /* Always fire pop event upon page load (normalize behaviour across browsers) */
     listen("popstate", pop, false);
     doc.addEventListener("DOMContentLoaded", pop, false);
     /* Change the browser URL or listen to changes on the URL */
     exports.riot.route = function (to) {
         // listen
-        if (typeof to === "function")
-            return pops.on("pop", to);
+        if (typeof to === "function") {
+            pops.on("pop", to);
+            return;
+        }
         // fire
         if (history.pushState)
             history.pushState(0, "0", to);
@@ -39900,7 +39908,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Observable = exports.CustomArray = void 0;
 // Black magic stuff
 var CustomArray = /** @class */ (function () {
@@ -40048,7 +40056,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.linearInterpolate = void 0;
 var unobservable_1 = __webpack_require__(/*! ./lib/unobservable */ "./src/ts/lib/unobservable.ts");
 var EPSILON = 0.00001;
@@ -40205,7 +40213,7 @@ exports["default"] = Movable;
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.makeDemoFullscreen = exports.presentCodeStatus = exports.presentWorld = exports.presentFeedback = exports.presentChallenge = exports.presentStats = exports.clearAll = void 0;
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 var riot_1 = __webpack_require__(/*! ./lib/riot */ "./src/ts/lib/riot.ts");
@@ -40219,7 +40227,9 @@ exports.clearAll = clearAll;
 var setTransformPos = function (elem, x, y) {
     var style = "translate(" + x + "px," + y + "px) translateZ(0)";
     elem.style.transform = style;
+    // @ts-ignore
     elem.style["-ms-transform"] = style;
+    // @ts-ignore
     elem.style["-webkit-transform"] = style;
 };
 var updateUserState = function ($user, elem_user, user) {
@@ -40231,12 +40241,12 @@ var updateUserState = function ($user, elem_user, user) {
 var presentStats = function ($parent, world) {
     var elem_transportedcounter = $parent.find(".transportedcounter").get(0), elem_elapsedtime = $parent.find(".elapsedtime").get(0), elem_transportedpersec = $parent.find(".transportedpersec").get(0), elem_avgwaittime = $parent.find(".avgwaittime").get(0), elem_maxwaittime = $parent.find(".maxwaittime").get(0), elem_movecount = $parent.find(".movecount").get(0);
     world.on("stats_display_changed", function () {
-        elem_transportedcounter.textContent = world.transportedCounter;
+        elem_transportedcounter.textContent = "" + world.transportedCounter;
         elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "秒";
         elem_transportedpersec.textContent = world.transportedPerSec.toPrecision(3);
         elem_avgwaittime.textContent = world.avgWaitTime.toFixed(1) + "秒";
         elem_maxwaittime.textContent = world.maxWaitTime.toFixed(1) + "秒";
-        elem_movecount.textContent = world.moveCount;
+        elem_movecount.textContent = "" + world.moveCount;
     });
     world.trigger("stats_display_changed");
 };
@@ -40248,6 +40258,7 @@ var presentChallenge = function ($parent, challenge, app, world, worldController
         timeScale: worldController.timeScale.toFixed(0) + "x",
         startButtonText: world.challengeEnded ? "<i class='fa fa-repeat'></i> 再開" : (worldController.isPaused ? "スタート" : "一時停止")
     }));
+    // @ts-ignore
     $parent.html($challenge);
     $parent.find(".startstop").on("click", function () {
         app.startStopOrRestart();
@@ -40385,17 +40396,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 var movable_1 = __webpack_require__(/*! ./movable */ "./src/ts/movable.ts");
 var movable_2 = __webpack_require__(/*! ./movable */ "./src/ts/movable.ts");
 var User = /** @class */ (function (_super) {
     __extends(User, _super);
     function User(weight) {
         var _this = _super.call(this) || this;
+        _this.spawnTimestamp = 0.0;
         _this.currentFloor = 0;
         _this.destinationFloor = 0;
         _this.done = false;
         _this.removeMe = false;
+        _this.displayType = "female";
+        _this.exitAvailableHandler = function (floorNum, elevator) { };
         _this.weight = weight;
         return _this;
     }
@@ -40425,7 +40439,7 @@ var User = /** @class */ (function (_super) {
             this.trigger("new_state");
             this.trigger("new_display_state");
             var self_1 = this;
-            this.moveToOverTime(destination, null, 1 + Math.random() * 0.5, movable_2.linearInterpolate, function lastMove() {
+            this.moveToOverTime(destination, null, 1 + Math.random() * 0.5, movable_2.linearInterpolate, function () {
                 self_1.removeMe = true;
                 self_1.trigger("removed");
                 self_1.off("*");
@@ -40458,7 +40472,7 @@ var User = /** @class */ (function (_super) {
         }
     };
     return User;
-}(movable_1["default"]));
+}(movable_1.default));
 exports["default"] = User;
 
 
@@ -40472,7 +40486,7 @@ exports["default"] = User;
 
 "use strict";
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createWorldController = exports.createWorldCreator = exports.WorldCreator = void 0;
 var riot_1 = __webpack_require__(/*! ./lib/riot */ "./src/ts/lib/riot.ts");
 var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
@@ -40495,7 +40509,7 @@ var WorldCreator = /** @class */ (function () {
         elevatorCapacities = elevatorCapacities || [4];
         var currentX = 200.0;
         var elevators = _.map(_.range(elevatorCount), function (e, i) {
-            var elevator = new elevator_1["default"](2.6, floorCount, floorHeight, elevatorCapacities[i % elevatorCapacities.length]);
+            var elevator = new elevator_1.default(2.6, floorCount, floorHeight, elevatorCapacities[i % elevatorCapacities.length]);
             // Move to right x position
             elevator.moveTo(currentX, null);
             elevator.setFloorPosition(0);
@@ -40507,7 +40521,7 @@ var WorldCreator = /** @class */ (function () {
     };
     WorldCreator.prototype.createRandomUser = function () {
         var weight = _.random(55, 100);
-        var user = new user_1["default"](weight);
+        var user = new user_1.default(weight);
         if (_.random(40) === 0) {
             user.displayType = "child";
         }
@@ -40544,15 +40558,15 @@ var WorldCreator = /** @class */ (function () {
         var _this = this;
         console.log("Creating world with options", options);
         var defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
-        options = _.defaults(_.clone(options), defaultOptions);
-        var world = { floorHeight: options.floorHeight, transportedCounter: 0 };
+        var completeOptions = _.defaults(_.clone(options), defaultOptions);
+        var world = { floorHeight: completeOptions.floorHeight, transportedCounter: 0 };
         riot_1.riot.observable(world);
         var handleUserCodeError = function (e) {
             world.trigger("usercode_error", e);
         };
-        world.floors = this.createFloors(options.floorCount, world.floorHeight, handleUserCodeError);
-        world.elevators = this.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
-        world.elevatorInterfaces = _.map(world.elevators, function (e) { return (0, interfaces_1.asElevatorInterface)({}, e, options.floorCount, handleUserCodeError); });
+        world.floors = this.createFloors(completeOptions.floorCount, world.floorHeight, handleUserCodeError);
+        world.elevators = this.createElevators(completeOptions.elevatorCount, completeOptions.floorCount, world.floorHeight, completeOptions.elevatorCapacities);
+        world.elevatorInterfaces = _.map(world.elevators, function (e) { return (0, interfaces_1.asElevatorInterface)({}, e, completeOptions.floorCount, handleUserCodeError); });
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
@@ -40624,16 +40638,16 @@ var WorldCreator = /** @class */ (function () {
             world.floors[i].on("up_button_pressed down_button_pressed", handleButtonRepressing);
         }
         ;
-        var elapsedSinceSpawn = 1.001 / options.spawnRate;
+        var elapsedSinceSpawn = 1.001 / completeOptions.spawnRate;
         var elapsedSinceStatsUpdate = 0.0;
         // Main update function
         world.update = function (dt) {
             world.elapsedTime += dt;
             elapsedSinceSpawn += dt;
             elapsedSinceStatsUpdate += dt;
-            while (elapsedSinceSpawn > 1.0 / options.spawnRate) {
-                elapsedSinceSpawn -= 1.0 / options.spawnRate;
-                registerUser(_this.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+            while (elapsedSinceSpawn > 1.0 / completeOptions.spawnRate) {
+                elapsedSinceSpawn -= 1.0 / completeOptions.spawnRate;
+                registerUser(_this.spawnUserRandomly(completeOptions.floorCount, world.floorHeight, world.floors));
             }
             // Use regular for loops for performance and memory friendlyness
             for (var i = 0, len = world.elevators.length; i < len; ++i) {
@@ -40814,7 +40828,7 @@ var exports = __webpack_exports__;
   !*** ./src/ts/app.ts ***!
   \***********************/
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 var CodeMirror = __webpack_require__(/*! codemirror */ "./node_modules/codemirror/lib/codemirror.js");
 __webpack_require__(/*! codemirror/addon/edit/closebrackets */ "./node_modules/codemirror/addon/edit/closebrackets.js");
@@ -40983,7 +40997,7 @@ $(function () {
                 app.world.challengeEnded = true;
                 app.worldController.setPaused(true);
                 if (challengeStatus) {
-                    (0, presenters_1.presentFeedback)($feedback, feedbackTempl, app.world, "成功です!", "目標を達成しました", createParamsUrl(params, { challenge: (challengeIndex + 2) }));
+                    (0, presenters_1.presentFeedback)($feedback, feedbackTempl, app.world, "成功です!", "目標を達成しました", createParamsUrl(params, { challenge: "" + (challengeIndex + 2) }));
                 }
                 else {
                     (0, presenters_1.presentFeedback)($feedback, feedbackTempl, app.world, "目標失敗", "プログラムを改良する必要があるかも？", "");

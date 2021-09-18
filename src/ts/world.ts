@@ -93,18 +93,18 @@ export class WorldCreator {
     createWorld(options: ChallengeOptions) {
         console.log("Creating world with options", options);
         const defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
-        options = _.defaults(_.clone(options), defaultOptions);
-        // @ts-ignore TODO: Does floorHeight really work?
-        const world = {floorHeight: options.floorHeight, transportedCounter: 0} as World;
+        const completeOptions = _.defaults(_.clone(options), defaultOptions);
+        const world = {floorHeight: completeOptions.floorHeight, transportedCounter: 0} as World;
+
         riot.observable(world);
 
         const handleUserCodeError = (e: any) => {
             world.trigger("usercode_error", e);
         }
 
-        world.floors = this.createFloors(options.floorCount, world.floorHeight, handleUserCodeError);
-        world.elevators = this.createElevators(options.elevatorCount, options.floorCount, world.floorHeight, options.elevatorCapacities);
-        world.elevatorInterfaces = _.map(world.elevators, (e: Elevator) => asElevatorInterface({}, e, options.floorCount, handleUserCodeError));
+        world.floors = this.createFloors(completeOptions.floorCount, world.floorHeight, handleUserCodeError);
+        world.elevators = this.createElevators(completeOptions.elevatorCount, completeOptions.floorCount, world.floorHeight, completeOptions.elevatorCapacities);
+        world.elevatorInterfaces = _.map(world.elevators, (e: Elevator) => asElevatorInterface({}, e, completeOptions.floorCount, handleUserCodeError));
         world.users = [];
         world.transportedCounter = 0;
         world.transportedPerSec = 0.0;
@@ -183,7 +183,7 @@ export class WorldCreator {
             world.floors[i].on("up_button_pressed down_button_pressed", handleButtonRepressing);
         };
 
-        let elapsedSinceSpawn = 1.001/options.spawnRate;
+        let elapsedSinceSpawn = 1.001/completeOptions.spawnRate;
         let elapsedSinceStatsUpdate = 0.0;
 
         // Main update function
@@ -191,9 +191,9 @@ export class WorldCreator {
             world.elapsedTime += dt;
             elapsedSinceSpawn += dt;
             elapsedSinceStatsUpdate += dt;
-            while(elapsedSinceSpawn > 1.0/options.spawnRate) {
-                elapsedSinceSpawn -= 1.0/options.spawnRate;
-                registerUser(this.spawnUserRandomly(options.floorCount, world.floorHeight, world.floors));
+            while(elapsedSinceSpawn > 1.0/completeOptions.spawnRate) {
+                elapsedSinceSpawn -= 1.0/completeOptions.spawnRate;
+                registerUser(this.spawnUserRandomly(completeOptions.floorCount, world.floorHeight, world.floors));
             }
 
             // Use regular for loops for performance and memory friendlyness
