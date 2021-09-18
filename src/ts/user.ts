@@ -5,13 +5,13 @@ import Elevator from './elevator';
 
 export default class User extends Movable {
     weight: number;
-    public spawnTimestamp: number;
+    public spawnTimestamp: number = 0.0;
     currentFloor = 0;
     destinationFloor = 0;
     done = false;
     removeMe = false;
-    public displayType: string;
-    exitAvailableHandler: (floorNum: number, elevator: Elevator) => void
+    public displayType: string = "female";
+    exitAvailableHandler = (floorNum: number, elevator: Elevator) => {};
 
     constructor(weight: number) {
         super();
@@ -45,7 +45,7 @@ export default class User extends Movable {
             this.trigger("new_state");
             this.trigger("new_display_state");
             const self = this;
-            this.moveToOverTime(destination, null, 1 + Math.random()*0.5, linearInterpolate, function lastMove() {
+            this.moveToOverTime(destination, null, 1 + Math.random()*0.5, linearInterpolate, () => {
                 self.removeMe = true;
                 self.trigger("removed");
                 self.off("*");

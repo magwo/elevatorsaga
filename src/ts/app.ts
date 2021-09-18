@@ -17,10 +17,10 @@ declare global {
 }
 
 interface IEditor {
-    getCodeObj;
-    setCode;
-    getCode;
-    setDevTestCode;
+    getCodeObj(): CodeObj | null;
+    setCode(code: string): void;
+    getCode(): string;
+    setDevTestCode(): void;
 }
 
 type Editor = Observable<IEditor>;
@@ -102,7 +102,7 @@ const createEditor = () => {
 
     const returnObj: Editor = riot.observable({} as IEditor);
     const autoSaver = _.debounce(saveCode, 1000);
-    cm.on("change", function() {
+    cm.on("change", () => {
         autoSaver();
     });
 
@@ -136,7 +136,7 @@ const createEditor = () => {
 };
 
 
-const createParamsUrl = function(current, overrides) {
+const createParamsUrl = (current: { [key: string]: string }, overrides: { [key: string]: string }) => {
     return "#" + _.map(_.merge(current, overrides), (val, key) => {
         return key + "=" + val;
     }).join(",");
@@ -148,12 +148,12 @@ interface IApp {
     worldCreator: WorldCreator;
     world: World;
     startStopOrRestart(): void;
-    startChallenge(challengeIndex, autoStart?): void;
+    startChallenge(challengeIndex: number, autoStart?: boolean): void;
 }
 
-type App = Observable<IApp>;
+export type App = Observable<IApp>;
 
-$(function() {
+$(() => {
     const tsKey = "elevatorTimeScale";
     const editor = createEditor();
 
@@ -175,7 +175,7 @@ $(function() {
 
     const app = riot.observable({} as IApp);
     app.worldController = createWorldController(1.0 / 60.0);
-    app.worldController.on("usercode_error", function(e) {
+    app.worldController.on("usercode_error", (e: any) => {
         console.log("World raised code error", e);
         editor.trigger("usercode_error", e);
     });
@@ -207,41 +207,41 @@ $(function() {
         presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         presentWorld($world, app.world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl);
 
-        app.worldController.on("timescale_changed", function() {
+        app.worldController.on("timescale_changed", () => {
             localStorage.setItem(tsKey, `${app.worldController.timeScale}`);
             presentChallenge($challenge, challenges[challengeIndex], app, app.world, app.worldController, challengeIndex + 1, challengeTempl);
         });
 
-        app.world.on("stats_changed", function() {
-            var challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
+        app.world.on("stats_changed", () => {
+            const challengeStatus = challenges[challengeIndex].condition.evaluate(app.world);
             if(challengeStatus !== null) {
                 app.world.challengeEnded = true;
                 app.worldController.setPaused(true);
                 if(challengeStatus) {
-                    presentFeedback($feedback, feedbackTempl, app.world, "成功です!", "目標を達成しました", createParamsUrl(params, { challenge: (challengeIndex + 2)}));
+                    presentFeedback($feedback, feedbackTempl, app.world, "成功です!", "目標を達成しました", createParamsUrl(params, { challenge: `${(challengeIndex + 2)}`}));
                 } else {
                     presentFeedback($feedback, feedbackTempl, app.world, "目標失敗", "プログラムを改良する必要があるかも？", "");
                 }
             }
         });
 
-        var codeObj = editor.getCodeObj();
+        const codeObj = editor.getCodeObj();
         console.log("Starting...");
         app.worldController.start(app.world, codeObj, window.requestAnimationFrame, autoStart);
     };
 
-    editor.on("apply_code", function() {
+    editor.on("apply_code", () => {
         app.startChallenge(app.currentChallengeIndex, true);
     });
-    editor.on("code_success", function() {
+    editor.on("code_success", () => {
         presentCodeStatus($codestatus, codeStatusTempl);
     });
-    editor.on("usercode_error", function(error) {
+    editor.on("usercode_error", (error: any) => {
         presentCodeStatus($codestatus, codeStatusTempl, error);
     });
-    editor.on("change", function() {
+    editor.on("change", () => {
         $("#fitness_message").addClass("faded");
-        var codeStr = editor.getCode();
+        const codeStr = editor.getCode();
         // fitnessSuite(codeStr, true, function(results) {
         //     var message = "";
         //     if(!results.error) {
@@ -263,7 +263,7 @@ $(function() {
         let autoStart = false;
         const tsVal = localStorage.getItem(tsKey);
         let timeScale = tsVal ? parseFloat(tsVal) : 2.0;
-        _.each(params, function(val, key) {
+        _.each(params, (val, key) => {
             if(key === "challenge") {
                 requestedChallenge = _.parseInt(val) - 1;
                 if(requestedChallenge < 0 || requestedChallenge >= challenges.length) {

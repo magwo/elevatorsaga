@@ -3,8 +3,9 @@
     "outDir": "./public/",
     "allowJs": true,
     "moduleResolution": "node",
-    "alwaysStrict": true,
-    "strictNullChecks": true
+    "strict": true,
+    "noImplicitReturns": true,
+    "target": "ES5"
   },
   "include": [ "src/ts/**/*" ],
   "exclude": [ "node_modules" ]

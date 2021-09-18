@@ -48,10 +48,10 @@ export default class Elevator extends Movable {
 
         this.currentFloor = 0;
         this.previousTruncFutureFloorIfStopped = 0;
-        this.buttonStates = _.map(_.range(floorCount), function(e, i){ return false; });
+        this.buttonStates = _.map(_.range(floorCount), (e, i) => false);
         this.moveCount = 0;
         this.removed = false;
-        this.userSlots = _.map(_.range(this.maxUsers), function(user, i) {
+        this.userSlots = _.map(_.range(this.maxUsers), (user, i) => {
             return { pos: [2 + (i * 10), 30], user: null};
         });
         this.width = this.maxUsers * 10;
@@ -59,11 +59,11 @@ export default class Elevator extends Movable {
 
         this.on("new_state", newElevStateHandler);
 
-        this.on("change:goingUpIndicator", function(value){
+        this.on("change:goingUpIndicator", (value: any) => {
             this.trigger("indicatorstate_change", {up: this.goingUpIndicator, down: this.goingDownIndicator});
         });
 
-        this.on("change:goingDownIndicator", function(value){
+        this.on("change:goingDownIndicator", (value: any) => {
             this.trigger("indicatorstate_change", {up: this.goingUpIndicator, down: this.goingDownIndicator});
         });
     }
@@ -241,7 +241,7 @@ export default class Elevator extends Movable {
     }
 
     getLoadFactor() {
-        const load = _.reduce(this.userSlots, function(sum, slot) { return sum + (slot.user ? slot.user.weight : 0); }, 0);
+        const load = _.reduce(this.userSlots, (sum, slot) => { return sum + (slot.user ? slot.user.weight : 0); }, 0);
         return load / (this.maxUsers * 100);
     }
 

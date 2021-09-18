@@ -24,9 +24,9 @@ export class CustomArray<T> {
 }
 
 export class Observable {
-    protected callbacks = {};
+    protected callbacks: { [key: string]: any } = {};
 
-    on(events: string, fn) {
+    on(events: string, fn: any) {
         // This function is convoluted because we would like to avoid using split or regex, both which cause an array allocation
         let count = 0;
         for(let i=0, len=events.length; i<len; ++i) {
@@ -53,7 +53,7 @@ export class Observable {
         return this;
     }
 
-    off(events: string, fn?) {
+    off(events: string, fn?: any) {
         if (events === "*") this.callbacks = {};
         else if (fn) {
             let fns = this.callbacks[events];
@@ -85,12 +85,12 @@ export class Observable {
     }
 
     // Only single event supported
-    one(name: string, fn) {
+    one(name: string, fn: any) {
         fn.one = true;
         return this.on(name, fn);
     }
 
-    trigger(name: string, ...args) {
+    trigger(name: string, ...args: any[]) {
         // Just using bogus args is much faster than manipulating the arguments array
         let fns = this.callbacks[name];
         if(!fns) { return this; }

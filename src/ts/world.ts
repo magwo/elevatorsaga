@@ -5,6 +5,8 @@ import { asFloor, Floor } from './floor';
 import { asElevatorInterface, ElevatorInterface } from './interfaces';
 import Elevator from './elevator';
 import User from './user';
+import { ChallengeOptions } from './challenges';
+import { CodeObj } from './base';
 
 interface IWorld {
     floorHeight: number;
@@ -30,7 +32,7 @@ export type World = Observable<IWorld>;
 export class WorldCreator {
     constructor() {}
 
-    createFloors(floorCount: number, floorHeight: number, errorHandler) {
+    createFloors(floorCount: number, floorHeight: number, errorHandler: (e: any) => void) {
         const floors = _.map(_.range(floorCount), (e, i) => {
             const yPos = (floorCount - 1 - i) * floorHeight;
             const floor = asFloor({}, i, yPos, errorHandler);
@@ -39,11 +41,11 @@ export class WorldCreator {
         return floors;
     }
 
-    createElevators(elevatorCount: number, floorCount: number, floorHeight: number, elevatorCapacities: number[]) {
+    createElevators(elevatorCount: number, floorCount: number, floorHeight: number, elevatorCapacities?: number[]) {
         elevatorCapacities = elevatorCapacities || [4];
         let currentX = 200.0;
         const elevators = _.map(_.range(elevatorCount), (e, i) => {
-            const elevator = new Elevator(2.6, floorCount, floorHeight, elevatorCapacities[i%elevatorCapacities.length]);
+            const elevator = new Elevator(2.6, floorCount, floorHeight, elevatorCapacities![i%elevatorCapacities!.length]);
 
             // Move to right x position
             elevator.moveTo(currentX, null);
@@ -88,14 +90,15 @@ export class WorldCreator {
         return user;
     }
 
-    createWorld(options) {
+    createWorld(options: ChallengeOptions) {
         console.log("Creating world with options", options);
         const defaultOptions = { floorHeight: 50, floorCount: 4, elevatorCount: 2, spawnRate: 0.5 };
         options = _.defaults(_.clone(options), defaultOptions);
+        // @ts-ignore TODO: Does floorHeight really work?
         const world = {floorHeight: options.floorHeight, transportedCounter: 0} as World;
         riot.observable(world);
 
-        var handleUserCodeError = function(e) {
+        const handleUserCodeError = (e: any) => {
             world.trigger("usercode_error", e);
         }
 
@@ -227,7 +230,7 @@ export class WorldCreator {
 
         world.unWind = () => {
             console.log("Unwinding", world);
-            _.each((world.elevators as IObservable[]).concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), function(obj) {
+            _.each((world.elevators as IObservable[]).concat(world.elevatorInterfaces).concat(world.users).concat(world.floors).concat([world]), (obj) => {
                 obj.off("*");
             });
             world.challengeEnded = true;
@@ -250,10 +253,10 @@ export const createWorldCreator = () => new WorldCreator();
 interface IWorldController {
     timeScale: number;
     isPaused: boolean;
-    start(world, codeObj, animationFrameRequester: (cb: FrameRequestCallback) => number, autoStart);
-    handleUserCodeError(e);
-    setPaused(paused: boolean);
-    setTimeScale(timeScale: number);
+    start(world: World, codeObj: CodeObj | null, animationFrameRequester: (cb: FrameRequestCallback) => number, autoStart?: boolean): void;
+    handleUserCodeError(e: any): void;
+    setPaused(paused: boolean): void;
+    setTimeScale(timeScale: number): void;
 }
 
 export type WorldController = Observable<IWorldController>;
@@ -262,7 +265,7 @@ export const createWorldController = (dtMax: number) => {
     const controller = riot.observable({} as IWorldController);
     controller.timeScale = 1.0;
     controller.isPaused = true;
-    controller.start = function(world, codeObj, animationFrameRequester, autoStart) {
+    controller.start = (world, codeObj, animationFrameRequester, autoStart) => {
         controller.isPaused = true;
         let lastT: (number | null) = null;
         let firstUpdate = true;
@@ -273,7 +276,7 @@ export const createWorldController = (dtMax: number) => {
                     firstUpdate = false;
                     // This logic prevents infite loops in usercode from breaking the page permanently - don't evaluate user code until game is unpaused.
                     try {
-                        codeObj.init(world.elevatorInterfaces, world.floors);
+                        codeObj!.init(world.elevatorInterfaces, world.floors);
                         world.init();
                     } catch(e) { controller.handleUserCodeError(e); }
                 }
@@ -282,7 +285,7 @@ export const createWorldController = (dtMax: number) => {
                 let scaledDt = dt * 0.001 * controller.timeScale;
                 scaledDt = Math.min(scaledDt, dtMax * 3 * controller.timeScale); // Limit to prevent unhealthy substepping
                 try {
-                    codeObj.update(scaledDt, world.elevatorInterfaces, world.floors);
+                    codeObj!.update(scaledDt, world.elevatorInterfaces, world.floors);
                 } catch(e) { controller.handleUserCodeError(e); }
                 while(scaledDt > 0.0 && !world.challengeEnded) {
                     var thisDt = Math.min(dtMax, scaledDt);
@@ -303,17 +306,17 @@ export const createWorldController = (dtMax: number) => {
         animationFrameRequester(updater);
     };
 
-    controller.handleUserCodeError = function(e) {
+    controller.handleUserCodeError = (e) => {
         controller.setPaused(true);
         console.log("Usercode error on update", e);
         controller.trigger("usercode_error", e);
     };
 
-    controller.setPaused = function(paused) {
+    controller.setPaused = (paused) => {
         controller.isPaused = paused;
         controller.trigger("timescale_changed");
     };
-    controller.setTimeScale = function(timeScale) {
+    controller.setTimeScale = (timeScale) => {
         controller.timeScale = timeScale;
         controller.trigger("timescale_changed");
     };

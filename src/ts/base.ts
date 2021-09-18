@@ -1,5 +1,7 @@
+import { Observable } from "./lib/riot";
+
 // Console shim
-(function () {
+(() => {
     const f = () => {};
     if (!console) {
         // @ts-ignore
@@ -7,7 +9,7 @@
             log:f, info:f, warn:f, debug:f, error:f
         };
     }
-}());
+})();
 
 export const limitNumber = (num: number, min: number, max: number) => {
     return Math.min(max, Math.max(num, min));
@@ -32,12 +34,7 @@ export const deprecationWarning = (name: string) => {
     console.warn("You are using a deprecated feature scheduled for removal: " + name);
 };
 
-/** @deprecated */
-export const newGuard = (obj, type) => {
-    if(!(obj instanceof type)) { throw "Incorrect instantiation, got " + typeof obj + " but expected " + type; }
-};
-
-export const createBoolPassthroughFunction = (owner, obj, objPropertyName: string) => {
+export const createBoolPassthroughFunction = <T>(owner: T, obj: Observable<any>, objPropertyName: string) => {
     return (val?: boolean) => {
         if(typeof val !== "undefined") {
             obj[objPropertyName] = val ? true : false;

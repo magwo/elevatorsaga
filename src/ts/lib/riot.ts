@@ -2,22 +2,22 @@
 "use strict";
 
 let FN: { [key: string]: string } = {}; // Precompiled templates (JavaScript functions)
-const template_escape = {"\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'"};
-const render_escape = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};
+const template_escape: { [key: string]: string } = {"\\": "\\\\", "\n": "\\n", "\r": "\\r", "'": "\\'"};
+const render_escape: { [key: string]: string } = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};
 
 type EscapeFunc = (str: string | null, key: string) => string;
 
-function default_escape_fn(str: string | null, key: string) {
+const default_escape_fn = (str: string | null, key: string) => {
   return str === null ? '' : (str+'').replace(/[&\"<>]/g, (char: string) => {
     return render_escape[char];
   });
-}
+};
 
 export interface IObservable {
-  on(events: string, fn): this;
-  off(events: string, fn?): this;
-  one(name: string, fn): this;
-  trigger(name: string, ...args): this;
+  on(events: string, fn: any): this;
+  off(events: string, fn?: any): this;
+  one(name: string, fn: any): this;
+  trigger(name: string, ...args: any[]): this;
 }
 
 export type Observable<T> = T & IObservable;
@@ -25,13 +25,13 @@ export type Observable<T> = T & IObservable;
 type RiotApi = {
   observable<T>(el: T): Observable<T>;
   render(tmpl: string, data: { [key: string]: any }, escape_fn?: EscapeFunc | boolean): string;
-  route?(to): void;
+  route?(to: any): void;
 }
 
 export let riot = {} as RiotApi;
 
 riot.observable = <T>(el: T) => {
-  let callbacks = {}, slice = [].slice;
+  let callbacks: { [key: string]: any } = {}, slice = [].slice;
   let result = el as Observable<T>;
 
   result.on = function(events, fn) {
@@ -99,16 +99,16 @@ riot.render = (tmpl, data, escape_fn) => {
 };
 
 /* Cross browser popstate */
-(function () {
+(() => {
   // for browsers only
   if (typeof window === "undefined") return;
 
-  var currentHash,
+  var currentHash: string,
     pops = riot.observable({}),
     listen = window.addEventListener,
     doc = document;
 
-  function pop(hash) {
+  const pop = (hash: any) => {
     hash = hash.type ? location.hash : hash;
     if (hash !== currentHash) pops.trigger("pop", hash);
     currentHash = hash;
@@ -120,9 +120,12 @@ riot.render = (tmpl, data, escape_fn) => {
   doc.addEventListener("DOMContentLoaded", pop, false);
 
   /* Change the browser URL or listen to changes on the URL */
-  riot.route = function(to) {
+  riot.route = (to) => {
     // listen
-    if (typeof to === "function") return pops.on("pop", to);
+    if (typeof to === "function") {
+      pops.on("pop", to);
+      return;
+    }
 
     // fire
     if (history.pushState) history.pushState(0, "0", to);

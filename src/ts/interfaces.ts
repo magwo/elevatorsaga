@@ -1,13 +1,14 @@
 import { riot, Observable } from './lib/riot';
 import * as _ from 'lodash';
 import { createBoolPassthroughFunction, limitNumber, epsilonEquals } from './base';
+import Elevator from './elevator';
 
 interface IElevator {
     goToFloor(floorNum: number, forceNow?: boolean): void;
     stop(): void;
     currentFloor(): number;
-    goingUpIndicator(val: boolean): boolean;
-    goingDownIndicator(val: boolean): boolean;
+    goingUpIndicator(val: boolean): boolean | this;
+    goingDownIndicator(val: boolean): boolean | this;
     maxPassengerCount(): number;
     loadFactor(): number;
     destinationDirection(): string;
@@ -22,21 +23,21 @@ export type ElevatorInterface<T> = Observable<T> & IElevator;
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
-export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandler): ElevatorInterface<T> => {
+export const asElevatorInterface = <T>(obj: T, elevator: Elevator, floorCount: number, errorHandler: (e: any) => void): ElevatorInterface<T> => {
     let elevatorInterface = riot.observable(obj) as Observable<T> & IElevator;
 
     elevatorInterface.destinationQueue = [];
 
-    var tryTrigger = function(event, arg1?, arg2?, arg3?, arg4?) {
+    const tryTrigger = (event: string, ...args: any[]) => {
         try {
-            elevatorInterface.trigger(event, arg1, arg2, arg3, arg4);
+            elevatorInterface.trigger(event, ...args);
         } catch(e) { errorHandler(e); }
     };
 
-    elevatorInterface.checkDestinationQueue = function() {
+    elevatorInterface.checkDestinationQueue = () => {
         if(!elevator.isBusy()) {
-            if(elevatorInterface.destinationQueue.length) {
-                elevator.goToFloor(_.first(elevatorInterface.destinationQueue));
+            if(elevatorInterface.destinationQueue.length > 0) {
+                elevator.goToFloor(_.first(elevatorInterface.destinationQueue)!);
             } else {
                 tryTrigger("idle");
             }
@@ -44,7 +45,7 @@ export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandle
     };
 
     // TODO: Write tests for this queueing logic
-    elevatorInterface.goToFloor = function(floorNum: number, forceNow?: boolean) {
+    elevatorInterface.goToFloor = (floorNum: number, forceNow?: boolean) => {
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
         if(elevatorInterface.destinationQueue.length > 0) {
@@ -57,31 +58,31 @@ export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandle
         elevatorInterface.checkDestinationQueue();
     };
 
-    elevatorInterface.stop = function() {
+    elevatorInterface.stop = () => {
         elevatorInterface.destinationQueue = [];
         if(!elevator.isBusy()) {
             elevator.goToFloor(elevator.getExactFutureFloorIfStopped());
         }
     };
 
-    elevatorInterface.getFirstPressedFloor = function() { return elevator.getFirstPressedFloor(); }; // Undocumented and deprecated, will be removed
-    elevatorInterface.getPressedFloors = function() { return elevator.getPressedFloors(); };
-    elevatorInterface.currentFloor = function() { return elevator.currentFloor; };
-    elevatorInterface.maxPassengerCount = function() { return elevator.maxUsers; };
-    elevatorInterface.loadFactor = function() { return elevator.getLoadFactor(); };
-    elevatorInterface.destinationDirection = function() {
+    elevatorInterface.getFirstPressedFloor = () => elevator.getFirstPressedFloor(); // Undocumented and deprecated, will be removed
+    elevatorInterface.getPressedFloors = () => elevator.getPressedFloors();
+    elevatorInterface.currentFloor = () => elevator.currentFloor;
+    elevatorInterface.maxPassengerCount = () => elevator.maxUsers;
+    elevatorInterface.loadFactor = () => elevator.getLoadFactor();
+    elevatorInterface.destinationDirection = () => {
         if(elevator.destinationY === elevator.y) { return "stopped"; }
         return elevator.destinationY > elevator.y ? "down" : "up";
     }
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
 
-    elevator.on("stopped", function(position) {
+    elevator.on("stopped", (position: number) => {
         if(elevatorInterface.destinationQueue.length > 0 && epsilonEquals(_.first(elevatorInterface.destinationQueue)!, position)) {
             // Reached the destination, so remove element at front of queue
             elevatorInterface.destinationQueue = _.drop(elevatorInterface.destinationQueue);
             if(elevator.isOnAFloor()) {
-                elevator.wait(1, function() {
+                elevator.wait(1, () => {
                     elevatorInterface.checkDestinationQueue();
                 });
             } else {
@@ -90,14 +91,14 @@ export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandle
         }
     });
 
-    elevator.on("passing_floor", function(floorNum, direction) {
+    elevator.on("passing_floor", (floorNum: number, direction: string) => {
         tryTrigger("passing_floor", floorNum, direction);
     });
 
-    elevator.on("stopped_at_floor", function(floorNum) {
+    elevator.on("stopped_at_floor", (floorNum: number) => {
         tryTrigger("stopped_at_floor", floorNum);
     });
-    elevator.on("floor_button_pressed", function(floorNum) {
+    elevator.on("floor_button_pressed", (floorNum: number) => {
         tryTrigger("floor_button_pressed", floorNum);
     });
 

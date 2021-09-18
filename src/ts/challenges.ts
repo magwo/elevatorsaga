@@ -1,7 +1,14 @@
-const requireUserCountWithinTime = function(userCount: number, timeLimit: number) {
+import { World } from "./world";
+
+interface ChallengeCondition {
+    description: string;
+    evaluate(world: World): boolean | null;
+}
+
+const requireUserCountWithinTime = (userCount: number, timeLimit: number): ChallengeCondition => {
     return {
         description: "<span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
-        evaluate(world: { elapsedTime: number; transportedCounter: number }) {
+        evaluate(world: World) {
             if(world.elapsedTime >= timeLimit || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.transportedCounter >= userCount;
             } else {
@@ -11,10 +18,10 @@ const requireUserCountWithinTime = function(userCount: number, timeLimit: number
     };
 };
 
-const requireUserCountWithMaxWaitTime = (userCount: number, maxWaitTime: number) => {
+const requireUserCountWithMaxWaitTime = (userCount: number, maxWaitTime: number): ChallengeCondition => {
     return {
         description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
-        evaluate(world: { maxWaitTime: number; transportedCounter: number }) {
+        evaluate(world: World) {
             if(world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
             } else {
@@ -24,10 +31,10 @@ const requireUserCountWithMaxWaitTime = (userCount: number, maxWaitTime: number)
     };
 };
 
-const requireUserCountWithinTimeWithMaxWaitTime = (userCount: number, timeLimit: number, maxWaitTime: number) => {
+const requireUserCountWithinTimeWithMaxWaitTime = (userCount: number, timeLimit: number, maxWaitTime: number): ChallengeCondition => {
     return {
         description: "<span class='emphasis-color'>" + maxWaitTime.toFixed(1) + "</span> 秒以上待たせることなく <span class='emphasis-color'>" + userCount + "</span> 人を <span class='emphasis-color'>" + timeLimit.toFixed(0) + "</span> 秒以内に運んでください。",
-        evaluate(world: { elapsedTime: number; maxWaitTime: number; transportedCounter: number }) {
+        evaluate(world: World) {
             if(world.elapsedTime >= timeLimit || world.maxWaitTime >= maxWaitTime || world.transportedCounter >= userCount) {
                 return world.elapsedTime <= timeLimit && world.maxWaitTime <= maxWaitTime && world.transportedCounter >= userCount;
             } else {
@@ -37,10 +44,10 @@ const requireUserCountWithinTimeWithMaxWaitTime = (userCount: number, timeLimit:
     };
 };
 
-const requireUserCountWithinMoves = (userCount: number, moveLimit: number) => {
+const requireUserCountWithinMoves = (userCount: number, moveLimit: number): ChallengeCondition => {
     return {
         description: "<span class='emphasis-color'>" + moveLimit + "</span> 回以内の移動で <span class='emphasis-color'>" + userCount + "</span> 人を運んでください。",
-        evaluate(world: { moveCount: number; transportedCounter: number }) {
+        evaluate(world: World) {
             if(world.moveCount >= moveLimit || world.transportedCounter >= userCount) {
                 return world.moveCount <= moveLimit && world.transportedCounter >= userCount;
             } else {
@@ -50,15 +57,27 @@ const requireUserCountWithinMoves = (userCount: number, moveLimit: number) => {
     };
 };
 
-const requireDemo = () => {
+const requireDemo = (): ChallengeCondition => {
     return {
         description: "エンドレス",
-        evaluate() { return null; }
+        evaluate(world: World) { return null; }
     };
 };
 
+export interface ChallengeOptions {
+    floorCount: number;
+    elevatorCount: number;
+    spawnRate: number;
+    elevatorCapacities?: number[];
+}
+
+export interface Challenge {
+    options: ChallengeOptions;
+    condition: ChallengeCondition;
+}
+
 /* jshint laxcomma:true */
-export const challenges = [
+export const challenges: Challenge[] = [
      {options: {floorCount: 3, elevatorCount: 1, spawnRate: 0.3}, condition: requireUserCountWithinTime(15, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.4}, condition: requireUserCountWithinTime(20, 60)}
     ,{options: {floorCount: 5, elevatorCount: 1, spawnRate: 0.5, elevatorCapacities: [6]}, condition: requireUserCountWithinTime(23, 60)}

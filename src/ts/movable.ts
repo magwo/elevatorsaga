@@ -1,5 +1,4 @@
 import { Observable } from './lib/unobservable';
-import { newGuard } from './base';
 
 const EPSILON = 0.00001;
 
@@ -79,7 +78,7 @@ export default class Movable extends Observable {
         };
     }
 
-    moveToOverTime(newX: number | null, newY: number | null, timeToSpend, interpolator?: Interpolator, cb?: () => void) {
+    moveToOverTime(newX: number | null, newY: number | null, timeToSpend: number, interpolator?: Interpolator, cb?: () => void) {
         this.makeSureNotBusy();
         if(newX === null) { newX = this.x; }
         if(newY === null) { newY = this.y; }
