@@ -40892,14 +40892,14 @@ var createEditor = function () {
         cm.focus();
     });
     $("#button_reset").on("click", function () {
-        if (confirm("Do you really want to reset to the default implementation?")) {
+        if (confirm("デフォルトのプログラムに戻します。よろしいですか？")) {
             localStorage.setItem("develevateBackupCode", cm.getValue());
             reset();
         }
         cm.focus();
     });
     $("#button_resetundo").on("click", function () {
-        if (confirm("Do you want to bring back the code as before the last reset?")) {
+        if (confirm("リセット前の状態に戻しますか？")) {
             cm.setValue(localStorage.getItem("develevateBackupCode") || "");
         }
         cm.focus();

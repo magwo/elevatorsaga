@@ -86,7 +86,7 @@ const createEditor = () => {
     });
 
     $("#button_reset").on("click", () => {
-        if(confirm("Do you really want to reset to the default implementation?")) {
+        if(confirm("デフォルトのプログラムに戻します。よろしいですか？")) {
             localStorage.setItem("develevateBackupCode", cm.getValue());
             reset();
         }
@@ -94,7 +94,7 @@ const createEditor = () => {
     });
 
     $("#button_resetundo").on("click", () => {
-        if(confirm("Do you want to bring back the code as before the last reset?")) {
+        if(confirm("リセット前の状態に戻しますか？")) {
             cm.setValue(localStorage.getItem("develevateBackupCode") || "");
         }
         cm.focus();
