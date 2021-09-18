@@ -3,6 +3,12 @@ import * as _ from 'lodash';
 import { createBoolPassthroughFunction, limitNumber, epsilonEquals } from './base';
 import Elevator from './elevator';
 
+export enum ElevatorDirection {
+    up = "up",
+    down = "down",
+    stopped = "stopped"
+}
+
 interface IElevator {
     goToFloor(floorNum: number, forceNow?: boolean): void;
     stop(): void;
@@ -11,7 +17,7 @@ interface IElevator {
     goingDownIndicator(val: boolean): boolean | this;
     maxPassengerCount(): number;
     loadFactor(): number;
-    destinationDirection(): string;
+    destinationDirection(): ElevatorDirection;
     destinationQueue: number[];
     checkDestinationQueue(): void;
     getFirstPressedFloor(): number;
@@ -71,8 +77,8 @@ export const asElevatorInterface = <T>(obj: T, elevator: Elevator, floorCount: n
     elevatorInterface.maxPassengerCount = () => elevator.maxUsers;
     elevatorInterface.loadFactor = () => elevator.getLoadFactor();
     elevatorInterface.destinationDirection = () => {
-        if(elevator.destinationY === elevator.y) { return "stopped"; }
-        return elevator.destinationY > elevator.y ? "down" : "up";
+        if(elevator.destinationY === elevator.y) { return ElevatorDirection.stopped; }
+        return elevator.destinationY > elevator.y ? ElevatorDirection.down : ElevatorDirection.up
     }
     elevatorInterface.goingUpIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingUpIndicator");
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
@@ -91,7 +97,7 @@ export const asElevatorInterface = <T>(obj: T, elevator: Elevator, floorCount: n
         }
     });
 
-    elevator.on("passing_floor", (floorNum: number, direction: string) => {
+    elevator.on("passing_floor", (floorNum: number, direction: ElevatorDirection) => {
         tryTrigger("passing_floor", floorNum, direction);
     });
 

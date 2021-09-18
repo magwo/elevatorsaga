@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 import { deprecationWarning, distanceNeededToAchieveSpeed, limitNumber, epsilonEquals, accelerationNeededToAchieveChangeDistance } from './base';
+import { ElevatorDirection } from './interfaces';
 import Movable from './movable';
 import User from './user';
 
@@ -281,7 +282,7 @@ export default class Elevator extends Movable {
             // Never emit passing_floor event for the destination floor
             // Because if it's the destination we're not going to pass it, at least not intentionally
             if(this.getDestinationFloor() !== floorBeingPassed && this.isApproachingFloor(floorBeingPassed)) {
-                var direction = this.velocityY > 0.0 ? "down" : "up";
+                const direction = this.velocityY > 0.0 ? ElevatorDirection.down : ElevatorDirection.up;
                 this.trigger("passing_floor", floorBeingPassed, direction);
             }
         }
