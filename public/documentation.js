@@ -1533,7 +1533,7 @@ function expandOrCloneMode(mode) {
   return mode;
 }
 
-var version = "11.2.0";
+var version = "11.1.0";
 
 /*
 Syntax highlighting with language autodetection.
@@ -1954,7 +1954,7 @@ const HLJS = function(hljs) {
         }
       }
       do {
-        if (top.scope) {
+        if (top.scope && !top.isMultiClass) {
           emitter.closeNode();
         }
         if (!top.skip && !top.subLanguage) {
@@ -3249,16 +3249,16 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-var exports = __webpack_exports__;
 /*!*********************************!*\
   !*** ./src/ts/documentation.ts ***!
   \*********************************/
 
-exports.__esModule = true;
-var core_1 = __webpack_require__(/*! highlight.js/lib/core */ "./node_modules/highlight.js/lib/core.js");
-var javascript_1 = __webpack_require__(/*! highlight.js/lib/languages/javascript */ "./node_modules/highlight.js/lib/languages/javascript.js");
-core_1["default"].registerLanguage("javascript", javascript_1["default"]);
-core_1["default"].highlightAll();
+var hljs = __webpack_require__(/*! highlight.js/lib/core */ "./node_modules/highlight.js/lib/core.js");
+var javascript = __webpack_require__(/*! highlight.js/lib/languages/javascript */ "./node_modules/highlight.js/lib/languages/javascript.js");
+document.addEventListener("DOMContentLoaded", function () {
+    hljs.registerLanguage("javascript", javascript);
+    hljs.highlightAll();
+});
 
 })();
 

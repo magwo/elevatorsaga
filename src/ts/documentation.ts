@@ -1,5 +1,7 @@
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
+const hljs = require('highlight.js/lib/core');
+const javascript = require('highlight.js/lib/languages/javascript');
 
-hljs.registerLanguage("javascript", javascript);
-hljs.highlightAll();
+document.addEventListener("DOMContentLoaded", () => {
+  hljs.registerLanguage("javascript", javascript);
+  hljs.highlightAll();
+});

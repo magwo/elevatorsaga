@@ -8,43 +8,44 @@ const render_escape = {'&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;'};
 type EscapeFunc = (str: string | null, key: string) => string;
 
 function default_escape_fn(str: string | null, key: string) {
-  return str === null ? '' : (str+'').replace(/[&\"<>]/g, function(char) {
+  return str === null ? '' : (str+'').replace(/[&\"<>]/g, (char: string) => {
     return render_escape[char];
   });
 }
 
-interface IObservable {
-  on(events, fn): this;
-  off(events, fn): this;
-  one(name, fn): this;
-  trigger(name, ...args): this;
+export interface IObservable {
+  on(events: string, fn): this;
+  off(events: string, fn?): this;
+  one(name: string, fn): this;
+  trigger(name: string, ...args): this;
 }
 
 export type Observable<T> = T & IObservable;
 
 type RiotApi = {
   observable<T>(el: T): Observable<T>;
-  render(tmpl: string, data: { [key: string]: string }, escape_fn: EscapeFunc | boolean): string;
+  render(tmpl: string, data: { [key: string]: any }, escape_fn?: EscapeFunc | boolean): string;
   route?(to): void;
 }
 
 export let riot = {} as RiotApi
 
-riot.observable = (el) => {
+riot.observable = <T>(el: T) => {
   let callbacks = {}, slice = [].slice;
-  let obs = {} as IObservable;
+  let result = el as Observable<T>;
 
-  obs.on = function(events, fn) {
+  result.on = function(events, fn) {
     if (typeof fn === "function") {
-      events.replace(/[^\s]+/g, function(name, pos) {
+      events.replace(/[^\s]+/g, (name: string, pos: number) => {
         (callbacks[name] = callbacks[name] || []).push(fn);
         fn.typed = pos > 0;
+        return "";
       });
     }
     return this;
   };
 
-  obs.off = function(events, fn) {
+  result.off = function(events, fn) {
     if (events === "*") callbacks = {};
     else if (fn) {
       var arr = callbacks[events];
@@ -52,20 +53,21 @@ riot.observable = (el) => {
         if (cb === fn) arr.splice(i, 1);
       }
     } else {
-      events.replace(/[^\s]+/g, function(name) {
+      events.replace(/[^\s]+/g, (name: string) => {
         callbacks[name] = [];
+        return "";
       });
     }
     return this;
   };
 
   // only single event supported
-  obs.one = function(name, fn) {
+  result.one = function(name, fn) {
     if (fn) fn.one = true;
     return this.on(name, fn);
   };
 
-  obs.trigger = function(name, ...args) {
+  result.trigger = function(name, ...args) {
     const fns = callbacks[name] || [];
 
     for (var i = 0, fn; (fn = fns[i]); ++i) {
@@ -81,7 +83,7 @@ riot.observable = (el) => {
     return this;
   };
 
-  return Object.assign(el, obs);
+  return result;
 };
 
 riot.render = (tmpl, data, escape_fn) => {

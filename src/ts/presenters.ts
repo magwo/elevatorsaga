@@ -1,36 +1,38 @@
-import $ from 'jquery';
-import './lib/riot';
-import _ from 'lodash';
+import * as $ from 'jquery';
+import { riot } from './lib/riot';
+import * as _ from 'lodash';
+import Elevator from './elevator';
+import User from './user';
 
-function clearAll($elems) {
+export const clearAll = ($elems) => {
     _.each($elems, function($elem) {
         $elem.empty();
     });
 };
 
-function setTransformPos(elem, x, y) {
-    var style = "translate(" + x + "px," + y + "px) translateZ(0)";
+const setTransformPos = (elem: HTMLElement, x: number, y: number) => {
+    const style = "translate(" + x + "px," + y + "px) translateZ(0)";
     elem.style.transform = style;
     elem.style["-ms-transform"] = style;
     elem.style["-webkit-transform"] = style;
 };
 
-function updateUserState($user, elem_user, user) {
+const updateUserState = ($user: JQuery<HTMLElement>, elem_user: HTMLElement, user: User) => {
     setTransformPos(elem_user, user.worldX, user.worldY);
     if(user.done) { $user.addClass("leaving"); }
 };
 
 
-function presentStats($parent, world) {
+export const presentStats = ($parent: JQuery<HTMLElement>, world) => {
 
-    var elem_transportedcounter = $parent.find(".transportedcounter").get(0),
+    const elem_transportedcounter = $parent.find(".transportedcounter").get(0),
         elem_elapsedtime = $parent.find(".elapsedtime").get(0),
         elem_transportedpersec = $parent.find(".transportedpersec").get(0),
         elem_avgwaittime = $parent.find(".avgwaittime").get(0),
         elem_maxwaittime = $parent.find(".maxwaittime").get(0),
         elem_movecount = $parent.find(".movecount").get(0);
 
-    world.on("stats_display_changed", function updateStats() {
+    world.on("stats_display_changed", () => {
         elem_transportedcounter.textContent = world.transportedCounter;
         elem_elapsedtime.textContent = world.elapsedTime.toFixed(0) + "秒";
         elem_transportedpersec.textContent = world.transportedPerSec.toPrecision(3);
@@ -41,8 +43,8 @@ function presentStats($parent, world) {
     world.trigger("stats_display_changed");
 };
 
-function presentChallenge($parent, challenge, app, world, worldController, challengeNum, challengeTempl) {
-    var $challenge = $(riot.render(challengeTempl, {
+export const presentChallenge = ($parent, challenge, app, world, worldController, challengeNum, challengeTempl) => {
+    const $challenge = $(riot.render(challengeTempl, {
         challenge: challenge,
         num: challengeNum,
         timeScale: worldController.timeScale.toFixed(0) + "x",
@@ -56,25 +58,25 @@ function presentChallenge($parent, challenge, app, world, worldController, chall
     $parent.find(".timescale_increase").on("click", function(e) {
         e.preventDefault();
         if(worldController.timeScale < 40) {
-            var timeScale = Math.round(worldController.timeScale * 1.618);
+            const timeScale = Math.round(worldController.timeScale * 1.618);
             worldController.setTimeScale(timeScale);
         }
     });
     $parent.find(".timescale_decrease").on("click", function(e) {
         e.preventDefault();
-        var timeScale = Math.round(worldController.timeScale / 1.618);
+        const timeScale = Math.round(worldController.timeScale / 1.618);
         worldController.setTimeScale(timeScale);
     });
 };
 
-function presentFeedback($parent, feedbackTempl, world, title, message, url) {
+export const presentFeedback = ($parent, feedbackTempl, world, title, message, url) => {
     $parent.html(riot.render(feedbackTempl, {title: title, message: message, url: url, paddingTop: world.floors.length * world.floorHeight * 0.2}));
     if(!url) {
         $parent.find("a").remove();
     }
 };
 
-function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) {
+export const presentWorld = ($world, world, floorTempl, elevatorTempl, elevatorButtonTempl, userTempl) => {
     $world.css("height", world.floorHeight * world.floors.length);
 
     $world.append(_.map(world.floors, function(f) {
@@ -96,33 +98,33 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
     $world.find(".floor").first().find(".down").addClass("invisible");
     $world.find(".floor").last().find(".up").addClass("invisible");
 
-    function renderElevatorButtons(states) {
+    const renderElevatorButtons = (states) => {
         // This is a rarely executed inner-inner loop, does not need efficiency
         return _.map(states, function(b, i) {
             return riot.render(elevatorButtonTempl, {floorNum: i});
         }).join("");
     };
 
-    function setUpElevator(e) {
-        var $elevator = $(riot.render(elevatorTempl, {e: e}));
-        var elem_elevator = $elevator.get(0);
+    const setUpElevator = (e: Elevator) => {
+        const $elevator = $(riot.render(elevatorTempl, {e: e}));
+        const elem_elevator = $elevator.get(0);
         $elevator.find(".buttonindicator").html(renderElevatorButtons(e.buttonStates));
-        var $buttons = _.map($elevator.find(".buttonindicator").children(), function(c) { return $(c); });
-        var elem_floorindicator = $elevator.find(".floorindicator > span").get(0);
+        const $buttons = _.map($elevator.find(".buttonindicator").children(), function(c) { return $(c); });
+        const elem_floorindicator = $elevator.find(".floorindicator > span").get(0);
 
         $elevator.on("click", ".buttonpress", function() {
             e.pressFloorButton(parseInt($(this).text()));
         });
-        e.on("new_display_state", function updateElevatorPosition() {
+        e.on("new_display_state", () => {
             setTransformPos(elem_elevator, e.worldX, e.worldY);
         });
-        e.on("new_current_floor", function update_current_floor(floor) {
+        e.on("new_current_floor", (floor: string) => {
             elem_floorindicator.textContent = floor;
         });
-        e.on("floor_buttons_changed", function update_floor_buttons(states, indexChanged) {
+        e.on("floor_buttons_changed", (states, indexChanged) => {
             $buttons[indexChanged].toggleClass("activated", states[indexChanged]);
         });
-        e.on("indicatorstate_change", function indicatorstate_change(indicatorStates) {
+        e.on("indicatorstate_change", (indicatorStates) => {
             $elevator.find(".up").toggleClass("activated", indicatorStates.up);
             $elevator.find(".down").toggleClass("activated", indicatorStates.down);
         });
@@ -132,16 +134,16 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
         return $elevator;
     }
 
-    $world.append(_.map(world.elevators, function(e) {
+    $world.append(_.map(world.elevators, (e: Elevator) => {
         return setUpElevator(e);
     }));
 
-    world.on("new_user", function(user) {
-        var $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
-        var elem_user = $user.get(0);
+    world.on("new_user", (user: User) => {
+        const $user = $(riot.render(userTempl, {u: user, state: user.done ? "leaving" : ""}));
+        const elem_user = $user.get(0);
 
-        user.on("new_display_state", function() { updateUserState($user, elem_user, user); })
-        user.on("removed", function() {
+        user.on("new_display_state", () => { updateUserState($user, elem_user, user); })
+        user.on("removed", () => {
             $user.remove();
         });
         $world.append($user);
@@ -149,7 +151,7 @@ function presentWorld($world, world, floorTempl, elevatorTempl, elevatorButtonTe
 };
 
 
-function presentCodeStatus($parent, templ, error) {
+export const presentCodeStatus = ($parent, templ, error?) => {
     console.log(error);
     var errorDisplay = error ? "block" : "none";
     var successDisplay = error ? "none" : "block";
@@ -162,9 +164,7 @@ function presentCodeStatus($parent, templ, error) {
     $parent.html(status);
 };
 
-function makeDemoFullscreen() {
+export const makeDemoFullscreen = () => {
     $("body .container > *").not(".world").css("visibility", "hidden");
     $("html, body, body .container, .world").css({width: "100%", margin: "0", "padding": 0});
 };
-
-export { clearAll, presentChallenge, presentStats, presentWorld, presentCodeStatus, presentFeedback };

@@ -3,7 +3,8 @@
     "outDir": "./public/",
     "allowJs": true,
     "moduleResolution": "node",
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "strictNullChecks": true
   },
   "include": [ "src/ts/**/*" ],
   "exclude": [ "node_modules" ]

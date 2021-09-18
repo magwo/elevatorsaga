@@ -17,10 +17,12 @@ interface IElevator {
     getPressedFloors(): number[];
 }
 
+export type ElevatorInterface<T> = Observable<T> & IElevator;
+
 // Interface that hides actual elevator object behind a more robust facade,
 // while also exposing relevant events, and providing some helper queue
 // functions that allow programming without async logic.
-export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandler) => {
+export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandler): ElevatorInterface<T> => {
     let elevatorInterface = riot.observable(obj) as Observable<T> & IElevator;
 
     elevatorInterface.destinationQueue = [];
@@ -45,9 +47,9 @@ export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandle
     elevatorInterface.goToFloor = function(floorNum: number, forceNow?: boolean) {
         floorNum = limitNumber(Number(floorNum), 0, floorCount - 1);
         // Auto-prevent immediately duplicate destinations
-        if(elevatorInterface.destinationQueue.length) {
+        if(elevatorInterface.destinationQueue.length > 0) {
             const adjacentElement = forceNow ? _.first(elevatorInterface.destinationQueue) : _.last(elevatorInterface.destinationQueue);
-            if(epsilonEquals(floorNum, adjacentElement)) {
+            if(epsilonEquals(floorNum, adjacentElement!)) {
                 return;
             }
         }
@@ -75,7 +77,7 @@ export const asElevatorInterface = <T>(obj: T, elevator, floorCount, errorHandle
     elevatorInterface.goingDownIndicator = createBoolPassthroughFunction(elevatorInterface, elevator, "goingDownIndicator");
 
     elevator.on("stopped", function(position) {
-        if(elevatorInterface.destinationQueue.length && epsilonEquals(_.first(elevatorInterface.destinationQueue), position)) {
+        if(elevatorInterface.destinationQueue.length > 0 && epsilonEquals(_.first(elevatorInterface.destinationQueue)!, position)) {
             // Reached the destination, so remove element at front of queue
             elevatorInterface.destinationQueue = _.drop(elevatorInterface.destinationQueue);
             if(elevator.isOnAFloor()) {

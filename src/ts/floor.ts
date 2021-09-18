@@ -1,20 +1,34 @@
-import './lib/riot';
+import { riot, Observable } from './lib/riot';
+import Elevator from './elevator';
 
-var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
-    var floor = riot.observable(obj);
+export interface IFloor {
+    level: number;
+    yPosition: number;
+    buttonStates: { up: string, down: string };
+    pressUpButton(): void;
+    pressDownButton(): void;
+    elevatorAvailable(elevator: Elevator): void;
+    getSpawnPosY(): number;
+    floorNum(): number;
+}
+
+export type Floor<T> = Observable<T> & IFloor;
+
+export const asFloor = <T>(obj: T, floorLevel: number, yPosition: number, errorHandler) => {
+    let floor = riot.observable(obj) as Floor<T>;
 
     floor.level = floorLevel;
     floor.yPosition = yPosition;
     floor.buttonStates = {up: "", down: ""};
 
     // TODO: Ideally the floor should have a facade where tryTrigger is done
-    var tryTrigger = function(event, arg1, arg2, arg3, arg4) {
+    const tryTrigger = (event: string, ...args) => {
         try {
-            floor.trigger(event, arg1, arg2, arg3, arg4);
+            floor.trigger(event, ...args);
         } catch(e) { errorHandler(e); }
     };
 
-    floor.pressUpButton = function() {
+    floor.pressUpButton = () => {
         var prev = floor.buttonStates.up;
         floor.buttonStates.up = "activated";
         if(prev !== floor.buttonStates.up) {
@@ -23,7 +37,7 @@ var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
         }
     };
 
-    floor.pressDownButton = function() {
+    floor.pressDownButton = () => {
         var prev = floor.buttonStates.down;
         floor.buttonStates.down = "activated";
         if(prev !== floor.buttonStates.down) {
@@ -32,7 +46,7 @@ var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
         }
     };
 
-    floor.elevatorAvailable = function(elevator) {
+    floor.elevatorAvailable = (elevator) => {
         if(elevator.goingUpIndicator && floor.buttonStates.up) {
             floor.buttonStates.up = "";
             tryTrigger("buttonstate_change", floor.buttonStates);
@@ -43,15 +57,13 @@ var asFloor = function(obj, floorLevel, yPosition, errorHandler) {
         }
     };
 
-    floor.getSpawnPosY = function() {
+    floor.getSpawnPosY = () => {
         return floor.yPosition + 30;
     };
 
-    floor.floorNum = function() {
+    floor.floorNum = () => {
         return floor.level;
     };
 
     return floor;
 };
-
-export { asFloor };

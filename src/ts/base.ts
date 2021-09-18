@@ -71,12 +71,17 @@ const createFrameRequester = (timeStep: number) => {
     return requester;
 };
 
+export interface CodeObj {
+    init: (elevators: any[], floors: any[]) => void;
+    update: (dt: number, elevators: any[], floors: any[]) => void;
+}
+
 export const getCodeObjFromCode = (code: string) => {
     if (code.trim().substr(0,1) === "{" && code.trim().substr(-1,1) === "}") {
         code = "(" + code + ")";
     }
     /* jslint evil:true */
-    const obj: { init: (elevators: any[], floors: any[]) => void; update: (dt: number, elevators: any[], floors: any[]) => void } = eval(code);
+    const obj: CodeObj = eval(code);
     /* jshint evil:false */
     if(typeof obj.init !== "function") {
         throw "Code must contain an init function";
@@ -85,4 +90,4 @@ export const getCodeObjFromCode = (code: string) => {
         throw "Code must contain an update function";
     }
     return obj;
-}
+};
