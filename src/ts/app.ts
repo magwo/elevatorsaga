@@ -284,4 +284,9 @@ $(function() {
         app.worldController.setTimeScale(timeScale);
         app.startChallenge(requestedChallenge, autoStart);
     });
+
+    console.log(location.hash);
+    if (location.hash.length === 0) {
+        location.hash = "#challenge=1";
+    }
 });

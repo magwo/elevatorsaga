@@ -28,7 +28,7 @@ type RiotApi = {
   route?(to): void;
 }
 
-export let riot = {} as RiotApi
+export let riot = {} as RiotApi;
 
 riot.observable = <T>(el: T) => {
   let callbacks = {}, slice = [].slice;
