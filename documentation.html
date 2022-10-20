@@ -92,10 +92,10 @@ elevator.goToFloor(2, true); // Do it before anything else</code></pre></td></tr
     // Do something special?
 }</code></pre></td></tr>
                     <tr><td>goingUpIndicator</td><td>function</td><td><small>Gets or sets the going up indicator, which will affect passenger behaviour when stopping at floors.</small></td><td><pre><code>if(elevator.goingUpIndicator()) {
-    elevator.goingDownIndicator(false);
+    elevator.goingUpIndicator(false);
 }</code></pre></td></tr>
                     <tr><td>goingDownIndicator</td><td>function</td><td><small>Gets or sets the going down indicator, which will affect passenger behaviour when stopping at floors.</small></td><td><pre><code>if(elevator.goingDownIndicator()) {
-    elevator.goingUpIndicator(false);
+    elevator.goingDownIndicator(false);
 }</code></pre></td></tr>
                     <tr><td>maxPassengerCount</td><td>function</td><td><small>Gets the maximum number of passengers that can occupy the elevator at the same time.</small></td><td><pre><code>if(elevator.maxPassengerCount() > 5) {
     // Use this elevator for something special, because it's big
