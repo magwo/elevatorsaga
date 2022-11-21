@@ -4,7 +4,7 @@
     <title>Elevator Saga - the elevator programming game</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="font-awesome-4.1-1.0/css/font-awesome.min.css" type="text/css" media="all">
-    <link href='//fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="libs/codemirror/codemirror.css">
     <link rel="stylesheet" href="libs/codemirror/themes/solarized.css">
     <link rel="stylesheet" href="style.css" type="text/css" media="all">
@@ -12,10 +12,6 @@
     <script type="text/javascript" src="libs/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="libs/lodash.min.js"></script>
     <script type="text/javascript" src="libs/riot.js"></script>
-
-    <script type="text/javascript" src="libs/codemirror/codemirror.js"></script>
-    <script type="text/javascript" src="libs/codemirror/addon/edit/closebrackets.js"></script>
-    <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
 
     <script type="text/javascript" src="libs/unobservable.js"></script>
 
@@ -29,6 +25,7 @@
     <script type="text/javascript" src="presenters.js"></script>
     <script type="text/javascript" src="challenges.js"></script>
     <script type="text/javascript" src="fitness.js"></script>
+    <script type="text/javascript" src="types.js"></script>
     <script type="text/javascript" src="app.js"></script>
 
 
@@ -84,7 +81,8 @@
     </script>
 
     <script type="text/plain" id="default-elev-implementation">
-{
+/** @type {Solution} */
+({
     init: function(elevators, floors) {
         var elevator = elevators[0]; // Let's use the first elevator
 
@@ -98,10 +96,11 @@
     update: function(dt, elevators, floors) {
         // We normally don't need to do anything here
     }
-}
+})
     </script>
     <script type="text/plain" id="devtest-elev-implementation">
-{
+/** @type {Solution} */
+({
     init: function(elevators, floors) {
         var selectElevatorForFloorPickup = function(floorNum) {
             return _.max(elevators, function(e) {
@@ -130,7 +129,7 @@
     },
     update: function(dt, elevators, floors) {
     }
-}
+})
     </script>
 
 
@@ -167,7 +166,7 @@
 
         <div class="codestatus"></div>
         <div class="code">
-            <textarea name="Code" id="code"></textarea>
+            <div id="editor"></div>
         </div>
         <button id="button_reset" style="float: left">Reset</button>
         <button id="button_resetundo" style="float: left">Undo reset</button>
@@ -187,6 +186,9 @@
             <h4><a href="test/index.html">Run tests</a></h4>
         </div>
     </div>
+
+    <!-- Load Monaco Editor from CDN; from: https://log.schemescape.com/posts/web-development/embedding-monaco-from-cdn.html -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.29.1/min/vs/loader.min.js"></script>
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

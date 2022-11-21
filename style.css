@@ -157,13 +157,17 @@ button.right {
     padding-top: 10px;
 }
 
-.CodeMirror {
+.code {
     font: 14px Consolas, Monaco, monospace;
-    width: 1220px;
-    margin: 10px auto;
-    height: 320px;
 }
 
+#editor {
+    border: solid 1px darkgray;
+    overflow: hidden;
+    width: 1220px;
+    height: 575px;
+    margin: 10px auto;
+}
 .world {
     position: relative;
     width: 1220px;
