@@ -46,7 +46,8 @@
             <p>
                 Your code must declare an object containing at least two functions called <span class="emphasis-color">init</span> and <span class="emphasis-color">update</span>. Like this:
             </p>
-            <div><pre><code>{
+            <div><pre><code>/** @type {Solution} */
+({
     init: function(elevators, floors) {
         // Do stuff with the elevators and floors, which are both arrays of objects
     },
@@ -54,7 +55,7 @@
         // Do more stuff with the elevators and floors
         // dt is the number of game seconds that passed since the last time update was called
     }
-}</code></pre></div>
+})</code></pre></div>
             <p>These functions will then be called by the game during the challenge.<br>
             <span class="emphasis-color">init</span> will be called when the challenge starts, and <span class="emphasis-color">update</span> repeatedly during the challenge.
             </p>
